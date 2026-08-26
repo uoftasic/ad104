@@ -3,7 +3,18 @@
 # Magic reads .magicrc from the directory you start it in. Without this file
 # Magic comes up with its own toy technology, every SKY130 layer is missing,
 # and the error you get ("Failed to load technology") does not say why.
-if {[info exists env(PDK_ROOT)]} {
+#
+# The workbench image also ships a ~/.magicrc that loads the same PDK file. If
+# it already did so, loading it a second time collides on the GUI-only line
+# `rename closewrapper closewrapperonly` inside sky130A.tcl, and Magic prints
+#     Error parsing ".magicrc": can't rename to "closewrapperonly": command already exists
+#     Bad local startup file ".magicrc", continuing without.
+# in the first two lines of your console - which looks exactly like the broken
+# toolchain this course teaches you to recognise, on a toolchain that is fine.
+# So only load it if nothing has loaded it yet.
+if {[tech name] eq "sky130A"} {
+    # Already loaded by ~/.magicrc. Nothing to do.
+} elseif {[info exists env(PDK_ROOT)]} {
     source $env(PDK_ROOT)/sky130A/libs.tech/magic/sky130A.magicrc
 } else {
     puts stderr "PDK_ROOT is not set. Try:  export PDK_ROOT=/foss/pdks"

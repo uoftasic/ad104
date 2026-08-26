@@ -62,11 +62,11 @@ aliases. These are the ones this course uses:
 | `ndc`, `pdc` | ndcontact, pdcontact | contact from diffusion up to li |
 | `ntapc`, `ptapc` | nsubstratencontact, psubstratepcontact | contact from a tap up to li |
 | `poly` | polysilicon | the gate layer |
-| `pc` | polycontact | contact from poly up to li |
+| `pc` | pcontact | contact from poly up to li |
 | `li` | locali | local interconnect |
 | `mcon` | viali | contact from li up to metal1 |
 | `m1`, `m2` | metal1, metal2 | wiring |
-| `via1` | via1 | metal1 to metal2 |
+| `via1` | m2contact | metal1 to metal2 |
 | `pfethvt` | pfethvt | makes a PMOS the high-threshold flavour |
 
 `tech layers` prints all of them and their aliases, if you want the full list.
@@ -126,10 +126,27 @@ layer sections and rectangles:
 rect 80 260 520 390
 ```
 
-Those coordinates are in units of 0.005 µm, so that rectangle is
-0.40 → 2.60 µm horizontally. When a lab tells you a shipped cell has a
-particular dimension, that is where the number comes from and you can check it
-with `grep`.
+**Read the header before you trust those numbers.** A `.mag` file's unit is set
+by its `magscale` line, and the two kinds of cell you will meet in this course
+disagree:
+
+| Cell | Header | One unit is | `rect 80 260 520 390` means |
+|---|---|---|---|
+| A foundry cell from the PDK | `magscale 1 2` | 0.005 µm | 0.40 → 2.60 µm |
+| Anything this course draws | *no `magscale` line* | 0.01 µm | 0.80 → 5.20 µm |
+
+So the rectangle above is 0.40 → 2.60 µm horizontally **in a foundry cell**. In
+`mag/my_inv.mag` the same 0.40 → 2.60 µm diffusion is stored as tiles spanning
+`40 130` to `260 195` — Magic splits a painted shape into several `rect` lines,
+so read the extent, not one line. Apply the foundry rule to a cell you drew and
+you will read every dimension
+as half its real size, silently — which is exactly the kind of factor-of-two this
+page warns about two sections earlier. Magic tells you which one you have on
+every load (`Scaled magic input cell my_inv geometry by factor of 2`), and
+`box values` always reports in 0.005 µm units whichever file you are in.
+
+When a lab tells you a shipped cell has a particular dimension, that is where the
+number comes from and you can check it with `grep`.
 
 ## The commands this course actually runs
 

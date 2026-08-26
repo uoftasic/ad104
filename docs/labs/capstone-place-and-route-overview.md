@@ -90,6 +90,22 @@ Then bring the block's own pins out — `CLK`, `D`, `A`, `B`, `Y` — each an
 `mcon` plus a pad plus a label, and paint metal1 rails across the whole row so
 that `VGND` and `VPWR` have geometry belonging to *this* cell to sit on.
 
+**Then turn those labels into ports**, which is a separate step and the one
+everybody skips:
+
+```tcl
+select top cell
+port makeall
+save datapath
+```
+
+A label is a name written on geometry; a **port** is a name the extractor puts
+on the `.subckt` line. `port makeall` promotes every top-cell label to a port.
+Without it `make layout` reports `ports (none)` and LVS fails with
+`Top level cell failed pin matching` — and the advice it prints, about labels
+needing to be on the top cell's own geometry, will not help, because by then
+yours already are.
+
 ### The flip-flop is not empty above
 
 `and2_0` and `buf_1` contain metal1 only in their rails. **`dfxtp_1` does

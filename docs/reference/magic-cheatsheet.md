@@ -81,13 +81,32 @@ shape it becomes the subcell's label, not yours.
 ```tcl
 drc check              ;# re-run
 drc catchup            ;# wait for it to finish (batch scripts need this)
-drc count              ;# how many violations, by rule
-drc why                ;# name the rules broken under the box
+drc count total        ;# how many violations - THE number you want
+drc count              ;# careful: prints "Cell X has 3 error tiles." and then
+                       ;#   "Total DRC errors found: 0" - that second line is a
+                       ;#   hierarchical total and reads 0 on a flat cell
+drc why                ;# name the rules broken under the box (set one first:
+                       ;#   with no box, 'select top cell')
 drc listall why        ;# every violation in the cell, with rule text
 drc euclidean on       ;# measure corners properly rather than as squares
 drc style drc(full)    ;# the rule set that catches missing well taps
 drc style drc(fast)    ;# back to the default
 ```
+
+The `Drc` menu on the layout window does the same things with a mouse, and one
+entry has no console equivalent worth typing:
+
+| Menu | Same as |
+|---|---|
+| **Drc → DRC update** | `drc check` — the one to reach for when a freshly opened cell shows a green `☑ DRC` and no hatching |
+| **Drc → DRC report** | `drc listall why`, and it needs no cursor box |
+| **Drc → DRC Find next error** | boxes *and zooms to* the next violating tile — the fastest way to find a hatched area you cannot see |
+| **Drc → DRC Complete** / **DRC Fast** | `drc style drc(full)` / `drc style drc(fast)` |
+
+**Magic does not check a cell you have only opened.** Its background checker
+re-checks tiles you *edit*; loading a `.mag` from disk edits nothing, so a cell
+with real violations opens showing a green `☑ DRC` and no white hatching. Run
+`drc check` (or `Drc → DRC update`) first, every time.
 
 ## Extraction
 

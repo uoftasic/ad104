@@ -82,7 +82,18 @@ make why C=3      # every violation in cell 3, with its rule name
 make edit C=3     # open it in Magic
 ```
 
-In Magic, put the cursor box over one of the white hatched areas and type:
+Magic opens with a green `☑ DRC` in the toolbar and **no white hatching anywhere**, on a
+cell that has three violations. That is not a clean cell — Magic's background checker only
+re-checks tiles you have *edited*, and loading a file from disk edits nothing, so it has
+never looked. Ask it to look:
+
+```tcl
+drc check
+```
+
+The toolbar goes red with a count and the white hatching appears. (`Drc → DRC update` on
+the menu bar does the same thing with the mouse.) Now put the cursor box over one of the
+white hatched areas and type:
 
 ```tcl
 drc why

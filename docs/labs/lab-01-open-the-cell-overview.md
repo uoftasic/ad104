@@ -127,15 +127,18 @@ have to remember that in Lab 03.
 
 ### L3 — Do it by hand
 
-Everything `make` just did is nine commands you can type. In the tkcon console:
+Everything `make` just did is thirteen commands you can type. In the tkcon console:
 
 ```tcl
+select top cell
 drc euclidean on
 drc check
-drc count
+drc catchup
+drc count total
 drc style drc(full)
 drc check
-drc count
+drc catchup
+drc count total
 drc why
 extract do local
 extract all
@@ -143,9 +146,24 @@ ext2spice lvs
 ext2spice -o /tmp/inv.spice
 ```
 
-Type them. Watch the count change when the rule set does. This is the flow for
-every remaining lab in this course and it is worth having run it once with
-your own fingers.
+Type them. Watch the count change when the rule set does: `Total DRC errors
+found: 0`, then `Total DRC errors found: 3`.
+
+Three of those lines are load-bearing and easy to leave out:
+
+- **`select top cell`** — `drc why` only reports on what is inside the cursor
+  box, and a freshly opened cell has no box worth speaking of. Without it you
+  get `No errors found.` on a cell with three violations.
+- **`drc catchup`** — `drc check` queues the re-check; `drc catchup` waits for
+  it to finish. Count too early and you count nothing.
+- **`drc count total`**, not `drc count`. Plain `drc count` prints two lines,
+  `Cell sky130_fd_sc_hd__inv_1 has 3 error tiles.` and then
+  `Total DRC errors found: 0` — that second number is the *hierarchical*
+  total across subcells, and on a flat cell it is always 0. Read the last line
+  of `drc count` and the number appears never to change at all.
+
+This is the flow for every remaining lab in this course and it is worth having
+run it once with your own fingers.
 
 ### L4 — Look at the library
 

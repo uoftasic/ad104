@@ -78,8 +78,13 @@ def main() -> int:
     if any(why.values()):
         print()
 
-    broke_circuit = [c for c in CELLS if lvs(c) != "match"]
-    if broke_circuit and all(fast.get(c, 1) == 0 and full.get(c, 1) == 0 for c in broke_circuit):
+    # Per cell, not across all of them: a student who erases drc_04's pad has to
+    # be told about drc_04 even though drc_05 is still broken in a different way.
+    # Guarding this with all() meant the message only ever appeared once every
+    # other cell was already finished - i.e. never, when the experiment is run.
+    broke_circuit = [c for c in CELLS if lvs(c) != "match"
+                     and fast.get(c, 1) == 0 and full.get(c, 1) == 0]
+    if broke_circuit:
         print("  Note: " + ", ".join(broke_circuit) + " is clean and no longer an inverter.")
         print("  Erasing the shape that broke the rule is not a fix. Move it, resize it,")
         print("  or add the thing it needed - the circuit has to survive.")

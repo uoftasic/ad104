@@ -22,7 +22,7 @@ MAGFILE  := $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/mag/$(CELL).mag
 PDKSPICE := $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_fd_sc_hd.spice
 SETUP    := $(PDK_ROOT)/sky130A/libs.tech/netgen/sky130A_setup.tcl
 
-.PHONY: all check gui klayout netlist clean
+.PHONY: all check gui edit klayout netlist clean
 
 all: check
 
@@ -48,7 +48,9 @@ check: results/lvs.report
 netlist: results/report.txt
 	@cat results/$(CELL).lvs.spice
 
-gui:
+# Every other lab in this course, and getting-started's "What the labs give you"
+# table, call this target `edit`. Keep both names here.
+gui edit:
 	@$(MAGIC) -d X11 $(MAGFILE) &
 
 klayout:

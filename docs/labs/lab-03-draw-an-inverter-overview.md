@@ -117,8 +117,20 @@ paint poly
 above the PMOS one, overhanging each by 0.25 µm, because a gate that stops
 inside the diffusion leaves a leakage path round its end (`poly.8`).
 
-Run `make` now. Two transistors should appear, with the right W and L, and
-`drc` should still be at zero.
+Save, then run `make`:
+
+```tcl
+save my_inv
+```
+
+`make` reads `mag/my_inv.mag` off the disk. Painting in Magic changes what is on
+your screen, not what is in that file, so until you `save` every `make` reports
+on the last version you wrote — the output does not change and nothing tells you
+why. Save before every `make` from here on. (L6 sets the labels and ports; the
+`save` is needed long before that.)
+
+Two transistors should appear, with the right W and L, and `drc` should still be
+at zero.
 
 ### L4 — Contacts
 

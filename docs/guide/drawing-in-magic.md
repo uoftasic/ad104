@@ -149,5 +149,5 @@ ext2spice cthresh 0       ;# ...and keep every parasitic capacitance
 gds write my_inv.gds      ;# the file a foundry would take
 ```
 
-The [Magic cheat sheet](../reference/magic-cheatsheet.md) has these with the
+The [Magic cheat sheet](reference/magic-cheatsheet.md) has these with the
 keyboard equivalents and about a dozen more.

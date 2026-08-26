@@ -8,9 +8,9 @@ from here is a drawing problem — which is a far better problem to have.
 
 ## Prerequisites
 
-[Getting started](../guide/getting-started.md) ·
-[What a layout actually is](../guide/what-a-layout-actually-is.md) ·
-[Anatomy of a standard cell](../guide/anatomy-of-a-standard-cell.md)
+[Getting started](guide/getting-started.md) ·
+[What a layout actually is](guide/what-a-layout-actually-is.md) ·
+[Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md)
 
 ## Objectives
 
@@ -91,7 +91,7 @@ make gui
 ```
 
 Magic opens with the cell loaded. Find, using
-[Anatomy of a standard cell](../guide/anatomy-of-a-standard-cell.md) as a map:
+[Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) as a map:
 
 - the n-well across the top, and the p-diffusion inside it
 - the n-diffusion in the bottom half

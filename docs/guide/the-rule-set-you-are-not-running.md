@@ -29,7 +29,7 @@ Every one of them is about **well taps** — the connections that hold the body
 of your transistors at a known voltage. They are excluded from the default set
 because they are expensive to compute, and because on a cell in isolation they
 are usually meaningless (see
-[Anatomy of a standard cell](anatomy-of-a-standard-cell.md): the foundry's own
+[Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md): the foundry's own
 inverter fails all three).
 
 ## Why that is dangerous rather than merely inconvenient

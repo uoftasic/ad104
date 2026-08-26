@@ -119,5 +119,5 @@ On paper:
 3. Decide which side of the cell the input is on and which side the output is
    on, and why.
 
-Then go and play with [SiliWiz](siliwiz.md) for twenty minutes, which will let
+Then go and play with [SiliWiz](guide/siliwiz.md) for twenty minutes, which will let
 you build roughly that and watch a cross-section of it appear.

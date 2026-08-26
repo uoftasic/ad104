@@ -6,8 +6,8 @@ The same two transistors, drawn twice, priced.
 
 ## Prerequisites
 
-Lab 03 passing. [What your drawing costs](../guide/what-your-drawing-costs.md) ·
-[Extraction is reverse engineering](../guide/extraction-is-reverse-engineering.md)
+Lab 03 passing. [What your drawing costs](guide/what-your-drawing-costs.md) ·
+[Extraction is reverse engineering](guide/extraction-is-reverse-engineering.md)
 
 ## Objectives
 
@@ -136,7 +136,7 @@ period 2137.8 ps  ->  467.8 MHz  ->  34.48 ps per stage
 
 **34 picoseconds is the floor** for this process at 1.8 V. Every timing number
 in the capstone is a multiple of it, and the whole of
-[Why the clock cannot go faster](../guide/why-the-clock-cannot-go-faster.md)
+[Why the clock cannot go faster](guide/why-the-clock-cannot-go-faster.md)
 is built on it.
 
 `src/mkring.py` writes both rings; open it, it is thirty lines.

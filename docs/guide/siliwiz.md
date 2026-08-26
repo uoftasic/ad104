@@ -66,7 +66,7 @@ pretending there are none:
   carry a number across.
 - **It has no LVS.** Nothing checks that what you drew is what you meant, and
   that turns out to be the harder half — see
-  [LVS asks a different question](lvs-asks-a-different-question.md).
+  [LVS asks a different question](guide/lvs-asks-a-different-question.md).
 - **The cross-section is schematic.** Real doping profiles are gradients, not
   the flat-topped blocks in the picture.
 

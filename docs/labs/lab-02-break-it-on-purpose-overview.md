@@ -11,9 +11,9 @@ your first DRC error is on a layout you have no attachment to.**
 
 ## Prerequisites
 
-[DRC is a conversation](../guide/drc-is-a-conversation.md) ·
-[The rule set you are not running](../guide/the-rule-set-you-are-not-running.md) ·
-[Drawing in Magic](../guide/drawing-in-magic.md)
+[DRC is a conversation](guide/drc-is-a-conversation.md) ·
+[The rule set you are not running](guide/the-rule-set-you-are-not-running.md) ·
+[Drawing in Magic](guide/drawing-in-magic.md)
 
 ## Objectives
 
@@ -95,7 +95,7 @@ contact, and `drc why` naming the rule twice — once plainly and once in its
 "in one direction" form.*
 
 Then look the rule up in the
-[DRC error decoder](../reference/drc-error-decoder.md), work out what it is
+[DRC error decoder](reference/drc-error-decoder.md), work out what it is
 protecting, and change the geometry to satisfy it. Save (`save`), and run
 `make` again.
 

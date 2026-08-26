@@ -29,7 +29,7 @@ number of inverters in a loop. An odd loop cannot settle — whatever it
 decides, it disagrees with itself one lap later — so it runs, and its period
 is $2 N t_p$.
 
-[Lab 05](../labs/lab-05-what-it-costs-overview.md) builds two 31-stage rings
+[Lab 05](labs/lab-05-what-it-costs-overview.md) builds two 31-stage rings
 out of extracted layouts:
 
 | | period | frequency | one stage |

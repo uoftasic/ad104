@@ -9,9 +9,9 @@ is made of.
 
 ## Prerequisites
 
-Lab 03 passing. [Cells are Lego](../guide/cells-are-lego.md) ·
-[Stick diagrams](../guide/stick-diagrams.md) ·
-[LVS asks a different question](../guide/lvs-asks-a-different-question.md)
+Lab 03 passing. [Cells are Lego](guide/cells-are-lego.md) ·
+[Stick diagrams](guide/stick-diagrams.md) ·
+[LVS asks a different question](guide/lvs-asks-a-different-question.md)
 
 ## Objectives
 

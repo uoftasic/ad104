@@ -29,7 +29,7 @@ poly overlap of poly contact < 0.05um (licon.8)
 poly overlap of poly contact < 0.08um in one direction (licon.8a)
 ```
 
-That is cell `drc_03` from [Lab 02](../labs/lab-02-break-it-on-purpose-overview.md),
+That is cell `drc_03` from [Lab 02](labs/lab-02-break-it-on-purpose-overview.md),
 where the poly landing pad has been shrunk to 0.25 × 0.25 µm around a
 0.17 µm cut, leaving 0.04 µm of poly on each side. The rule wants 0.05.
 
@@ -112,5 +112,5 @@ away from being wrong again.
 `drc why` gives you a rule name and a number. Look up the number. Change the
 geometry to satisfy it by a comfortable margin. Re-run.
 
-The [DRC error decoder](../reference/drc-error-decoder.md) lists every rule
+The [DRC error decoder](reference/drc-error-decoder.md) lists every rule
 this course can make you hit, with the number and the fix.

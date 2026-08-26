@@ -122,7 +122,8 @@ because it is enormous and it is arithmetic. A real flow:
 4. routes hundreds of thousands of nets on five metal layers,
 5. and then checks its own work with the same DRC and LVS you are running.
 
-In [DD103](https://uoftasic.com/dd103/) that whole flow runs in **54 seconds**
-on a small design. Doing four cells and three wires by hand in the capstone is
+In [DD103](https://uoftasic.com/dd103/) that whole flow runs in **about a minute**
+on a small design — its own pages time it at 57 s for the vending machine and 59 s
+for the elevator. Doing four cells and three wires by hand in the capstone is
 not a substitute for it. It is so that when you look at the tool's output you
 know what it is a picture of.

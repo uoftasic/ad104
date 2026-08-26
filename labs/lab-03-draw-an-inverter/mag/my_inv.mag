@@ -1,0 +1,56 @@
+magic
+tech sky130A
+timestamp 1787730307
+<< checkpaint >>
+rect -630 -630 930 1230
+<< nwell >>
+rect 0 300 300 600
+<< pwell >>
+rect 0 0 300 300
+<< psubdiff >>
+rect 40 69 260 85
+rect 40 52 55 69
+rect 72 52 260 69
+rect 40 35 260 52
+<< nsubdiff >>
+rect 40 539 260 555
+rect 40 522 55 539
+rect 72 522 260 539
+rect 40 505 260 522
+<< psubdiffcont >>
+rect 55 52 72 69
+<< nsubdiffcont >>
+rect 55 522 72 539
+<< locali >>
+rect 45 587 82 595
+rect 45 570 55 587
+rect 72 570 82 587
+rect 45 539 82 570
+rect 45 522 55 539
+rect 72 522 82 539
+rect 45 505 82 522
+rect 45 69 82 95
+rect 45 52 55 69
+rect 72 52 82 69
+rect 45 30 82 52
+rect 45 13 55 30
+rect 72 13 82 30
+rect 45 5 82 13
+<< viali >>
+rect 55 570 72 587
+rect 55 13 72 30
+<< metal1 >>
+rect 0 587 300 600
+rect 0 570 55 587
+rect 72 570 300 587
+rect 0 560 300 570
+rect 0 30 300 40
+rect 0 13 55 30
+rect 72 13 300 30
+rect 0 0 300 13
+<< labels >>
+rlabel metal1 120 5 145 30 0 VGND
+port 1 nsew
+rlabel metal1 120 570 145 595 0 VPWR
+port 2 nsew
+<< end >>

@@ -1,0 +1,10 @@
+# Load the SKY130 technology into Magic.
+#
+# Magic reads .magicrc from the directory you start it in. Without this file
+# Magic comes up with its own toy technology, every SKY130 layer is missing,
+# and the error you get ("Failed to load technology") does not say why.
+if {[info exists env(PDK_ROOT)]} {
+    source $env(PDK_ROOT)/sky130A/libs.tech/magic/sky130A.magicrc
+} else {
+    puts stderr "PDK_ROOT is not set. Try:  export PDK_ROOT=/foss/pdks"
+}

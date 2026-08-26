@@ -1,0 +1,12 @@
+* Lab 04 - the same NAND with A and B the other way round.
+*
+* `make swapped` runs LVS against this file instead. Netgen will tell you the
+* netlists match uniquely AND that the pin lists do not, which is the single
+* most confusing message this toolchain produces. It is worth meeting once on
+* purpose.
+.subckt my_nand2 A B Y VPWR VGND
+XM1 Y  A ni   VGND sky130_fd_pr__nfet_01v8     w=0.65 l=0.15
+XM2 ni B VGND VGND sky130_fd_pr__nfet_01v8     w=0.65 l=0.15
+XM3 Y  A VPWR VPWR sky130_fd_pr__pfet_01v8_hvt w=1    l=0.15
+XM4 Y  B VPWR VPWR sky130_fd_pr__pfet_01v8_hvt w=1    l=0.15
+.ends

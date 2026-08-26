@@ -1,0 +1,30 @@
+* Lab 04 - the schematic side of LVS: what each block is supposed to be.
+*
+* Read the NAND from the bottom up. The two NMOS are in SERIES, so the output
+* only reaches VGND when both gates are high; the two PMOS are in PARALLEL, so
+* either one alone can pull the output up. That is NAND, and it is why the
+* series pair can share one strip of diffusion in the layout.
+
+.subckt my_inv A Y VPWR VGND
+XM1 Y A VGND VGND sky130_fd_pr__nfet_01v8     w=0.65 l=0.15
+XM2 Y A VPWR VPWR sky130_fd_pr__pfet_01v8_hvt w=1    l=0.15
+.ends
+
+* `ni` is the shared node between the two series NMOS - the one with no
+* contact on it in the layout. B is the device nearer the output.
+.subckt my_nand2 A B Y VPWR VGND
+XM1 Y  B ni   VGND sky130_fd_pr__nfet_01v8     w=0.65 l=0.15
+XM2 ni A VGND VGND sky130_fd_pr__nfet_01v8     w=0.65 l=0.15
+XM3 Y  A VPWR VPWR sky130_fd_pr__pfet_01v8_hvt w=1    l=0.15
+XM4 Y  B VPWR VPWR sky130_fd_pr__pfet_01v8_hvt w=1    l=0.15
+.ends
+
+.subckt my_buf A X VPWR VGND
+Xi1 A  n1 VPWR VGND my_inv
+Xi2 n1 X  VPWR VGND my_inv
+.ends
+
+.subckt my_and2 A B X VPWR VGND
+Xn1 A B n1 VPWR VGND my_nand2
+Xi1 n1 X     VPWR VGND my_inv
+.ends

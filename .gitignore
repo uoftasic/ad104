@@ -1,34 +1,9 @@
-# OS / editors
-.DS_Store
-.idea/
-.vscode/
-*.swp
-
-# Python
+runs/
+**/results/*
+!**/results/.gitkeep
 __pycache__/
-.venv/
-venv/
-*.egg-info/
-.pytest_cache/
-.mypy_cache/
-
-# Lab output — every lab regenerates these with `make`
-labs/**/results/*
-!labs/**/results/.gitkeep
-*.ext
-*.res.ext
-*.sim
-*.nodes
+*.pyc
 *.log
-
-# Magic backups
-*.mag.bak
-*~
-
-# Env / secrets
-.env
-*.pem
-
-# Build artifacts
-site/
-_book/
+*.ext
+*.sim
+*.spice.raw

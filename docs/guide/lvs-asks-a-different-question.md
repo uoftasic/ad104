@@ -88,7 +88,7 @@ Something is genuinely absent. In this course it is almost always one of:
   schematic and one input floating.
 - **a missing label.** No label, no port, no comparison.
 - **a missing tap**, which turns the bulk terminals into invented nodes —
-  see [the rule set you are not running](the-rule-set-you-are-not-running.md).
+  see [the rule set you are not running](guide/the-rule-set-you-are-not-running.md).
 - **the wrong device flavour** — `pfet_01v8` where the schematic says
   `pfet_01v8_hvt`. Netgen reports this as a device class that has no partner.
 

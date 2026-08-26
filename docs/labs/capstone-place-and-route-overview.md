@@ -11,9 +11,9 @@ what you are looking at.
 
 ## Prerequisites
 
-Labs 01–05. [Cells are Lego](../guide/cells-are-lego.md) ·
-[Routing by hand](../guide/routing-by-hand.md) ·
-[Why the clock cannot go faster](../guide/why-the-clock-cannot-go-faster.md)
+Labs 01–05. [Cells are Lego](guide/cells-are-lego.md) ·
+[Routing by hand](guide/routing-by-hand.md) ·
+[Why the clock cannot go faster](guide/why-the-clock-cannot-go-faster.md)
 
 ## The circuit
 

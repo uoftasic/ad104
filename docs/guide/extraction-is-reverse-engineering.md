@@ -124,7 +124,7 @@ schematic in netgen only produces noise.
 ## What extraction does not know
 
 - **It does not know what you meant.** That is LVS's job, and it is the
-  [next page](lvs-asks-a-different-question.md).
+  [next page](guide/lvs-asks-a-different-question.md).
 - **It does not model resistance by default.** `ext2spice` can extract
   resistors too, but the flow gets much slower and this course does not need
   it. Remember that li is about 12.8 Ω per square while metal1 is 0.125, so a

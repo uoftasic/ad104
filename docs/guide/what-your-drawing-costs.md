@@ -16,7 +16,7 @@ L = 0.15 µm for both. Same devices. 4.8 times the area.*
 
 ## The numbers
 
-These come out of [Lab 05](../labs/lab-05-what-it-costs-overview.md), which
+These come out of [Lab 05](labs/lab-05-what-it-costs-overview.md), which
 runs the extraction and both simulations and prints this table:
 
 | | yours | the foundry's | ratio |

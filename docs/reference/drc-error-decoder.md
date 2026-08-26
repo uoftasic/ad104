@@ -73,7 +73,7 @@ passes.
 ## The four that only exist in the full rule set
 
 These are **not checked by default**. See
-[The rule set you are not running](../guide/the-rule-set-you-are-not-running.md).
+[The rule set you are not running](guide/the-rule-set-you-are-not-running.md).
 
 | Message | What to do |
 |---|---|

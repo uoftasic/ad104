@@ -8,10 +8,10 @@ rule sets, and proved by netgen to be what you meant.
 
 ## Prerequisites
 
-Lab 02 finished. [Drawing in Magic](../guide/drawing-in-magic.md) ·
-[Stick diagrams](../guide/stick-diagrams.md) ·
-[Extraction is reverse engineering](../guide/extraction-is-reverse-engineering.md) ·
-[LVS asks a different question](../guide/lvs-asks-a-different-question.md)
+Lab 02 finished. [Drawing in Magic](guide/drawing-in-magic.md) ·
+[Stick diagrams](guide/stick-diagrams.md) ·
+[Extraction is reverse engineering](guide/extraction-is-reverse-engineering.md) ·
+[LVS asks a different question](guide/lvs-asks-a-different-question.md)
 
 ## Objectives
 
@@ -25,7 +25,7 @@ Lab 02 finished. [Drawing in Magic](../guide/drawing-in-magic.md) ·
 **Wn = 0.65 µm, Wp = 1.00 µm, L = 0.15 µm.**
 
 Those are exactly `sky130_fd_sc_hd__inv_1`'s numbers, which you read in Lab 01.
-That is deliberate: in [Lab 05](lab-05-what-it-costs-overview.md) you put your
+That is deliberate: in [Lab 05](labs/lab-05-what-it-costs-overview.md) you put your
 cell next to the foundry's and measure the difference, and holding the
 transistors identical means **the only thing left to compare is the drawing**.
 
@@ -87,7 +87,7 @@ of the cell.
 ### L1 — Sketch it first
 
 On paper. The stick diagram from
-[Stick diagrams](../guide/stick-diagrams.md): PMOS above, NMOS below, one
+[Stick diagrams](guide/stick-diagrams.md): PMOS above, NMOS below, one
 vertical poly stripe crossing both, output on the right, input on the gate.
 Ninety seconds, and it will save you an hour.
 

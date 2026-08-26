@@ -1,0 +1,22 @@
+magic
+tech sky130A
+timestamp 1787733974
+<< checkpaint >>
+rect -630 -630 1330 1230
+<< metal1 >>
+rect 0 560 700 600
+rect 0 0 700 40
+use my_inv  in0
+timestamp 1787733743
+transform 1 0 400 0 1 0
+box 0 0 300 600
+use my_nand2  nd0
+timestamp 1787733743
+transform 1 0 0 0 1 0
+box 0 0 400 600
+<< labels >>
+rlabel metal1 360 5 385 30 0 VGND
+port 1 nsew
+rlabel metal1 360 570 385 595 0 VPWR
+port 2 nsew
+<< end >>

@@ -1,0 +1,22 @@
+magic
+tech sky130A
+timestamp 1787733554
+<< checkpaint >>
+rect -649 -654 1983 926
+use sky130_fd_sc_hd__and2_0  and1 $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1772378662
+transform 1 0 736 0 1 0
+box -19 -24 249 296
+use sky130_fd_sc_hd__and2_0  and2
+timestamp 1772378662
+transform 1 0 966 0 1 0
+box -19 -24 249 296
+use sky130_fd_sc_hd__buf_1  buf0 $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1772378662
+transform 1 0 1196 0 1 0
+box -19 -24 157 296
+use sky130_fd_sc_hd__dfxtp_1  dff0 $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1772378662
+transform 1 0 0 0 1 0
+box -19 -24 755 296
+<< end >>

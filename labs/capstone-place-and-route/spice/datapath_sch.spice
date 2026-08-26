@@ -1,0 +1,12 @@
+* Capstone - the schematic side of LVS.
+*
+* Four standard cells. This is the netlist a synthesis tool would have handed
+* you, and your job in this lab was to turn it into geometry by hand.
+.include /foss/pdks/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_fd_sc_hd.spice
+
+.subckt datapath CLK D A B Y VGND VPWR
+Xdff0 CLK D VGND VGND VPWR VPWR q  sky130_fd_sc_hd__dfxtp_1
+Xand1 q    A VGND VGND VPWR VPWR n1 sky130_fd_sc_hd__and2_0
+Xand2 n1   B VGND VGND VPWR VPWR n2 sky130_fd_sc_hd__and2_0
+Xbuf0 n2  VGND VGND VPWR VPWR Y     sky130_fd_sc_hd__buf_1
+.ends

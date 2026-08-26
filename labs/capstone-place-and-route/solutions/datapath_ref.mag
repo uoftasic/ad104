@@ -1,0 +1,105 @@
+magic
+tech sky130A
+magscale 1 2
+timestamp 1787731399
+<< checkpaint >>
+rect -1390 -1308 4058 1852
+<< viali >>
+rect 1869 425 1903 459
+rect 2329 425 2363 459
+rect 1501 357 1535 391
+rect 1961 357 1995 391
+rect 2603 357 2637 391
+rect 1685 289 1719 323
+rect 2145 289 2179 323
+rect 29 221 63 255
+rect 2421 221 2455 255
+rect 280 160 314 194
+rect 1390 85 1424 119
+<< metal1 >>
+rect -92 496 2760 592
+rect 1857 459 1915 465
+rect 1857 425 1869 459
+rect 1903 425 1915 459
+rect 1857 397 1915 425
+rect 2317 459 2375 465
+rect 2317 425 2329 459
+rect 2363 425 2375 459
+rect 1378 391 1547 397
+rect 1378 357 1501 391
+rect 1535 357 1547 391
+rect 1378 351 1547 357
+rect 1857 391 2007 397
+rect 1857 357 1961 391
+rect 1995 357 2007 391
+rect 1857 351 2007 357
+rect 15 255 77 269
+rect 15 221 29 255
+rect 63 221 77 255
+rect 15 207 77 221
+rect 266 194 328 206
+rect 266 160 280 194
+rect 314 160 328 194
+rect 266 148 328 160
+rect 1378 119 1436 351
+rect 1671 323 1733 337
+rect 1671 289 1685 323
+rect 1719 289 1733 323
+rect 1671 275 1733 289
+rect 2131 323 2193 337
+rect 2131 289 2145 323
+rect 2179 289 2193 323
+rect 2131 275 2193 289
+rect 2317 261 2375 425
+rect 2589 391 2651 405
+rect 2589 357 2603 391
+rect 2637 357 2651 391
+rect 2589 343 2651 357
+rect 2317 255 2467 261
+rect 2317 221 2421 255
+rect 2455 221 2467 255
+rect 2317 215 2467 221
+rect 1378 85 1390 119
+rect 1424 85 1436 119
+rect 1378 79 1436 85
+rect -92 -48 2760 48
+use sky130_fd_sc_hd__and2_0  and1 $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1772378662
+transform 1 0 1472 0 1 0
+box -38 -48 498 592
+use sky130_fd_sc_hd__and2_0  and2
+timestamp 1772378662
+transform 1 0 1932 0 1 0
+box -38 -48 498 592
+use sky130_fd_sc_hd__buf_1  buf0 $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1772378662
+transform 1 0 2392 0 1 0
+box -38 -48 314 592
+use sky130_fd_sc_hd__dfxtp_1  dff0 $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1772378662
+transform 1 0 0 0 1 0
+box -38 -48 1510 592
+use sky130_fd_sc_hd__tapvpwrvgnd_1  tapL $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1772378662
+transform 1 0 -92 0 1 0
+box -38 -48 130 592
+use sky130_fd_sc_hd__tapvpwrvgnd_1  tapR
+timestamp 1772378662
+transform 1 0 2668 0 1 0
+box -38 -48 130 592
+<< labels >>
+rlabel metal1 20 220 72 260 0 CLK
+port 1 nsew
+rlabel metal1 272 158 322 198 0 D
+port 2 nsew
+rlabel metal1 1676 288 1728 328 0 A
+port 3 nsew
+rlabel metal1 2136 288 2188 328 0 B
+port 4 nsew
+rlabel metal1 2594 356 2646 396 0 Y
+port 5 nsew
+rlabel metal1 600 -40 660 40 0 VGND
+port 6 nsew
+rlabel metal1 600 504 660 584 0 VPWR
+port 7 nsew
+<< end >>

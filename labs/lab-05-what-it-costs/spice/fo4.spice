@@ -1,0 +1,33 @@
+* Lab 05 - the same inverter, drawn two ways, driving four copies of itself.
+*
+* Fan-out-of-4 is the standard way to quote a gate delay, because it is roughly
+* what a gate drives in a real design. Both halves of this deck see an
+* identical input edge and an identical load; the ONLY difference between them
+* is the geometry the two cells were drawn with.
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+.include my_inv.pex.spice
+.include sky130_fd_sc_hd__inv_1.pex.spice
+
+Vdd VPWR 0 1.8
+Vin IN 0 PULSE(0 1.8 1n 20p 20p 2n 4n)
+
+* yours:   .subckt my_inv A Y VPWR VGND
+Xm0 IN  MID VPWR 0 my_inv
+Xm1 MID MO1 VPWR 0 my_inv
+Xm2 MID MO2 VPWR 0 my_inv
+Xm3 MID MO3 VPWR 0 my_inv
+Xm4 MID MO4 VPWR 0 my_inv
+
+* theirs: .subckt sky130_fd_sc_hd__inv_1 A VGND VNB VPB VPWR Y
+Xf0 IN  0 0 VPWR VPWR FID sky130_fd_sc_hd__inv_1
+Xf1 FID 0 0 VPWR VPWR FO1 sky130_fd_sc_hd__inv_1
+Xf2 FID 0 0 VPWR VPWR FO2 sky130_fd_sc_hd__inv_1
+Xf3 FID 0 0 VPWR VPWR FO3 sky130_fd_sc_hd__inv_1
+Xf4 FID 0 0 VPWR VPWR FO4 sky130_fd_sc_hd__inv_1
+
+.tran 1p 9n
+.meas tran m_tphl TRIG v(IN) VAL=0.9 RISE=1 TARG v(MID) VAL=0.9 FALL=1
+.meas tran m_tplh TRIG v(IN) VAL=0.9 FALL=1 TARG v(MID) VAL=0.9 RISE=1
+.meas tran f_tphl TRIG v(IN) VAL=0.9 RISE=1 TARG v(FID) VAL=0.9 FALL=1
+.meas tran f_tplh TRIG v(IN) VAL=0.9 FALL=1 TARG v(FID) VAL=0.9 RISE=1
+.end

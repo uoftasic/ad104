@@ -1,0 +1,103 @@
+# What a layout actually is
+
+A schematic is a claim about connectivity. A layout is a **set of
+instructions for a machine that makes patterns of light.**
+
+That difference is the whole course, so it is worth being concrete about it.
+
+## A chip is made by printing, about seventy times
+
+Fabricating a wafer is a loop. Coat it in something. Shine light through a
+mask so that a pattern of the mask lands on the coating. Wash away the parts
+that were lit — or the parts that were not. Then do something to whatever is
+now exposed: implant ions into it, grow an oxide on it, etch it away, plate
+metal into it. Strip the coating and go round again with the next mask.
+
+A **layout is the drawing on those masks**. Every rectangle you paint in
+Magic ends up as a hole or a blob on a piece of quartz that light goes through.
+
+This has two consequences that are easy to say and take a while to feel:
+
+- **There is no wire layer and no transistor layer.** There is a layer where
+  the silicon got doped n-type, and a layer where polysilicon was deposited,
+  and where they cross you happen to get a transistor. Nobody drew a
+  transistor. They drew two rectangles that overlap.
+- **Everything is a rectangle, and every rectangle has a minimum size.** The
+  light has a wavelength; the etch has a spread; the wafer is not perfectly
+  flat. The design rules are the foundry telling you what they can actually
+  print with acceptable yield.
+
+## The layers you will use, bottom to top
+
+SKY130 has about 40 mask layers. This course uses ten of them. Physically
+they stack in this order, and that order is the reason for most of the rules:
+
+| Magic layer | On the wafer | What it is for |
+|---|---|---|
+| `nwell` | a deep n-type tub in the p-substrate | somewhere to put PMOS |
+| `ndiff` / `pdiff` | heavily doped silicon at the surface | the source and drain of a transistor, and the wire between them |
+| `ptap` / `ntap` | doped silicon of the *same* type as the well underneath | a handle to hold the well at a known voltage |
+| `poly` | polysilicon deposited on a very thin oxide | the **gate**. Where it crosses diffusion you get a transistor. |
+| `licon1` (`ndc`/`pdc`/`pc` in Magic) | a tungsten plug | the only way up from silicon or poly |
+| `li1` (`li`) | a thin local-interconnect layer | short wiring inside a cell |
+| `mcon` | a plug from li1 to metal1 | the only way up from li |
+| `met1` … `met5` | aluminium/copper wiring | actual wires |
+| `via1` … `via4` | plugs between metal layers | the only way between metals |
+
+The pattern is rigid and worth memorising: **conductor, plug, conductor, plug,
+conductor.** You cannot connect metal1 to poly. You go poly → `licon1` → li1
+→ `mcon` → metal1. Half of a beginner's DRC errors are an attempt to skip a
+rung.
+
+![The inverter, layer by layer](../assets/img/ad104-magic-my-inv.png)
+
+*Read this bottom to top. Purple at the very bottom and very top: the metal1
+supply rails. The orange hatch below the lower rail and the green block above
+it: the p-tap and the NMOS n-diffusion. The red stripe running the full height:
+one strip of polysilicon — the gate of both transistors. The pale-blue vertical
+runs: local interconnect. The boxed X's: contacts, every one of them 0.17 µm
+square because that is the only size the process makes.*
+
+## Where the transistor is
+
+Look at the picture again. There is no object called "transistor" anywhere in
+it. There is:
+
+- a strip of green n-diffusion, 0.65 µm tall,
+- a red poly stripe, 0.15 µm wide, crossing it,
+- and a contact on either side.
+
+The poly sits on 4 nm of oxide over the silicon. Put a voltage on it and the
+field pulls electrons to the surface of the silicon underneath, joining the
+two diffusion regions into one conducting channel. **The channel is the part of
+the diffusion the poly is standing on.**
+
+So:
+
+- **$W$ is the height of the diffusion where the poly crosses it.** Wider
+  channel, more current.
+- **$L$ is the width of the poly stripe where it crosses.** Longer channel,
+  less current.
+
+You are not going to type `W=0.65` anywhere in this course. You are going to
+draw a rectangle 0.65 µm tall, and Magic is going to read `w=0.65` back out of
+it in Lab 03. That round trip — draw a shape, and a tool tells you the
+device parameter — is the moment layout stops being abstract.
+
+## Two things that are not obvious
+
+**The diffusion is also a wire.** The strip of n-diffusion between two poly
+gates is a conductor. That is why two transistors in series can share it and
+need no contact between them; you will use that in the NAND gate in Lab 04.
+It is a *bad* wire — resistive and heavy with junction capacitance — which is
+why nobody routes with it further than the next transistor.
+
+**The wells need holding.** The p-substrate under your NMOS and the n-well
+under your PMOS are the *bodies* of your transistors, and the body terminal is
+real. If nothing ties them to a supply they float, the threshold voltages
+wander, and at worst the parasitic bipolar structures hidden in every CMOS
+process latch up and short the supply to ground until you remove power. The
+`ptap` and `ntap` strips in the picture exist to prevent that. They are the
+single most commonly forgotten thing in a first layout, and the default
+design-rule check does not mention them — see
+[The rule set you are not running](the-rule-set-you-are-not-running.md).

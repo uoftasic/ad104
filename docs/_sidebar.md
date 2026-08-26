@@ -1,0 +1,36 @@
+- [Home](README.md)
+- **Guide**
+  - [Getting started](guide/getting-started.md)
+  - **I. Just start drawing**
+    - [What a layout actually is](guide/what-a-layout-actually-is.md)
+    - [Stick diagrams](guide/stick-diagrams.md)
+    - [Play with SiliWiz first](guide/siliwiz.md)
+  - **II. Read before you draw**
+    - [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md)
+    - [Drawing in Magic](guide/drawing-in-magic.md)
+  - **III. DRC**
+    - [DRC is a conversation](guide/drc-is-a-conversation.md)
+    - [The rule set you are not running](guide/the-rule-set-you-are-not-running.md)
+  - **IV. LVS**
+    - [Extraction is reverse engineering](guide/extraction-is-reverse-engineering.md)
+    - [LVS asks a different question](guide/lvs-asks-a-different-question.md)
+  - **V. What it costs**
+    - [What your drawing costs](guide/what-your-drawing-costs.md)
+  - **VI. Assembly**
+    - [Cells are Lego](guide/cells-are-lego.md)
+    - [Routing by hand](guide/routing-by-hand.md)
+  - **VII. Time**
+    - [Why the clock cannot go faster](guide/why-the-clock-cannot-go-faster.md)
+- **Labs**
+  - [Lab 01 — Open a cell you did not draw](labs/lab-01-open-the-cell-overview.md)
+  - [Lab 02 — Break it on purpose](labs/lab-02-break-it-on-purpose-overview.md)
+  - [Lab 03 — Draw an inverter](labs/lab-03-draw-an-inverter-overview.md)
+  - [Lab 04 — A buffer and an AND gate](labs/lab-04-buffer-and-and-overview.md)
+  - [Lab 05 — What it costs](labs/lab-05-what-it-costs-overview.md)
+  - [Capstone — Place and route](labs/capstone-place-and-route-overview.md)
+- **Reference**
+  - [Magic cheat sheet](reference/magic-cheatsheet.md)
+  - [The DRC error decoder](reference/drc-error-decoder.md)
+  - [The SKY130 layer map](reference/sky130-layer-map.md)
+- **Repo**
+  - [Lab packages](https://github.com/uoftasic/ad104/tree/main/labs)

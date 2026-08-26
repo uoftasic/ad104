@@ -1,0 +1,33 @@
+magic
+tech sky130A
+timestamp 1787730756
+<< checkpaint >>
+rect -630 -630 1330 1230
+<< locali >>
+rect 130 240 155 265
+rect 240 240 265 265
+rect 320 240 561 265
+rect 620 242 645 267
+<< metal1 >>
+rect 0 560 700 600
+rect 0 0 700 40
+use my_inv  in0 ../mag
+timestamp 1787730308
+transform 1 0 400 0 1 0
+box 0 0 300 600
+use my_nand2  nd0 ../mag
+timestamp 1787730718
+transform 1 0 0 0 1 0
+box 0 0 400 600
+<< labels >>
+rlabel locali 130 240 155 265 0 A
+port 1 nsew
+rlabel locali 240 240 265 265 0 B
+port 2 nsew
+rlabel locali 620 242 645 267 0 X
+port 3 nsew
+rlabel metal1 360 5 385 30 0 VGND
+port 4 nsew
+rlabel metal1 360 570 385 595 0 VPWR
+port 5 nsew
+<< end >>

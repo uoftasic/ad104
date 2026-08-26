@@ -1,0 +1,13 @@
+* Lab 03 - the schematic side of LVS.
+*
+* This is the CMOS inverter from the AD103 capstone, written out as a SPICE
+* subcircuit: one NMOS pulling down, one PMOS pulling up, gates tied together.
+* LVS asks one question - is the thing you drew in Magic this circuit?
+*
+* Wn = 0.65, Wp = 1.00, L = 0.15 (plain micron numbers, never `1u` - a MOSFET
+* W in metres falls outside every bin and ngspice stops with "could not find a
+* valid modelname").
+.subckt my_inv A Y VPWR VGND
+XM1 Y A VGND VGND sky130_fd_pr__nfet_01v8     w=0.65 l=0.15
+XM2 Y A VPWR VPWR sky130_fd_pr__pfet_01v8_hvt w=1    l=0.15
+.ends

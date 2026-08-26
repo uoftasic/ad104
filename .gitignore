@@ -1,0 +1,34 @@
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Python
+__pycache__/
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Lab output — every lab regenerates these with `make`
+labs/**/results/*
+!labs/**/results/.gitkeep
+*.ext
+*.res.ext
+*.sim
+*.nodes
+*.log
+
+# Magic backups
+*.mag.bak
+*~
+
+# Env / secrets
+.env
+*.pem
+
+# Build artifacts
+site/
+_book/

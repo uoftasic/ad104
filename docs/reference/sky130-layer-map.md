@@ -16,7 +16,7 @@ same file, converted from milliohms to ohms per square.
 | `pdiff` | 65/20 + 94/20 | p+ silicon at the surface | 197 Ω/□ |
 | `ntap` | 65/44 + 93/44 | n+ silicon **inside the n-well** — a handle on the well | 120 Ω/□ |
 | `ptap` | 65/44 + 94/20 | p+ silicon in the substrate — a handle on the substrate | 197 Ω/□ |
-| `poly` | 66/20 | polysilicon on 4 nm of gate oxide | 48.2 Ω/□ |
+| `poly` | 66/20 | polysilicon on the thin gate oxide | 48.2 Ω/□ |
 | `pfethvt` | 78/44 | the HVTP implant — makes a PMOS high-threshold | — |
 | `pc` (poly contact) | 66/44 + 95/20 | a tungsten plug from poly to li, plus the NPC blocking mask | — |
 | `ndc` / `pdc` / `ntapc` / `ptapc` | 66/44 | the same plug, from silicon to li | — |

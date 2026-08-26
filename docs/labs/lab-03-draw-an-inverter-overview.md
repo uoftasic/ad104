@@ -66,6 +66,13 @@ the rule. Fix one thing, run `make` again.
 
 ## What the frame already contains
 
+![The frame you start from](../assets/img/ad104-magic-frame.png)
+
+*Everything except the transistors. The n-well is the grey hatch across the
+top half and the p-substrate the orange hatch below it; the green strip is the
+n-well tap and the brown one the substrate tap, each with a contact and a
+short li run up to a purple metal1 rail. The middle is yours.*
+
 `make scaffold` gives you everything that is not a transistor:
 
 - the n-well (y = 3.00 to 6.00) and the p-well below it

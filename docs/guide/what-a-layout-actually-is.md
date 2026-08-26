@@ -67,7 +67,7 @@ it. There is:
 - a red poly stripe, 0.15 µm wide, crossing it,
 - and a contact on either side.
 
-The poly sits on 4 nm of oxide over the silicon. Put a voltage on it and the
+The poly sits on a few nanometres of oxide over the silicon. Put a voltage on it and the
 field pulls electrons to the surface of the silicon underneath, joining the
 two diffusion regions into one conducting channel. **The channel is the part of
 the diffusion the poly is standing on.**

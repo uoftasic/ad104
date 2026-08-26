@@ -1,6 +1,6 @@
 # Play with SiliWiz first
 
-**<https://app.siliwiz.com/>** — no account, no install, works on a phone.
+**<https://app.siliwiz.com/>** — no account, nothing to install, runs in a tab.
 
 SiliWiz is a browser toy that lets you paint layout layers and then shows you
 the **cross-section** of the silicon you just described, and simulates it. It

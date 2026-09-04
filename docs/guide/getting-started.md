@@ -17,7 +17,7 @@ asks where the silicon goes.
 ## The workbench
 
 Everything runs in the noVNC desktop from IC101:
-`hpretl/iic-osic-tools:2026.04`. Start it the way IC101 told you, open
+`hpretl/iic-osic-tools:2026.08`. Start it the way IC101 told you, open
 `http://localhost` in a browser, and use the terminal on that desktop.
 
 ```bash
@@ -33,7 +33,7 @@ names will be missing.
 ```bash
 mod add ad104     # first time only
 mod ad104
-magic --version   # expect: 8.3.636
+magic --version   # expect: 8.3.681
 ```
 
 ## Magic, the first time

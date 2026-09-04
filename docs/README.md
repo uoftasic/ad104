@@ -12,13 +12,13 @@ Labs run inside the shared **workspace** you set up in [IC101](https://uoftasic.
 |---|---|
 | **Track** | Analog |
 | **Prerequisites** | [IC101](https://uoftasic.com/ic101/) → [AD101](https://uoftasic.com/ad101/) → [AD102](https://uoftasic.com/ad102/) → [AD103](https://uoftasic.com/ad103/), in that order |
-| **Main tool** | **Magic** 8.3.636 — the layout editor. You have not used it before; [Getting started](guide/getting-started.md) assumes that. |
-| **Also** | netgen for LVS, KLayout 0.30.8 for looking at GDS, ngspice 46 for what the geometry costs you |
+| **Main tool** | **Magic** 8.3.681 — the layout editor. You have not used it before; [Getting started](guide/getting-started.md) assumes that. |
+| **Also** | netgen for LVS, KLayout 0.30.11 for looking at GDS, ngspice 47 for what the geometry costs you |
 | **Math level** | Arithmetic and a ruler. Every dimension in this course is a number of microns. |
 | **Time** | 16–20 hours, self-paced. More if you enjoy it, and you might. |
 
-> **This course is pinned to the workbench image `hpretl/iic-osic-tools:2026.04`**,
-> which ships **Magic 8.3.636**, **netgen 1.5.318** and **KLayout 0.30.8**.
+> **This course is pinned to the workbench image `hpretl/iic-osic-tools:2026.08`**,
+> which ships **Magic 8.3.681**, **netgen 1.5.323** and **KLayout 0.30.11**.
 > Check yours with `magic --version`.
 
 > **If your environment setup fails, run `make` anyway.** Every lab pins
@@ -92,7 +92,7 @@ expects you to work this out alone at 2 a.m. — see
 echo $PDK                      # must say sky130A, not ihp-sg13g2
 mod add ad104                  # first time only
 mod ad104
-magic --version                # expect: 8.3.636
+magic --version                # expect: 8.3.681
 cd labs/lab-01-open-the-cell && make
 ```
 

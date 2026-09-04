@@ -1,6 +1,6 @@
 # AD104 Lab 03 - draw a CMOS inverter
 #
-# Runs in a bare hpretl/iic-osic-tools:2026.04 container with no environment
+# Runs in a bare hpretl/iic-osic-tools:2026.08 container with no environment
 # setup: it pins PDK itself, because the image ships with PDK=ihp-sg13g2.
 #
 #   make            check YOUR cell: DRC, extract, LVS, and a verdict  (~1 s)

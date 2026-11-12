@@ -137,6 +137,12 @@ builds on it.
 
 ## Part 5: Measure your own cell (optional)
 
+> **Known problem:** `make mine` currently damages the file it copies (it overwrites the
+> `magic` line at the top), so the `make` after it stops with
+> `results/my_inv.pex.spice is missing - extraction did not run.` Skip this part until it is
+> fixed. If you have already run it, put the reference cell back with
+> `git checkout mag/my_inv.mag` and run `make` again.
+
 1. Copy your Lab 03 cell in and run the comparison again:
 
    ```bash
@@ -146,11 +152,6 @@ builds on it.
 
 2. Check the W and L rows. If they do not read `1.00 x`, your cell is not the one Lab 03 asked
    for, and the comparison is no longer isolating the drawing.
-
-> **Known problem:** if `make` stops with `results/my_inv.pex.spice is missing - extraction did
-> not run.`, `make mine` has damaged the copied file. Put the reference cell back with
-> `git checkout mag/my_inv.mag`, run `make` again, and say so in
-> [Discord](https://discord.gg/hrJnP5UsGz).
 
 **You should see** `1.00 x` on the W and L rows.
 

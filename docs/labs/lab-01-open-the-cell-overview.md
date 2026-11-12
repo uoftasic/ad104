@@ -24,6 +24,8 @@ This part runs in your browser and needs no setup. Do it before you open Magic f
 time; it is the cheapest twenty minutes in the course.
 
 1. Open **<https://app.siliwiz.com/>**. [SiliWiz](guide/siliwiz.md) describes the interface.
+   Load the inverter from the **Preset** dropdown above the drawing area to see a finished
+   example.
 2. Open **LESSONS** (top right) and do the *nmos* lesson. Drag the cross-section cut line with the
    blue slider so that it passes through the middle of the poly stripe, and look at the
    cross-section: substrate, a thin oxide, poly on top, and doped regions on either side.
@@ -31,7 +33,7 @@ time; it is the cheapest twenty minutes in the course.
    nothing joining them. **The transistor exists only where the poly crosses.**
 4. Move a contact until it hangs off the edge of the diffusion it sits on, and open the
    **CROSS SECTION & DRC** tab. SiliWiz's rules are not SKY130's, but the shape of the
-   complaint, "this thing does not surround that thing by enough", is the shape of most of the
+   complaint, "this thing does not surround that thing by enough", is the shape of half the
    errors you'll fix in Lab 02.
 5. Do the *parasitics* lesson. Stretch a metal wire longer and watch what happens to the
    simulated waveform. That is the argument of Lab 05, in two minutes.

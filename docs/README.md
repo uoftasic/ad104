@@ -57,8 +57,8 @@ include in your question.
 ## The workbench
 
 This course is pinned to the workbench image **`hpretl/iic-osic-tools:2026.08`**, which ships
-**Magic 8.3.681**, **netgen 1.5.323** and **KLayout 0.30.11**. Lab 01 has you set it up and
-check the Magic version.
+**Magic 8.3.681**, **netgen 1.5.323** and **KLayout 0.30.11**. You start it the way IC101
+showed you, and Lab 01 has you load this course's environment in it and check the Magic version.
 
 If the environment setup in Lab 01 fails, run `make` in a lab folder anyway. Every lab pins
 `PDK=sky130A` itself and ships its own `.magicrc`, so the labs run to completion in a bare
@@ -86,7 +86,7 @@ rails are purple metal1.*
 
 ## What you'll do
 
-1. Open a cell **you did not draw**, the foundry's own inverter, and get four tools to agree
+1. Open a cell **you did not draw**, the foundry's own inverter, and get four checks to agree
    about it before you draw anything.
 2. Fix **five broken layouts**, each breaking exactly one real SKY130 rule, including one that
    the default rule set calls clean.

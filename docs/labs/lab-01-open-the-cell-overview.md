@@ -1,7 +1,7 @@
 # Lab 01 — Open a cell you did not draw
 
 You'll set up the workbench, then load the foundry's own inverter, `sky130_fd_sc_hd__inv_1`,
-into Magic and get four tools to agree about it: DRC under two rule sets, extraction, and LVS.
+into Magic and get four checks to agree about it: DRC under two rule sets, extraction, and LVS.
 If they agree, your toolchain works, and every problem after this lab is a drawing problem.
 
 Package: [`labs/lab-01-open-the-cell/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-01-open-the-cell)
@@ -132,13 +132,14 @@ and off the poly, and a DRC complaint as soon as the contact leaves its diffusio
    ```
 
 2. Look at the full-rule-set count. **The foundry's own cell fails the full rule set**, and that
-   is the expected answer. All three violations come from one omission: the cell has no well
-   tap, because the library puts taps in a separate cell
+   is the expected answer. (Magic calls a rule set a DRC *style*, which is why the output says
+   `default style` and `full style`.) Before you read on, answer for yourself: why does the full
+   rule set find three violations in a cell that has been taped out hundreds of times?
+
+3. Check your answer. All three violations come from one omission: the cell has no well tap,
+   because the library puts taps in a separate cell
    ([Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md#why-the-cell-has-no-well-tap)
    explains why).
-
-   Answer for yourself: why does the full rule set find three violations in a cell that has been
-   taped out hundreds of times?
 
 **You should see** `PASS`, `0` under the default rule set and `3` under the full one.
 
@@ -151,7 +152,7 @@ and off the poly, and a DRC complaint as soon as the contact leaves its diffusio
    ```
 
    (`make edit` does the same, and is the name every other lab uses.) Magic opens with the cell
-   loaded.
+   loaded, and the terminal comes back to you while Magic stays open.
 
 2. Using [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) as a map, find:
 
@@ -201,7 +202,8 @@ Part 6.
 Everything `make` did in Part 3 is a short list of commands you can type yourself. This is the
 flow for every remaining lab in the course, and it is worth running once with your own fingers.
 
-1. In the `tkcon` console of the Magic window from Part 4, type these one at a time:
+1. In the `tkcon` console (the Tcl console window that opened with Magic in Part 4), type these
+   one at a time:
 
    ```tcl
    select top cell
@@ -276,7 +278,7 @@ You are done when:
 
 | What you see | What it means |
 |---|---|
-| `DRC violations, default style` is not 0 | The technology did not load. Check that `$PDK_ROOT` is set and that `.magicrc` is in the folder you ran `make` from. |
+| `DRC violations, default style` is not 0 | The technology did not load. Check that `$PDK_ROOT` points at the PDKs (`/foss/pdks` in the workbench image) and that `.magicrc` is in the folder you ran `make` from. |
 | `results/report.txt is missing` | Magic did not finish. Read `results/magic.log`. |
 | `LVS: netgen wrote no report` | Read `results/netgen.log`. The cause is usually `$PDK_ROOT` again. |
 | `magic: command not found` | You are not in the workbench container. |

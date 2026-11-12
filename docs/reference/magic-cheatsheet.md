@@ -1,7 +1,7 @@
 # Magic cheat sheet
 
-Everything this course uses. All of it can be typed into the `tkcon` console;
-the keyboard column is what works in the layout window.
+Every Magic command this course uses. You can type all of them into the `tkcon` console; the
+keyboard column is what works in the layout window.
 
 ## Starting
 
@@ -11,14 +11,20 @@ magic -d X11 <cellname>          # opens layout1 + tkcon
 magic -dnull -noconsole script.tcl   # batch, which is what the labs do
 ```
 
-`-d X11` is the driver that works in this container. `-d XR` can `BadAlloc`
-and give you a black window.
+`-d X11` is the driver that works in this container. `-d XR` can fail with `BadAlloc` and give
+you a black window.
 
-`.magicrc`, two lines, in the directory you start from:
+The image's `~/.magicrc` loads whichever PDK `$PDK` names. Each lab package also has a
+`.magicrc`, read from the directory you start Magic in, that loads SKY130 only if nothing has
+loaded it yet:
 
 ```tcl
-if {[info exists env(PDK_ROOT)]} {
+if {[tech name] eq "sky130A"} {
+    # Already loaded by ~/.magicrc. Nothing to do.
+} elseif {[info exists env(PDK_ROOT)]} {
     source $env(PDK_ROOT)/sky130A/libs.tech/magic/sky130A.magicrc
+} else {
+    puts stderr "PDK_ROOT is not set. Try:  export PDK_ROOT=/foss/pdks"
 }
 ```
 
@@ -33,8 +39,8 @@ if {[info exists env(PDK_ROOT)]} {
 | | `z` / `Z` | zoom in / out |
 | | `v` | view everything |
 
-**Always write `um`.** Numbers without a unit are lambda (0.01 µm here) and
-there is no warning.
+**Always write `um`.** Numbers without a unit are lambda (0.01 µm here), and there is no
+warning.
 
 ## Painting
 
@@ -59,9 +65,9 @@ poly                   li                     mcon
 m1 m2                  via1                   pfethvt
 ```
 
-`ndc`, `pdc`, `pc`, `ntapc`, `ptapc` and `mcon` are **contact types**: painting
-one fills the whole stack (lower layer + cut + upper layer) at once. Each cut
-must be exactly 0.17 µm square for a single contact.
+`ndc`, `pdc`, `pc`, `ntapc`, `ptapc` and `mcon` are **contact types**: painting one fills the
+whole stack (lower layer + cut + upper layer) at once. For a single contact, the cut must be
+exactly 0.17 µm square.
 
 ## Labels and ports
 
@@ -73,15 +79,15 @@ port makeall           ;# turn every label in the cell into a terminal
 port <name> index <n>  ;# set a port's number, if order matters to you
 ```
 
-A label lands on geometry **belonging to the current cell**. Over a subcell's
-shape it becomes the subcell's label, not yours.
+A label lands on geometry **belonging to the current cell**. Placed over a subcell's shape, it
+becomes the subcell's label, not yours.
 
 ## DRC
 
 ```tcl
 drc check              ;# re-run
 drc catchup            ;# wait for it to finish (batch scripts need this)
-drc count total        ;# how many violations - THE number you want
+drc count total        ;# how many violations: the number you want
 drc count              ;# careful: prints "Cell X has 3 error tiles." and then
                        ;#   "Total DRC errors found: 0" - that second line is a
                        ;#   hierarchical total and reads 0 on a flat cell
@@ -93,20 +99,19 @@ drc style drc(full)    ;# the rule set that catches missing well taps
 drc style drc(fast)    ;# back to the default
 ```
 
-The `Drc` menu on the layout window does the same things with a mouse, and one
-entry has no console equivalent worth typing:
+The `Drc` menu on the layout window does the same things with the mouse:
 
 | Menu | Same as |
 |---|---|
-| **Drc → DRC update** | `drc check` — the one to reach for when a freshly opened cell shows a green `☑ DRC` and no hatching |
+| **Drc → DRC update** | `drc check`. Use it when a freshly opened cell shows a green `☑ DRC` and no hatching. |
 | **Drc → DRC report** | `drc listall why`, and it needs no cursor box |
-| **Drc → DRC Find next error** | boxes *and zooms to* the next violating tile — the fastest way to find a hatched area you cannot see |
+| **Drc → DRC Find next error** | boxes *and zooms to* the next violating tile; the fastest way to find a hatched area you cannot see. It has no console equivalent worth typing. |
 | **Drc → DRC Complete** / **DRC Fast** | `drc style drc(full)` / `drc style drc(fast)` |
 
-**Magic does not check a cell you have only opened.** Its background checker
-re-checks tiles you *edit*; loading a `.mag` from disk edits nothing, so a cell
-with real violations opens showing a green `☑ DRC` and no white hatching. Run
-`drc check` (or `Drc → DRC update`) first, every time.
+**Magic does not check a cell you have only opened.** Its background checker re-checks tiles
+you *edit*, and loading a `.mag` from disk edits nothing, so a cell with real violations opens
+showing a green `☑ DRC` and no white hatching. Run `drc check` (or `Drc → DRC update`) first,
+every time.
 
 ## Extraction
 
@@ -142,7 +147,7 @@ gds write out.gds      ;# the file a foundry would take
 property FIXED_BBOX    ;# a cell's placement outline, if it has one
 ```
 
-## Batch scripting, the shape the labs use
+## Batch scripts
 
 ```tcl
 cd results
@@ -158,10 +163,10 @@ ext2spice -o my_inv.spice
 quit -noprompt
 ```
 
-Run it with `magic -dnull -noconsole thatfile.tcl`. `cd` **before** `addpath`,
-because `addpath` stores what you typed and does not re-resolve it.
+This is the shape the lab scripts use. Run it with `magic -dnull -noconsole thatfile.tcl`. Put
+`cd` **before** `addpath`, because `addpath` stores what you typed and does not re-resolve it.
 
-## netgen, for LVS
+## netgen (LVS)
 
 ```bash
 netgen -batch lvs \
@@ -171,14 +176,12 @@ netgen -batch lvs \
   report.txt
 ```
 
-Look for `Circuits match uniquely.` Anything else, read the report from the
-bottom.
+Look for `Circuits match uniquely.` For anything else, read the report from the bottom.
 
-## KLayout, for looking
+## KLayout (viewing)
 
 ```bash
 klayout -nn $PDK_ROOT/sky130A/libs.tech/klayout/tech/sky130A.lyt out.gds
 ```
 
-`-nn` loads the SKY130 technology so the layers are named and coloured
-properly.
+`-nn` loads the SKY130 technology, so the layers are named and coloured properly.

@@ -60,8 +60,10 @@ Magic decides which technology to load when it starts, from two startup files:
   `PDK=ihp-sg13g2` you get IHP's layers and none of SKY130's.
 - A file called `.magicrc` in **the directory you start Magic in**. Every lab package has one at
   its top level. It loads SKY130 if nothing has loaded it yet, and does nothing if
-  `~/.magicrc` already did. Loading it twice makes Magic print `Bad local startup file
-  ".magicrc", continuing without.` as the first line in the console.
+  `~/.magicrc` already did. That check matters: a `.magicrc` that loads SKY130 a second time
+  makes Magic print `Error parsing ".magicrc": can't rename to "closewrapperonly": command
+  already exists` and `Bad local startup file ".magicrc", continuing without.` in the first two
+  lines of the console, which looks like a broken toolchain on one that is fine.
 
 Every lab's Makefile also sets `PDK=sky130A` for the Magic it starts, so `make edit` opens in
 SKY130 even if `.designinit` failed for you.

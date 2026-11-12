@@ -176,7 +176,9 @@ Look at how the tools report it before you fix it.
    tap has no contact on it and nothing ties the well to VPWR.
 
 3. Fix it with the same loop as Part 3 (`make why C=5`, `make edit C=5`, `drc check`,
-   `drc why`), then `save` and run `make`.
+   `drc why`), then `save` and run `make`. In Magic, type `drc style drc(full)` before
+   `drc check`: under the default rule set this cell has no violations, so there is nothing for
+   `drc why` to name.
 
 Answer for yourself: if you had only run the default rule set, what would have told you about
 this cell? The habit to keep is one line: **before you believe a DRC count of zero, run

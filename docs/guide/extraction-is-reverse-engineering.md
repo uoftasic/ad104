@@ -19,7 +19,8 @@ parasitic resistors, hierarchical subcircuits, and no `.include` of the models.
 
 ## Reading the netlist
 
-From the inverter you draw in Lab 03:
+From the reference inverter for Lab 03 (yours has the same devices, though its ports may be listed
+in a different order, depending on the order you created the labels):
 
 ```spice
 .subckt my_inv A Y VPWR VGND

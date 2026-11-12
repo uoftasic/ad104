@@ -191,6 +191,8 @@ Part 6.
 
 3. Find `w=0.65` and `w=1`. Nobody typed those numbers; Magic measured the height of two
    rectangles. Answer for yourself: which rectangle's height is `w=0.65`?
+   ([What a layout is](guide/what-a-layout-actually-is.md#where-the-transistor-is) has the rule
+   if you need it.)
 
 4. Find `pfet_01v8_hvt`. The PMOS is the high-threshold flavour, and you'll need to remember that
    in Lab 03.
@@ -199,8 +201,9 @@ Part 6.
 
 ## Part 6: Run the flow by hand
 
-Everything `make` did in Part 3 is a short list of commands you can type yourself. This is the
-flow for every remaining lab in the course, and it is worth running once with your own fingers.
+Everything Magic did for `make` in Part 3 is a short list of commands you can type yourself.
+This is the flow for every remaining lab in the course, and it is worth running once with your
+own fingers.
 
 1. In the `tkcon` console (the Tcl console window that opened with Magic in Part 4), type these
    one at a time:

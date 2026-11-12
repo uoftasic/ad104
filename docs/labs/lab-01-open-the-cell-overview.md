@@ -1,210 +1,280 @@
 # Lab 01 — Open a cell you did not draw
 
-**Package:** [`labs/lab-01-open-the-cell/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-01-open-the-cell)
+You'll set up the workbench, then load the foundry's own inverter, `sky130_fd_sc_hd__inv_1`,
+into Magic and get four tools to agree about it: DRC under two rule sets, extraction, and LVS.
+If they agree, your toolchain works, and every problem after this lab is a drawing problem.
 
-Before you draw anything, get four tools to agree about somebody else's
-layout. If they do, your toolchain is correct and everything that goes wrong
-from here is a drawing problem — which is a far better problem to have.
+Package: [`labs/lab-01-open-the-cell/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-01-open-the-cell)
 
-## Prerequisites
+## Before you start
 
-[Getting started](guide/getting-started.md) ·
-[What a layout actually is](guide/what-a-layout-actually-is.md) ·
-[Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md)
+- Read [Getting started](guide/getting-started.md),
+  [What a layout is](guide/what-a-layout-actually-is.md), [SiliWiz](guide/siliwiz.md) and
+  [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md).
+- Finish [IC101](https://uoftasic.com/ic101/): you need the `workspace` clone and the noVNC
+  desktop.
+- Keep the [Magic cheat sheet](reference/magic-cheatsheet.md) open in another tab.
 
-## Objectives
+**Time:** about 1.5 hours, including 20 minutes for the optional SiliWiz part. `make` itself
+takes about a second and a half.
 
-- Load a real foundry standard cell into Magic
-- Run the design rule check under **both** rule sets and understand why they
-  disagree
-- Extract the geometry back into a SPICE netlist and read every field of it
-- Get netgen to confirm that netlist is what the foundry says the cell is
+## Part 1: Explore SiliWiz (optional)
 
-## Run it
+This part runs in your browser and needs no setup. Do it before you open Magic for the first
+time; it is the cheapest twenty minutes in the course.
 
-```bash
-cd labs/lab-01-open-the-cell
-make
-```
+1. Open **<https://app.siliwiz.com/>**. [SiliWiz](guide/siliwiz.md) describes the interface.
+2. Open **LESSONS** (top right) and do the *nmos* lesson. Drag the cross-section cut line with the
+   blue slider so that it passes through the middle of the poly stripe, and look at the
+   cross-section: substrate, a thin oxide, poly on top, and doped regions on either side.
+3. Drag the cut so that it misses the poly. The cross-section becomes two doped regions with
+   nothing joining them. **The transistor exists only where the poly crosses.**
+4. Move a contact until it hangs off the edge of the diffusion it sits on, and open the
+   **CROSS SECTION & DRC** tab. SiliWiz's rules are not SKY130's, but the shape of the
+   complaint, "this thing does not surround that thing by enough", is the shape of most of the
+   errors you'll fix in Lab 02.
+5. Do the *parasitics* lesson. Stretch a metal wire longer and watch what happens to the
+   simulated waveform. That is the argument of Lab 05, in two minutes.
 
-No environment setup needed. The `Makefile` pins `PDK=sky130A` itself, so this
-runs in a bare container even if `.designinit` failed you.
+**You should see** the transistor appear and disappear in the cross-section as the cut moves on
+and off the poly, and a DRC complaint as soon as the contact leaves its diffusion.
 
-Expected, in about **one and a half seconds** (1.35, 1.46 and 1.60 s on three
-timed clean runs):
+## Part 2: Set up the workbench
 
-```
-== magic: load, DRC, extract   (sky130_fd_sc_hd__inv_1)
-== netgen: layout vs the foundry's own netlist
+1. Start the noVNC desktop the way [IC101](https://uoftasic.com/ic101/) showed you, open
+   `http://localhost` in a browser, and open a terminal on that desktop. Type every command from
+   here on in that terminal, not on your laptop.
 
-  THE FOUNDRY'S INVERTER, MEASURED BY YOUR TOOLS
+2. Load the course environment. Do this in every new terminal; it does not carry over.
 
-  ok  cell width                              1.38 um   (reference 1.38)
-  ok  cell height                             2.72 um   (reference 2.72)
-  ok  DRC violations, default style                 0   (reference 0)
-  ok  DRC violations, full style                    3   (reference 3)
-  ok  devices extracted                             2   (reference 2)
+   ```bash
+   . /foss/designs/common/.designinit
+   ```
 
-      cell area  1.38 x 2.72 = 3.7536 um^2
+3. Check the PDK:
 
-  THE TWO TRANSISTORS IT FOUND
-      X0  sky130_fd_pr__nfet_01v8          W=0.65  L=0.15   drain area 0.169 um^2
-      X1  sky130_fd_pr__pfet_01v8_hvt      W=1  L=0.15   drain area 0.26 um^2
+   ```bash
+   echo $PDK
+   ```
 
-  LVS: Circuits match uniquely
+   It must print `sky130A`. If it prints `ihp-sg13g2`, the image's default, step 2 did not run in
+   this terminal.
 
-  THE THREE THINGS THE FULL RULE SET COMPLAINS ABOUT
-      All nwells must contain metal-connected N+ taps (nwell.4)
-      P-diff distance to N-tap must be < 15.0um (LU.3)
-      N-diff distance to P-tap must be < 15.0um (LU.2)
-      ...
+4. Get the course files. `mod` is a command that `.designinit` defines.
 
-PASS  Magic read the foundry's own layout, found zero violations under the
-      default rule set and the three expected context rules under the full
-      one, pulled two transistors out of the geometry, and netgen agreed
-      they are the circuit the foundry says the cell is.
-```
+   ```bash
+   mod add ad104     # first time only
+   mod ad104         # puts you in the course folder
+   ```
 
-## The three violations are the point of the lab
+5. Check the Magic version:
 
-**The foundry's own cell fails the full rule set.** Read that again before you
-assume you broke something.
+   ```bash
+   magic --version
+   ```
 
-All three are the same omission: this cell has no well tap, so the n-well is
-not tied to VPWR and the substrate is not tied to VGND. That is deliberate —
-taps cost area and a tap every 1.38 µm is far more than the process needs, so
-the library puts them in a separate cell (`sky130_fd_sc_hd__tapvpwrvgnd_1`,
-0.46 µm wide) and the flow drops a few into each row.
+   ```
+   8.3.681
+   ```
 
-> **"DRC clean" is not a property of a cell. It is a property of a cell in a
-> context.**
+| What you see | What it means |
+|---|---|
+| `.designinit: No such file or directory` | The workspace was not set up. Finish IC101. You can still run `make` in a lab: every lab package pins its own PDK. |
+| `couldn't read Username for 'https://github.com'` on `mod add ad104` | The repo did not answer anonymously. That is our problem, not yours; say so in [Discord](https://discord.gg/hrJnP5UsGz). |
 
-Meeting that here, on a cell you cannot possibly have damaged, is much cheaper
-than meeting it in the capstone and assuming you did.
+**You should see** `sky130A` from step 3 and `8.3.681` from step 5.
 
-## Procedure
+## Part 3: Run the check
 
-### L1 — Look at it
+1. From the course folder, go into the lab package and run it:
 
-```bash
-make gui
-```
+   ```bash
+   cd labs/lab-01-open-the-cell
+   make
+   ```
 
-Magic opens with the cell loaded. Find, using
-[Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) as a map:
+   The `Makefile` sets `PDK=sky130A` itself, so this works even if `.designinit` failed for you.
+   It takes about a second and a half (1.35, 1.46 and 1.60 s on three timed clean runs) and
+   prints:
 
-- the n-well across the top, and the p-diffusion inside it
-- the n-diffusion in the bottom half
-- the **single** poly stripe crossing both — that is why the two gates are
-  connected without a wire
-- the two metal1 rails, straddling y = 0 and y = 2.72
-- the contacts, every one of them 0.17 µm square
+   ```
+   == magic: load, DRC, extract   (sky130_fd_sc_hd__inv_1)
+   == netgen: layout vs the foundry's own netlist
 
-Then find something that is *not* there: a well tap.
+     THE FOUNDRY'S INVERTER, MEASURED BY YOUR TOOLS
 
-### L2 — Read the netlist
+     ok  cell width                              1.38 um   (reference 1.38)
+     ok  cell height                             2.72 um   (reference 2.72)
+     ok  DRC violations, default style                 0   (reference 0)
+     ok  DRC violations, full style                    3   (reference 3)
+     ok  devices extracted                             2   (reference 2)
 
-```bash
-make netlist
-```
+         cell area  1.38 x 2.72 = 3.7536 um^2
 
-```spice
-.subckt sky130_fd_sc_hd__inv_1 A VGND VNB VPB VPWR Y
-X0 Y A VGND VNB sky130_fd_pr__nfet_01v8     ad=0.169 pd=1.82 as=0.169 ps=1.82 w=0.65 l=0.15
-X1 Y A VPWR VPB sky130_fd_pr__pfet_01v8_hvt ad=0.26  pd=2.52 as=0.26  ps=2.52 w=1    l=0.15
-.ends
-```
+     THE TWO TRANSISTORS IT FOUND
+         X0  sky130_fd_pr__nfet_01v8          W=0.65  L=0.15   drain area 0.169 um^2
+         X1  sky130_fd_pr__pfet_01v8_hvt      W=1  L=0.15   drain area 0.26 um^2
 
-Six ports, and two of them are `VNB` and `VPB` — the bulk terminals. The cell
-exposes its own substrate and well as pins, precisely *because* it does not
-tie them to anything itself.
+     LVS: Circuits match uniquely
 
-Note `w=0.65` and `w=1`. Nobody typed those. Magic measured the height of two
-rectangles.
+     THE THREE THINGS THE FULL RULE SET COMPLAINS ABOUT
+         All nwells must contain metal-connected N+ taps (nwell.4)
+         P-diff distance to N-tap must be < 15.0um (LU.3)
+         N-diff distance to P-tap must be < 15.0um (LU.2)
+         ...
 
-Note `pfet_01v8_hvt`. The PMOS is the high-threshold flavour, and you will
-have to remember that in Lab 03.
+   PASS  Magic read the foundry's own layout, found zero violations under the
+         default rule set and the three expected context rules under the full
+         one, pulled two transistors out of the geometry, and netgen agreed
+         they are the circuit the foundry says the cell is.
+   ```
 
-### L3 — Do it by hand
+2. Look at the full-rule-set count. **The foundry's own cell fails the full rule set**, and that
+   is the expected answer. All three violations come from one omission: the cell has no well
+   tap, because the library puts taps in a separate cell
+   ([Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md#why-the-cell-has-no-well-tap)
+   explains why).
 
-Everything `make` just did is thirteen commands you can type. In the tkcon console:
+   Answer for yourself: why does the full rule set find three violations in a cell that has been
+   taped out hundreds of times?
 
-```tcl
-select top cell
-drc euclidean on
-drc check
-drc catchup
-drc count total
-drc style drc(full)
-drc check
-drc catchup
-drc count total
-drc why
-extract do local
-extract all
-ext2spice lvs
-ext2spice -o /tmp/inv.spice
-```
+**You should see** `PASS`, `0` under the default rule set and `3` under the full one.
 
-Type them. Watch the count change when the rule set does: `Total DRC errors
-found: 0`, then `Total DRC errors found: 3`.
+## Part 4: Look at the cell in Magic
 
-Three of those lines are load-bearing and easy to leave out:
+1. Open the cell:
 
-- **`select top cell`** — `drc why` only reports on what is inside the cursor
-  box, and a freshly opened cell has no box worth speaking of. Without it you
-  get `No errors found.` on a cell with three violations.
-- **`drc catchup`** — `drc check` queues the re-check; `drc catchup` waits for
-  it to finish. Count too early and you count nothing.
+   ```bash
+   make gui
+   ```
+
+   (`make edit` does the same, and is the name every other lab uses.) Magic opens with the cell
+   loaded.
+
+2. Using [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) as a map, find:
+
+   - the n-well across the top, and the p-diffusion inside it
+   - the n-diffusion in the bottom half
+   - the **single** poly stripe crossing both, which is why the two gates are connected without a
+     wire
+   - the two metal1 rails, straddling y = 0 and y = 2.72
+   - the contacts, every one of them 0.17 µm square
+
+3. Now look for something that is *not* there: a well tap.
+
+**You should see** every item in step 2, and no tap anywhere in the cell. Leave Magic open for
+Part 6.
+
+## Part 5: Read the extracted netlist
+
+1. In the terminal, print the netlist Magic extracted from the geometry:
+
+   ```bash
+   make netlist
+   ```
+
+   ```spice
+   * NGSPICE file created from sky130_fd_sc_hd__inv_1.ext - technology: sky130A
+
+   .subckt sky130_fd_sc_hd__inv_1 A VGND VNB VPB VPWR Y
+   X0 Y A VGND VNB sky130_fd_pr__nfet_01v8 ad=0.169 pd=1.82 as=0.169 ps=1.82 w=0.65 l=0.15
+   X1 Y A VPWR VPB sky130_fd_pr__pfet_01v8_hvt ad=0.26 pd=2.52 as=0.26 ps=2.52 w=1 l=0.15
+   .ends
+   ```
+
+2. Count the ports. There are six, and two of them, `VNB` and `VPB`, are the bulk terminals. The
+   cell exposes its own substrate and well as pins because it does not tie them to anything
+   itself.
+
+3. Find `w=0.65` and `w=1`. Nobody typed those numbers; Magic measured the height of two
+   rectangles. Answer for yourself: which rectangle's height is `w=0.65`?
+
+4. Find `pfet_01v8_hvt`. The PMOS is the high-threshold flavour, and you'll need to remember that
+   in Lab 03.
+
+**You should see** two devices, six ports, and `w=0.65 l=0.15` on the NMOS.
+
+## Part 6: Run the flow by hand
+
+Everything `make` did in Part 3 is a short list of commands you can type yourself. This is the
+flow for every remaining lab in the course, and it is worth running once with your own fingers.
+
+1. In the `tkcon` console of the Magic window from Part 4, type these one at a time:
+
+   ```tcl
+   select top cell
+   drc euclidean on
+   drc check
+   drc catchup
+   drc count total
+   drc style drc(full)
+   drc check
+   drc catchup
+   drc count total
+   drc why
+   extract do local
+   extract all
+   ext2spice lvs
+   ext2spice -o /tmp/inv.spice
+   ```
+
+2. Watch the count change when the rule set does: the first `drc count total` prints
+   `Total DRC errors found: 0`, and the second prints `Total DRC errors found: 3`. `drc why` then
+   names the three rules.
+
+Three of those lines are easy to leave out and matter:
+
+- **`select top cell`**: `drc why` only reports on what is inside the cursor box, and a freshly
+  opened cell has no box worth speaking of. Without it you get `No errors found.` on a cell with
+  three violations.
+- **`drc catchup`**: `drc check` queues the re-check, and `drc catchup` waits for it to finish.
+  Count too early and you count nothing.
 - **`drc count total`**, not `drc count`. Plain `drc count` prints two lines,
-  `Cell sky130_fd_sc_hd__inv_1 has 3 error tiles.` and then
-  `Total DRC errors found: 0` — that second number is the *hierarchical*
-  total across subcells, and on a flat cell it is always 0. Read the last line
-  of `drc count` and the number appears never to change at all.
+  `Cell sky130_fd_sc_hd__inv_1 has 3 error tiles.` and then `Total DRC errors found: 0`. The
+  second number is the *hierarchical* total across subcells, which is always 0 on a flat cell, so
+  if you read the last line of `drc count` the number never seems to change.
 
-This is the flow for every remaining lab in this course and it is worth having
-run it once with your own fingers.
+**You should see** `0`, then `3`, then the same three rule names as in Part 3.
 
-### L4 — Look at the library
+## Part 7: Browse the library
 
-```bash
-ls $PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/mag/ | wc -l     # 446
-ls $PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/mag/ | grep __inv_
-```
+1. Count the cells in the library and list the inverters:
 
-Seven inverters: `inv_1 inv_2 inv_4 inv_6 inv_8 inv_12 inv_16`. Same logic,
-increasing drive strength. Open `inv_8` next to `inv_1` and see where the
-factor of eight went.
+   ```bash
+   ls $PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/mag/ | wc -l
+   ls $PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/mag/ | grep __inv_
+   ```
 
-```bash
-make klayout
-```
+   The first prints `446`. The second lists seven inverters: `inv_1`, `inv_2`, `inv_4`, `inv_6`,
+   `inv_8`, `inv_12` and `inv_16`. They are the same logic with increasing drive strength.
 
-opens the whole library GDS in KLayout, which is a much better viewer than
-Magic and cannot edit anything, so it is safe to browse.
+2. Open the whole library GDS in KLayout, which is a much better viewer than Magic and cannot
+   edit anything, so it is safe to browse:
 
-## Expected results
+   ```bash
+   make klayout
+   ```
+
+3. Open `inv_8` next to `inv_1` and see where the factor of eight went.
+
+**You should see** 446 cells, seven inverters, and an `inv_8` that is visibly wider than `inv_1`.
+
+## Finishing
+
+You are done when:
 
 - [ ] `make` ends in `PASS`
-- [ ] you can point at the n-well, the two diffusions, the poly stripe and the
-      two rails in the Magic window
-- [ ] you can say why the full rule set finds three violations in a cell that
-      has been taped out hundreds of times
-- [ ] you know what `w=0.65` in the extracted netlist is the height of
+- [ ] you can point at the n-well, the two diffusions, the poly stripe and the two rails in the
+      Magic window
+- [ ] you can say why the full rule set finds three violations in a cell that has been taped out
+      hundreds of times
+- [ ] you know which rectangle's height `w=0.65` in the extracted netlist is
 
-## Files
+## If something goes wrong
 
-| Path | What it is |
+| What you see | What it means |
 |---|---|
-| `.magicrc` | the two lines that load SKY130 into Magic |
-| `tcl/inspect.tcl` | the Magic script `make` runs, in the order you would type it |
-| `src/check.py` | reads what Magic and netgen produced and prints the verdict |
-
-## If it fails
-
-| What you see | What it is |
-|---|---|
-| `DRC violations, default style` is not 0 | The technology did not load. Check `$PDK_ROOT` is set and that `.magicrc` is in the directory you ran `make` from. |
-| `results/report.txt is missing` | Magic did not finish. `cat results/magic.log`. |
-| `LVS: netgen wrote no report` | `cat results/netgen.log`. Usually `$PDK_ROOT` again. |
+| `DRC violations, default style` is not 0 | The technology did not load. Check that `$PDK_ROOT` is set and that `.magicrc` is in the folder you ran `make` from. |
+| `results/report.txt is missing` | Magic did not finish. Read `results/magic.log`. |
+| `LVS: netgen wrote no report` | Read `results/netgen.log`. The cause is usually `$PDK_ROOT` again. |
 | `magic: command not found` | You are not in the workbench container. |

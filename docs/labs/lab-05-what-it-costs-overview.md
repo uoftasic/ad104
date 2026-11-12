@@ -1,162 +1,167 @@
 # Lab 05 — What it costs
 
-**Package:** [`labs/lab-05-what-it-costs/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-05-what-it-costs)
+You'll extract the Lab 03 inverter and the foundry's `inv_1` with every parasitic capacitance
+kept, simulate both, and put a price on the drawing: the same two transistors, drawn twice,
+measured for area and delay.
 
-The same two transistors, drawn twice, priced.
+Package: [`labs/lab-05-what-it-costs/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-05-what-it-costs)
 
-## Prerequisites
+## Before you start
 
-Lab 03 passing. [What your drawing costs](guide/what-your-drawing-costs.md) ·
-[Extraction is reverse engineering](guide/extraction-is-reverse-engineering.md)
+- Get [Lab 03](labs/lab-03-draw-an-inverter-overview.md) to `PASS`.
+- Read [Area, parasitics and delay](guide/what-your-drawing-costs.md). This lab also uses
+  [Extraction](guide/extraction-is-reverse-engineering.md).
 
-## Objectives
+**Time:** about 1 hour, most of it reading the results. Each full `make` takes two to three
+minutes (114 s and 182 s on two timed clean runs, depending on what else the machine is doing).
+Nearly all of that is the two ring oscillators: 62 extracted subcircuits, 20 ns of transient, and
+ngspice reading the whole SKY130 model library twice.
 
-- Extract a layout with **every** parasitic capacitance kept
-- Measure a gate delay two different ways and understand why they disagree
-- Build a ring oscillator and get a real number for one gate delay in SKY130
-- Put a price on the layout choice you made in Lab 03
+## Part 1: Run the comparison
 
-## Run it
+1. Go into the lab package and run it:
 
-```bash
-cd labs/lab-05-what-it-costs
-make
-```
+   ```bash
+   cd labs/lab-05-what-it-costs
+   make
+   ```
 
-**Two to three minutes** — 114 s and 182 s on two timed clean runs, depending
-on what else the machine is doing. Nearly all of it is the two ring
-oscillators: 62 extracted subcircuits, 20 ns of transient, and ngspice reading
-the whole SKY130 model library twice.
+   By default it compares the **reference** Lab 03 inverter with the foundry's. Part 5 (optional)
+   swaps in your own. It prints:
 
-By default it compares the **reference** Lab 03 inverter against the foundry's.
-To use your own:
+   ```
+     THE SAME TWO TRANSISTORS, DRAWN TWICE
 
-```bash
-make mine MAG=../lab-03-draw-an-inverter/mag/my_inv.mag
-make
-```
+                                          yours       foundry           ratio
+     ------------------------------------------------------------------------
+     cell width                               3          1.38 um       2.17 x
+     cell height                              6          2.72 um       2.21 x
+     cell area                               18         3.754 um2      4.80 x
 
-## What it prints
+     NMOS: sky130_fd_pr__nfet_01v8
+        W                                  0.65          0.65 um       1.00 x
+        L                                  0.15          0.15 um       1.00 x
+        drain junction area               0.715         0.169 um2      4.23 x
+        drain junction perim                3.5          1.82 um       1.92 x
+     PMOS: sky130_fd_pr__pfet_01v8_hvt
+        W                                     1             1 um       1.00 x
+        L                                  0.15          0.15 um       1.00 x
+        drain junction area                 1.1          0.26 um2      4.23 x
+        drain junction perim                4.2          2.52 um       1.67 x
 
-```
-  THE SAME TWO TRANSISTORS, DRAWN TWICE
+     extracted capacitance, total         2.024         1.563 fF       1.29 x
+          ... of it on the output        0.3035        0.3889 fF       0.78 x
 
-                                       yours       foundry           ratio
-  ------------------------------------------------------------------------
-  cell width                               3          1.38 um       2.17 x
-  cell height                              6          2.72 um       2.21 x
-  cell area                               18         3.754 um2      4.80 x
+     DELAY, fan-out of 4
+     t_pHL                                40.21         35.98 ps       1.12 x
+     t_pLH                                95.44          86.4 ps       1.10 x
+     average                              67.82         61.19 ps       1.11 x
 
-  NMOS: sky130_fd_pr__nfet_01v8
-     W                                  0.65          0.65 um       1.00 x
-     L                                  0.15          0.15 um       1.00 x
-     drain junction area               0.715         0.169 um2      4.23 x
-     drain junction perim                3.5          1.82 um       1.92 x
-  PMOS: sky130_fd_pr__pfet_01v8_hvt
-     W                                     1             1 um       1.00 x
-     L                                  0.15          0.15 um       1.00 x
-     drain junction area                 1.1          0.26 um2      4.23 x
-     drain junction perim                4.2          2.52 um       1.67 x
+     RING OSCILLATOR, 31 stages, nothing but the cell driving itself
+     period                                2720          2138 ps       1.27 x
+     frequency                            367.6         467.8 MHz      0.79 x
+     one stage                            43.88         34.48 ps       1.27 x
+   ```
 
-  extracted capacitance, total         2.024         1.563 fF       1.29 x
-       ... of it on the output        0.3035        0.3889 fF       0.78 x
+2. Find the four `1.00 x` rows for W and L. They are the control: the transistors are identical,
+   down to the model name, so **everything else on the table comes from the drawing.**
 
-  DELAY, fan-out of 4
-  t_pHL                                40.21         35.98 ps       1.12 x
-  t_pLH                                95.44          86.4 ps       1.10 x
-  average                              67.82         61.19 ps       1.11 x
+**You should see** `1.00 x` on every W and L row, and `make` ending in `PASS`. There is no wrong
+answer in this lab, only a measurement.
 
-  RING OSCILLATOR, 31 stages, nothing but the cell driving itself
-  period                                2720          2138 ps       1.27 x
-  frequency                            367.6         467.8 MHz      0.79 x
-  one stage                            43.88         34.48 ps       1.27 x
-```
+## Part 2: Compare the two delay rows
 
-Every `1.00 x` in the W and L rows is the control. The transistors are
-identical, down to the model name. **Everything else on that table is the
-drawing.**
+1. Find the two delay ratios: **1.11 x at fan-out 4, 1.27 x in the ring.** Your cell is 11 %
+   slower in one test and 27 % slower in the other.
 
-## Read the two delay rows twice
+2. Explain the difference before you read on. Hint: a gate's delay is how long it takes to charge
+   whatever hangs off its output, and that load has two parts, what you are driving and what you
+   brought with you.
 
-**11 % slower at fan-out 4. 27 % slower in a ring.** Same two cells.
+[Area, parasitics and delay](guide/what-your-drawing-costs.md#fo4-delay-and-ring-oscillator-delay)
+has the full explanation. In short: at fan-out 4 the four downstream gates dominate the load, and
+their input capacitance is identical for both cells. In the ring each stage drives one gate and
+nothing else, so your 4.23 × junction area is a large share of the total.
 
-A gate's delay is how long it takes to charge whatever hangs off its output,
-and that load has two parts: what you are driving, and what you brought with
-you. The second is your own drain junctions and wiring, and it is roughly a
-fixed number of femtofarads.
+**You should see** that the self-loaded test (the ring) shows the bigger penalty.
 
-At **fan-out 4** the four downstream gates dominate, and their input
-capacitance is identical because W and L are identical. Your extra baggage is
-a minority of the total.
+## Part 3: Look at the capacitors
 
-In a **ring** each stage drives one gate and nothing else. Now your 4.23 ×
-junction area is a big share of the total, and it shows.
+1. Print both parasitic netlists side by side:
 
-> Layout parasitics behave like a fixed additive load. They disappear when a
-> gate drives something big and they dominate when it drives something small —
-> which is most of a chip.
+   ```bash
+   make caps
+   ```
 
-## The row that looks backwards
+2. Compare the two rows that seem to disagree:
 
-```
-  extracted capacitance, total         2.024         1.563 fF       1.29 x
-       ... of it on the output        0.3035        0.3889 fF       0.78 x
-```
+   ```
+     extracted capacitance, total         2.024         1.563 fF       1.29 x
+          ... of it on the output        0.3035        0.3889 fF       0.78 x
+   ```
 
-By the second measure the foundry's cell is *worse*. That is real, and it is
-worth understanding rather than explaining away.
+   By the second measure the foundry's cell is *worse*. That is real. The extracted `C` elements
+   are **wire-to-wire coupling**, and the foundry cell has more of it on the output because
+   everything in it is packed close together.
 
-The extracted `C` elements are **wire-to-wire coupling**, and the foundry cell
-has more of it on the output precisely because everything in it is crammed
-together. What that list does **not** contain is the **junction capacitance**
-of the source and drain diffusions — that lives inside the device model,
-computed from the `ad`, `as`, `pd` and `ps` parameters on each device line.
-Yours are 4.23 × theirs.
+3. Answer for yourself: where does the **junction capacitance** of the source and drain
+   diffusions live, and why is it not in the `C` lines? (It is inside the device model, computed
+   from the `ad`, `as`, `pd` and `ps` parameters on each device line, and yours are 4.23 ×
+   theirs.)
 
-You cannot read the answer off the parasitic netlist. You have to simulate it.
-That is why this lab does.
+You cannot read the answer off the parasitic netlist. You have to simulate, which is why this lab
+does.
 
-```bash
-make caps    # both parasitic netlists, side by side
-```
+**You should see** the `C` lines for both cells, with no junction capacitance among them.
 
-## The ring oscillator, and where the 34 ps comes from
+## Part 4: Read the ring oscillator
 
-An odd number of inverters in a loop cannot settle: whatever it decides, it
-disagrees with itself one lap later. So it oscillates, with period
-$2 N t_p$, and that makes it the cleanest possible measurement of a single
-gate delay — no source, no load, nothing but the cell driving one copy of
-itself.
+An odd number of inverters in a loop cannot settle: whatever value it holds, it contradicts
+itself one lap later. So it oscillates, with period $2 N t_p$, which makes it the cleanest
+measurement of a single gate delay: no source and no external load, just the cell driving one copy
+of itself.
 
-31 stages, the foundry's cell, extracted with parasitics:
+1. Open `src/mkring.py`, which writes both 31-stage rings. It is under fifty lines.
 
-```
-period 2137.8 ps  ->  467.8 MHz  ->  34.48 ps per stage
-```
+2. Check the foundry cell's numbers from Part 1 against the formula:
 
-**34 picoseconds is the floor** for this process at 1.8 V. Every timing number
-in the capstone is a multiple of it, and the whole of
-[Why the clock cannot go faster](guide/why-the-clock-cannot-go-faster.md)
-is built on it.
+   ```
+   period 2137.8 ps  ->  467.8 MHz  ->  34.48 ps per stage
+   ```
 
-`src/mkring.py` writes both rings; open it, it is thirty lines.
+**34 picoseconds is the floor** for this process at 1.8 V. The capstone's timing numbers are
+multiples of it, and [What sets the clock frequency](guide/why-the-clock-cannot-go-faster.md)
+builds on it.
 
-## Expected results
+**You should see** 2137.8 ps divided by $2 \times 31$ come out at about 34.48 ps.
 
-- [ ] `make` ends in `PASS` — there is no wrong answer here, only a measurement
-- [ ] your W and L rows read `1.00 x`; if they do not, your cell is not the one
-      Lab 03 asked for and the comparison is not isolating the drawing
+## Part 5: Measure your own cell (optional)
+
+1. Copy your Lab 03 cell in and run the comparison again:
+
+   ```bash
+   make mine MAG=../lab-03-draw-an-inverter/mag/my_inv.mag
+   make
+   ```
+
+2. Check the W and L rows. If they do not read `1.00 x`, your cell is not the one Lab 03 asked
+   for, and the comparison is no longer isolating the drawing.
+
+> **Known problem:** if `make` stops with `results/my_inv.pex.spice is missing - extraction did
+> not run.`, `make mine` has damaged the copied file. Put the reference cell back with
+> `git checkout mag/my_inv.mag`, run `make` again, and say so in
+> [Discord](https://discord.gg/hrJnP5UsGz).
+
+**You should see** `1.00 x` on the W and L rows.
+
+## Finishing
+
+You are done when:
+
+- [ ] `make` ends in `PASS`
+- [ ] your W and L rows read `1.00 x`
 - [ ] you can explain why FO4 and the ring disagree
-- [ ] you can say where junction capacitance lives, and why it is not in the
-      `C` lines
+- [ ] you can say where junction capacitance lives, and why it is not in the `C` lines
 
-## Targets
-
-| Command | What it does |
-|---|---|
-| `make` | extract both, simulate both, print the table |
-| `make mine MAG=...` | copy your own Lab 03 cell in and compare that |
-| `make pex` | just the extraction, about 4 s |
-| `make caps` | both parasitic netlists, side by side |
-| `make table` | re-print from results already on disk, instantly |
-| `make clean` | delete `results/` |
+`make table` re-prints the comparison from results already on disk, instantly. `make pex` runs
+only the extraction, in about 4 s.

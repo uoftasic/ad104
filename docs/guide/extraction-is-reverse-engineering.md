@@ -109,7 +109,7 @@ C5 VPWR VGND 1.33952f
 ```
 
 That is six capacitors nobody drew. Any two conductors near each other form a capacitor, and a
-layout is conductors near each other.
+layout is full of conductors near each other.
 
 **Use the `lvs` netlist for LVS and the `cthresh 0` one for simulation.** Every lab in this course
 writes both. Comparing a parasitic netlist against a schematic in netgen only produces noise.

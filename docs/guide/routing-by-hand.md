@@ -106,5 +106,4 @@ cell's origin. Add the x you placed the cell at, and you know where to put the `
 The capstone turns this page into a step-by-step procedure: find both pins in absolute
 coordinates, put an `mcon` and a pad on each, join them inside the band, then check. Two checks
 matter, and they catch different things. DRC, under both rule sets, catches spacing and enclosure
-mistakes and the missing tap cells. LVS catches a wire that does not quite land. Neither check
-catches what the other one does.
+mistakes and the missing tap cells. LVS catches a wire that does not quite land.

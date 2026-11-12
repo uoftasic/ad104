@@ -12,7 +12,8 @@ Package: [`labs/capstone-place-and-route/`](https://github.com/uoftasic/ad104/tr
 - Finish Labs 01–05.
 - Read [Routing by hand](guide/routing-by-hand.md) and
   [What sets the clock frequency](guide/why-the-clock-cannot-go-faster.md).
-  [Instances and hierarchy](guide/cells-are-lego.md) covers placing cells and the label trap.
+  [Instances and hierarchy](guide/cells-are-lego.md) covers placing cells, and why a label on a
+  subcell's shape does not name your block.
 - Keep the [DRC error decoder](reference/drc-error-decoder.md) open in another tab.
 
 **Time:** about 3 hours, about half of it routing. `make layout` (DRC and LVS only) takes about
@@ -141,8 +142,11 @@ still reports 32, and LVS still fails, until Parts 4 and 5.
 
 ## Part 4: Bring out the pins
 
-1. Bring out the block's own pins, `CLK`, `D`, `A`, `B` and `Y`: each one an `mcon` on the cell's
-   li pin, a metal1 pad, and a label on the pad. Use the spot you chose in Part 2 for `D`.
+1. Bring out the block's own pins, `CLK`, `D`, `A`, `B` and `Y`: each one an `mcon` on a cell's li
+   pin, a metal1 pad, and a label on the pad. The circuit at the top tells you which cell each
+   pin belongs to: `CLK` and `D` go to the flip-flop, `A` and `B` to the free input of `and1` and
+   `and2`, and `Y` comes from the buffer's output. Their coordinates are in each cell's `flabel`
+   lines. Use the spot you chose in Part 2 for `D`.
 
 2. Paint metal1 rails across the whole row and label them `VGND` and `VPWR`, so the supply labels
    sit on geometry that belongs to *this* cell. A label on a cell's own rail would belong to that

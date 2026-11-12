@@ -75,7 +75,7 @@ You never type `W=0.65` in this course. In Lab 03 you draw a rectangle 0.65 µm 
 reads `w=0.65` back out of it. That round trip, where you draw a shape and a tool tells you the
 device parameter, is when layout stops being abstract.
 
-## Two less obvious points
+## Diffusion as a wire, and tying the wells
 
 **Diffusion is also a wire.** The strip of n-diffusion between two poly gates is a conductor.
 That is why two transistors in series can share it and need no contact between them, which you

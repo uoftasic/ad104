@@ -1,9 +1,11 @@
 # AD104 — Layout
 
 AD103 ended with a CMOS inverter you could simulate: two symbols and a wire. In AD104 you draw
-that inverter as a layout, the coloured rectangles a foundry turns into masks. You check it with
-the same tools a real tapeout uses, measure what your drawing costs against the foundry's own
-cell, and finish by placing and routing a small block of standard cells by hand.
+that inverter as a layout, the coloured rectangles a foundry turns into masks. You check it the
+way a real tapeout does, with a design rule check (DRC, can it be manufactured?) and a
+layout-versus-schematic check (LVS, is it the circuit you meant?). Then you measure what your
+drawing costs against the foundry's own cell, and finish by placing and routing a small block of
+standard cells by hand.
 
 Part of the **UofT ASIC Team** education materials. Published at **https://uoftasic.com/ad104/**.
 Labs run inside the shared **workspace** you set up in [IC101](https://uoftasic.com/ic101/).

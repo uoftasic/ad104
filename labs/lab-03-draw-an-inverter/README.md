@@ -2,12 +2,8 @@
 
 Writeup: [uoftasic.com/ad104 → Lab 03](https://uoftasic.com/ad104/#/labs/lab-03-draw-an-inverter-overview)
 
-Two transistors, one shared gate, DRC clean under both rule sets, and proved
-by netgen to be the circuit you meant.
-
-**Wn = 0.65 µm, Wp = 1.00 µm, L = 0.15 µm** — the foundry's own `inv_1`
-numbers, so that Lab 05 can compare the two cells with the transistors held
-identical.
+You draw a CMOS inverter in Magic, starting from a frame that already has the wells, rails and
+taps, until it is DRC clean under both rule sets and netgen matches it to the schematic.
 
 ## Run it
 
@@ -18,35 +14,8 @@ make edit         # open it in Magic
 make              # check what you have, about 1.1 s
 ```
 
-`make` reports in words. On the bare scaffold:
-
-```
-FAIL  No transistors at all. A transistor is the place where a poly stripe
-      crosses a diffusion. If Magic sees no crossing, either the poly does
-      not overlap the diffusion, or one of them is not the layer you think
-      it is - check the layer name in the title bar as you paint.
-```
-
-Fix one thing, run `make` again. That loop is the job.
-
-## What PASS looks like
-
-```
-      transistors            2   (1 n, 1 p)
-        X0   sky130_fd_pr__nfet_01v8          W=0.65  L=0.15
-        X1   sky130_fd_pr__pfet_01v8_hvt      W=1  L=0.15
-
-      ports                  A Y VPWR VGND
-
-      DRC, default rule set  0
-      DRC, full rule set     0
-
-      LVS                    Circuits match uniquely.
-```
-
-Note `_hvt` on the PMOS. If yours says `sky130_fd_pr__pfet_01v8` you have
-built the wrong transistor, DRC will never mention it, and the checker will
-tell you what to paint.
+`make` reports in words what it found and what to fix next. Save in Magic before every `make`:
+the checker reads `mag/my_inv.mag` from disk.
 
 ## Targets
 
@@ -66,11 +35,7 @@ tell you what to paint.
 |---|---|
 | `mag/my_inv.mag` | **your cell** |
 | `tcl/frame.tcl` | the frame: wells, rails, taps. What `make scaffold` runs. |
-| `tcl/inverter.tcl` | the reference cell, drawn command by command with the reason for every number |
+| `tcl/inverter.tcl` | the reference cell, drawn command by command with the reason for every number. Read it after yours passes. |
 | `tcl/verify.tcl` | DRC, extract and PEX-extract whatever is in `mag/` |
 | `spice/my_inv_sch.spice` | the schematic side of LVS |
 | `solutions/inv_ref.mag` | the finished reference. Open it after yours works. |
-
-`tcl/inverter.tcl` is the most useful file in this package and it is not a
-diff — it is the cell built one command at a time, with a comment on each line
-saying which rule set the number. Read it **after** yours passes.

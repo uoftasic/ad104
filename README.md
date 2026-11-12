@@ -4,7 +4,9 @@ Draw a transistor as geometry in Magic: DRC-clean, LVS-clean, and placed and
 routed by hand.
 
 **Published at <https://uoftasic.com/ad104/>.** Part of the
-[UofT ASIC Team](https://uoftasic.com) education materials.
+[UofT ASIC Team](https://uoftasic.com) education materials. Students start at the
+Course path on the course home page, which alternates guide pages to read with
+labs to do.
 
 | | |
 |---|---|
@@ -23,13 +25,14 @@ cd labs/lab-01-open-the-cell && make      # ~1.5 s, ends in PASS
 
 Every lab pins `PDK=sky130A` itself and ships its own `.magicrc`, so `make`
 works in a bare container with no environment setup, and every lab ends in
-`PASS` or `FAIL` with a reason.
+`PASS` or `FAIL` with a reason. Lab 01 walks students through the workbench
+setup.
 
 ## Labs
 
 | | | Runs in |
 |---|---|---|
-| [Lab 01](labs/lab-01-open-the-cell/) | Open a cell you did not draw — DRC, extract and LVS the foundry's own inverter | 1.5 s |
+| [Lab 01](labs/lab-01-open-the-cell/) | Open a cell you did not draw: DRC, extract and LVS the foundry's own inverter | 1.5 s |
 | [Lab 02](labs/lab-02-break-it-on-purpose/) | Five broken layouts, five real SKY130 rules, one of them invisible | 4 s |
 | [Lab 03](labs/lab-03-draw-an-inverter/) | Draw a DRC-clean, LVS-clean CMOS inverter from an empty frame | 1.1 s |
 | [Lab 04](labs/lab-04-buffer-and-and/) | A buffer and an AND gate, out of cells you already have | 1 min |
@@ -41,7 +44,9 @@ works in a bare container with no environment setup, and every lab ends in
 | Path | |
 |---|---|
 | `docs/` | the published site (Docsify, no build step) |
-| `labs/<id>/mag/` | `.mag` layouts — the files you edit |
+| `docs/guide/` | guide pages: reading only, no commands to run |
+| `docs/labs/` | lab writeups: numbered parts where students run everything |
+| `labs/<id>/mag/` | `.mag` layouts: the files you edit |
 | `labs/<id>/tcl/` | the Magic scripts `make` runs, written to be readable |
 | `labs/<id>/spice/` | schematic netlists for LVS, and testbenches |
 | `labs/<id>/src/` | Python checkers and deck generators |

@@ -1,16 +1,14 @@
 # Anatomy of a standard cell
 
-Before you draw one, read one. The SKY130 high-density library ships **446
-cells** in `$PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/mag/`, and the smallest
-of them is the inverter you are about to reinvent.
+Before you draw a cell, read one. The SKY130 high-density library ships **446 cells** in
+`$PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/mag/`, and the smallest of them is the inverter you
+are about to draw yourself, `sky130_fd_sc_hd__inv_1`. In Lab 01 you open it and get four tools to
+agree about it. This page tells you what to look for.
 
-Lab 01 opens `sky130_fd_sc_hd__inv_1` and gets four tools to agree about it.
-This page is what to look at while you are in there.
+## The constraints every cell obeys
 
-## The shape of the deal
-
-A standard cell is a transistor-level layout that has agreed to obey a few
-constraints so that a machine can place thousands of them without thinking:
+A standard cell is a transistor-level layout that follows a few constraints, so that a machine
+can place thousands of them without thinking:
 
 | Constraint | `sky130_fd_sc_hd` |
 |---|---|
@@ -20,124 +18,123 @@ constraints so that a machine can place thousands of them without thinking:
 | Rails span the full width, so abutting cells connect them | yes |
 | Pins are on **li1**, reachable from above | yes |
 
-`inv_1` is **1.38 µm × 2.72 µm = 3.7536 µm²**, which Lab 01 prints. The
-`FIXED_BBOX` property in the `.mag` file says `0 0 276 544`, in units of
-0.005 µm — multiply by 0.005 and you get exactly those two numbers.
+`inv_1` is **1.38 µm × 2.72 µm = 3.7536 µm²**, which Lab 01 prints. The `FIXED_BBOX` property
+in the `.mag` file says `0 0 276 544`, in units of 0.005 µm; multiply by 0.005 and you get those
+two dimensions.
 
-Because the rails straddle the boundary, two cells side by side share half a
-rail each and the supply is continuous across the row with no wire drawn.
-Flip a cell vertically and put it above, and the rails are shared again. That
-single decision is why chips are built out of rows.
+Because the rails straddle the cell boundary, two cells placed side by side share half a rail
+each, and the supply runs continuously along the row with no wire drawn. Flip a cell vertically
+and put it above, and the rails are shared again. That one decision is why chips are built out of
+rows.
 
-## The parts, in `inv_1`
+## What is inside `inv_1`
 
-Open it (`make gui` in Lab 01) and find:
+When you open it in
+[Lab 01, Part 4](labs/lab-01-open-the-cell-overview.md#part-4-look-at-the-cell-in-magic), you
+will find:
 
-- **an n-well** across the top half, with p-diffusion inside it — the PMOS
-- **n-diffusion** in the bottom half — the NMOS
-- **one poly stripe** crossing both. `w=0.65 l=0.15` for the NMOS and
-  `w=1 l=0.15` for the PMOS, which Lab 01 reads back out of the geometry
-- **six ports**: `A`, `Y`, `VPWR`, `VGND`, and two you would not have guessed:
-  **`VPB`** and **`VNB`**, the p-bulk and n-bulk. The cell exposes its own well
-  and substrate as terminals.
+- **an n-well** across the top half, with p-diffusion inside it: the PMOS
+- **n-diffusion** in the bottom half: the NMOS
+- **one poly stripe** crossing both. Lab 01 reads `w=0.65 l=0.15` for the NMOS and
+  `w=1 l=0.15` for the PMOS back out of the geometry.
+- **six ports**: `A`, `Y`, `VPWR`, `VGND`, and two you might not expect, **`VPB`** and
+  **`VNB`**, the p-bulk and n-bulk. The cell exposes its own well and substrate as terminals.
 
-That last one is the interesting part.
+The last two are there because of something the cell leaves out.
 
-## The cell has no well tap, and that is deliberate
+## Why the cell has no well tap
 
-Run the full design-rule check on the foundry's own inverter and it fails.
-Lab 01 does exactly that and prints:
+Run the full design-rule check on the foundry's own inverter and it fails. Lab 01 does exactly
+that, and prints:
 
 ```
-      DRC, default rule set  0
-      DRC, full rule set     3
-
+  ok  DRC violations, default style                 0   (reference 0)
+  ok  DRC violations, full style                    3   (reference 3)
+  ...
+  THE THREE THINGS THE FULL RULE SET COMPLAINS ABOUT
       All nwells must contain metal-connected N+ taps (nwell.4)
       P-diff distance to N-tap must be < 15.0um (LU.3)
       N-diff distance to P-tap must be < 15.0um (LU.2)
 ```
 
-Three violations, in a cell shipped by the foundry, in a library that has been
-taped out hundreds of times.
+That is three violations in a cell shipped by the foundry, from a library that has been taped out
+hundreds of times.
 
-They are all the same omission: **there is no tap in this cell.** The n-well is
-not tied to VPWR and the substrate is not tied to VGND, which is why `VPB` and
-`VNB` are ports rather than being wired internally.
+All three come from the same omission: **there is no tap in this cell.** The n-well is not tied
+to VPWR and the substrate is not tied to VGND, which is why `VPB` and `VNB` are ports instead of
+being wired inside the cell.
 
-This is not a bug and it is not sloppiness. Taps cost area, and a tap every
-1.38 µm is far more than any process needs — the latch-up rule only asks for
-one within 15 µm. So the library puts them in a **separate cell**,
-`sky130_fd_sc_hd__tapvpwrvgnd_1`, 0.46 µm wide, and the flow drops a handful
-into each row. You will do that by hand in the capstone.
+This is deliberate. Taps cost area, and a tap every 1.38 µm is far more than any process needs:
+the latch-up rule only asks for one within 15 µm. So the library puts them in a **separate
+cell**, `sky130_fd_sc_hd__tapvpwrvgnd_1`, 0.46 µm wide, and the flow drops a few into each row.
+You will do that by hand in the capstone.
 
-The lesson generalises past taps:
+The same idea applies beyond taps:
 
-> **"DRC clean" is not a property of a cell. It is a property of a cell in a
-> context.** Some rules can only be satisfied by a cell's neighbours, and a
-> checker run on one cell in isolation will report them as failures forever.
+> **A cell is DRC clean only in a context.** Some rules can only be satisfied by a cell's
+> neighbours, and a checker run on one cell by itself will always report them.
 
-Meeting this on the foundry's cell, in the first lab, is much cheaper than
-meeting it on your own cell in the third one and assuming you broke something.
+It is much cheaper to learn this on the foundry's cell in the first lab than on your own cell in
+the third, where you would assume you had broken something.
 
-## Drive strength is the number after the underscore
+## Drive strength
 
 ```
 sky130_fd_sc_hd__inv_1   inv_2   inv_4   inv_6   inv_8   inv_12   inv_16
 sky130_fd_sc_hd__and2_0  and2_1  and2_2  and2_4
 ```
 
-Same logic function, wider transistors, more current, more area, more input
-capacitance. `and2_0` is the *weakest* AND in the library; `and2_4` is roughly
-four times the drive. Choosing between them is most of what a synthesis tool
-does with its afternoon, and in the capstone you will be handed `and2_0`
-specifically so you can see what the cheapest choice costs in delay.
+The number after the last underscore is the drive strength. Each step up is the same logic
+function with wider transistors, so more current, more area and more input capacitance.
+`and2_0` is the *weakest* AND in the library, and `and2_4` has roughly four times its drive.
+Choosing between them is most of what a synthesis tool spends its time on. In the capstone you
+are handed `and2_0` on purpose, so you can see what the cheapest choice costs in delay.
 
-## Who drew these, and with what?
+## Who drew these cells
 
-A fair question, and the `.mag` file answers it. At the bottom of
-`sky130_fd_sc_hd__inv_1.mag`:
+The `.mag` file answers that. Near the end of `sky130_fd_sc_hd__inv_1.mag`, among its
+properties:
 
 ```
+string GDS_END 2272374
 string GDS_FILE $PDKPATH/libs.ref/sky130_fd_sc_hd/gds/sky130_fd_sc_hd.gds
 string GDS_START 2268880
-string GDS_END 2272374
 ```
 
-That is not a layout. It is a **byte range in the foundry's GDS file**. The
-`.mag` you are looking at was produced by `open_pdks` reading SkyWater's
-released GDSII back into Magic so the cells could be used in an open flow, and
-it keeps a pointer home. When you write GDS from a design that instantiates
-these cells, Magic does not re-generate their geometry at all — it copies
-those bytes straight through. You can watch it say so:
+That is not a layout. It is a **byte range in the foundry's GDS file**. The `.mag` file was
+produced by `open_pdks` reading SkyWater's released GDSII back into Magic so the cells could be
+used in an open flow, and it keeps a pointer to where it came from. When you write GDS from a
+design that uses these cells, Magic does not regenerate their geometry; it copies those bytes
+straight through. Writing the capstone's reference block, Magic logs:
 
 ```
    Copying output for cell sky130_fd_sc_hd__and2_0 from $PDKPATH/.../sky130_fd_sc_hd.gds
    Generating output for cell datapath_ref
 ```
 
-So: **the foundry drew them, in a commercial tool, and shipped GDSII.** Magic
-is the reader, not the author.
+So **the foundry drew them, in a commercial tool, and shipped GDSII.** Magic reads them; it did
+not create them.
 
-Which raises the practical question — is Magic the right tool for *you* to
-draw a minimum-size cell in? Honestly: it is rough. Magic thinks in tiles and
-in a "corner-stitched" plane model that makes some edits behave in ways that
-surprise people from a polygon editor, and packing a cell to the last 0.005 µm
-in it is a fight. KLayout is a nicer polygon editor.
+## Why this course uses Magic
 
-This course uses Magic anyway, for reasons that are about the *flow*, not the
-editor:
+That raises a practical question: is Magic the right tool for *you* to draw a minimum-size cell
+in? It is rough. Magic thinks in tiles, in a "corner-stitched" plane model that makes
+some edits behave in ways that surprise people used to a polygon editor, and packing a cell to the
+last 0.005 µm in it is a fight. KLayout is a nicer polygon editor.
 
-- Magic has a **live design-rule checker**. Errors appear as white hatching as
-  you draw, with a count in the toolbar. That feedback loop is the thing that
-  teaches you the rules, and KLayout does not have it.
-- Magic **extracts**. It turns geometry back into a SPICE netlist, with
-  parasitics, in one command. That is Labs 01, 03, 04, 05 and the capstone.
-- The whole open SKY130 ecosystem — netgen's setup file, `open_pdks`,
-  LibreLane's sign-off — is wired to Magic's output formats.
+This course uses Magic anyway, for reasons that are about the *flow* rather than the editor:
 
-And this course never asks you to draw a *minimum-size* cell. Your inverter in
-Lab 03 is deliberately roomy. Lab 05 then measures exactly what that roominess
-cost, which is a better lesson than fighting the editor for an afternoon.
+- Magic has a **live design-rule checker**. Errors appear as white hatching while you draw, with
+  a count in the toolbar. That feedback is what teaches you the rules, and KLayout does not have
+  it.
+- Magic **extracts**. It turns geometry back into a SPICE netlist, with parasitics, in one
+  command. Labs 01, 03, 04, 05 and the capstone all rely on that.
+- The open SKY130 ecosystem (netgen's setup file, `open_pdks`, LibreLane's sign-off) is wired to
+  Magic's output formats.
 
-Use KLayout for **looking**: it renders GDS beautifully, it has a proper layer
-browser, and the capstone opens your finished block in it.
+This course also never asks you to draw a *minimum-size* cell. Your inverter in Lab 03 is
+deliberately roomy, and Lab 05 measures what that roominess cost, which teaches you more than an
+afternoon fighting the editor would.
+
+Use KLayout for **looking**. It renders GDS well and has a proper layer browser, and you open your
+finished capstone block in it.

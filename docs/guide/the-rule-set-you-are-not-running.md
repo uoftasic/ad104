@@ -1,4 +1,4 @@
-# The rule set you are not running
+# The full DRC rule set
 
 Magic's SKY130 technology file defines the design rules in **variants**:
 
@@ -6,12 +6,12 @@ Magic's SKY130 technology file defines the design rules in **variants**:
 style drc variants (fast),(full),(routing)
 ```
 
-The first one listed is the default, so unless you say otherwise you are
-running **`fast`**. And `fast` leaves out a category of rules.
+The first one listed is the default, so unless you say otherwise you are running **`fast`**, and
+`fast` leaves out a whole category of rules.
 
 ## What `full` adds
 
-Three rules that matter to you, all of which are invisible in the default set:
+Four rules matter to you, and none of them are in the default set:
 
 ```
 variants (full)
@@ -25,16 +25,14 @@ variants (full)
         "P-diff distance to N-tap must be < 15.0um (LU.3)"
 ```
 
-Every one of them is about **well taps** — the connections that hold the body
-of your transistors at a known voltage. They are excluded from the default set
-because they are expensive to compute, and because on a cell in isolation they
-are usually meaningless (see
-[Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md): the foundry's own
-inverter fails all three).
+Every one of them is about **well taps**, the connections that hold the body of your transistors
+at a known voltage. They are left out of the default set because they are expensive to compute,
+and because on a cell by itself they usually mean nothing: the foundry's own inverter fails three
+of them (see [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md)).
 
-## Why that is dangerous rather than merely inconvenient
+## Why a missing tap is dangerous
 
-A missing tap does not look like a mistake. It looks like nothing.
+A missing tap does not look like a mistake. It looks like nothing at all:
 
 - The layout is visually complete.
 - `drc check` says **0**.
@@ -48,20 +46,18 @@ Here is the capstone block before the tap cells go in, checked both ways:
       DRC, full rule set     32
 ```
 
-Thirty-two violations, none of which the default check has an opinion about.
-And what the missing taps actually cause on real silicon is **latch-up**: every
-CMOS process contains parasitic bipolar transistors between the well, the
-substrate and your diffusions, and if nothing holds the well and substrate
-firmly, a transient can turn them on into a self-sustaining short from supply
-to ground. The chip stops working until you cut the power, and sometimes after.
+That is thirty-two violations that the default check does not report. On real silicon, missing
+taps cause **latch-up**. Every CMOS process contains parasitic bipolar transistors between the
+well, the substrate and your diffusions. If nothing holds the well and substrate firmly at their
+supplies, a transient can turn those transistors on into a self-sustaining short from supply to
+ground. The chip stops working until you cut the power, and sometimes after that too.
 
-## The one-line rule
+## The rule of thumb
 
-> **Before you believe a DRC count of zero, run it again with
-> `drc style drc(full)`.**
+> **Before you believe a DRC count of zero, run it again with `drc style drc(full)`.**
 
-Every lab in this course runs both and prints both, side by side, so you never
-have to remember. When you are working in Magic by hand:
+Every lab in this course runs both rule sets and prints both counts side by side, so you never
+have to remember. When you work in Magic by hand, the sequence is:
 
 ```tcl
 drc style drc(full)
@@ -70,12 +66,11 @@ drc catchup
 drc count
 ```
 
-Switching back is `drc style drc(fast)`.
+`drc style drc(fast)` switches back.
 
-## A second opinion, from a different tool
+## A second tool sees the same fault
 
-The nice thing about the tap fault is that **two independent tools notice it**,
-and neither of them says the word "tap".
+**Two independent tools notice a missing tap**, and neither of them uses the word "tap".
 
 Extract a block with no taps and look at the netlist:
 
@@ -84,10 +79,9 @@ Extract a block with no taps and look at the netlist:
 Xbuf0 buf0/A dff0/VGND VSUBS dff0/VPB dff0/VPWR Y sky130_fd_sc_hd__buf_1
 ```
 
-The bulk terminals came out as **`VSUBS`** and **`dff0/VPB`** — invented node
-names, because nothing connects those wells to a supply. Netgen then reports a
-mismatch, because the schematic you are comparing against has them on VGND and
-VPWR.
+The bulk terminals came out as **`VSUBS`** and **`dff0/VPB`**. These are invented node names,
+because nothing connects those wells to a supply. Netgen then reports a mismatch, because the
+schematic you compare against has them on VGND and VPWR.
 
 Put the taps in, and the same line becomes:
 
@@ -95,20 +89,19 @@ Put the taps in, and the same line becomes:
 Xbuf0 buf0/A VGND VGND VPWR VPWR Y sky130_fd_sc_hd__buf_1
 ```
 
-Two symptoms, one cause, and neither of them is a DRC error in the rule set
-you were running. Lab 02's fifth cell is this fault at the scale of a single
-inverter, so you meet it once where it is small.
+That is two symptoms of one cause, and neither is a DRC error in the rule set you were running.
+Lab 02's fifth cell has this fault at the scale of a single inverter, so you meet it first where
+it is small.
 
-## The general form
+## Checkers in general
 
-This is not really a lesson about taps. It is a lesson about checkers.
+The lesson is about checkers more than taps:
 
-> **A checker that passes has told you that the rules it ran did not fire.
-> It has not told you the design is right.**
+> **A checker that passes has told you that the rules it ran did not fire. It has not told you the
+> design is right.**
 
-The digital track hits the same shape of problem from a different direction:
-in [DD103](https://uoftasic.com/dd103/) an entire chip hardens successfully in
-the *wrong PDK*, behind three green ticks and a real `.gds`, because nothing in
-the flow checks that you meant that PDK. Same failure, different tool. The
-habit that saves you is the same one: know which checks you are running, and
-ask what they are not looking at.
+The digital track meets the same problem from a different direction. In
+[DD103](https://uoftasic.com/dd103/) an entire chip hardens successfully in the *wrong PDK*,
+behind three green ticks and a real `.gds`, because nothing in the flow checks that you meant
+that PDK. The habit that protects you is the same in both tracks: know which checks you are
+running, and ask what they are not looking at.

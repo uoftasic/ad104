@@ -1,101 +1,79 @@
 # Getting started
 
-You need three things before Lab 01: the workbench, this repo inside it, and
-Magic opening with the SKY130 technology loaded. That last one is the only
-part that ever goes wrong, and it goes wrong in a way that does not say so.
+Before Lab 01 you need three things: the workbench, this course's files inside it, and Magic
+opening with the SKY130 technology loaded. The third is the one that goes wrong, and when it does
+there is no error message. This page explains how the pieces fit together.
+[Lab 01, Part 2](labs/lab-01-open-the-cell-overview.md#part-2-set-up-the-workbench) is where you
+set them up.
 
 ## Prerequisites
 
 [IC101](https://uoftasic.com/ic101/) → [AD101](https://uoftasic.com/ad101/) →
 [AD102](https://uoftasic.com/ad102/) → [AD103](https://uoftasic.com/ad103/).
 
-This course assumes AD103 in particular. You should have drawn a CMOS
-inverter in XSchem, swept its transfer curve, and be comfortable with the idea
-that $W$ and $L$ are numbers you choose. AD104 takes exactly that inverter and
-asks where the silicon goes.
+AD103 matters most. You should have drawn a CMOS inverter in XSchem, swept its transfer curve,
+and be comfortable with the idea that $W$ and $L$ are numbers you choose. AD104 takes that
+inverter and asks where the silicon goes.
 
 ## The workbench
 
-Everything runs in the noVNC desktop from IC101:
-`hpretl/iic-osic-tools:2026.08`. Start it the way IC101 told you, open
-`http://localhost` in a browser, and use the terminal on that desktop.
+Everything runs in the noVNC desktop from IC101, which is the image
+`hpretl/iic-osic-tools:2026.08`. You start it the way IC101 showed you, open `http://localhost`
+in a browser, and type commands in the terminal on that desktop.
 
-```bash
-. /foss/designs/common/.designinit
-echo $PDK
-```
+The image can work with more than one process, and the environment variable `$PDK` picks which.
+This course needs **`sky130A`**. The image ships with `PDK=ihp-sg13g2`, a real 130 nm process from
+a different foundry, with different layer names and different rules. Magic opens in it without
+complaint, and every layer this course names is missing.
 
-`$PDK` must print **`sky130A`**. The image ships with `PDK=ihp-sg13g2`, which
-is a real 130 nm process from a different foundry with different layer names
-and different rules. Magic will happily open in it and every layer this course
-names will be missing.
+The course environment script, `/foss/designs/common/.designinit`, switches the whole shell to
+SKY130. It also defines `mod`, the command that copies a course's files into your workspace. You
+load the script once in every new terminal.
 
-```bash
-mod add ad104     # first time only
-mod ad104
-magic --version   # expect: 8.3.681
-```
+## Magic
 
-## Magic, the first time
+Magic is older than most of the people taking this course: it started at Berkeley in 1983, and it
+looks it. It is also the only open-source layout editor with a live design-rule checker, a
+built-in extractor and a scripting console, which is why the open SKY130 ecosystem is built
+around it.
 
-Magic is older than most of the people taking this course — it started at
-Berkeley in 1983 — and it looks it. It is also the only open-source layout
-editor with a live design-rule checker, a built-in extractor, and a scripting
-console, which is why the whole SKY130 open ecosystem is built around it.
+Every lab opens Magic for you with `make edit`, run from inside the lab package. That starts
+Magic in the folder holding the `.mag` file and names the cell without its `.mag` extension, for
+example `magic -d X11 my_inv` in `labs/lab-03-draw-an-inverter/mag`.
 
-**Every lab in this course opens Magic for you.** From inside a lab package:
+Two windows appear: **`layout1`**, which shows the drawing, and **`tkcon`**, a Tcl console. The
+console is the main way you work in this course. Every command in the guide pages and labs can be
+typed there, and the lab scripts drive Magic by feeding it the same commands.
 
-```bash
-make edit
-```
+### The `-d X11` option
 
-If you want to open a cell by hand, `cd` into a directory that has a
-`.magicrc` in it and name the cell without its `.mag` extension:
+Magic has three graphics drivers in this image, and `X11` is the one that works. The Cairo/OpenGL
+driver (`-d XR`) can fail with a `BadAlloc` inside the container, and when it does you get a black
+window instead of no window, which takes a while to diagnose. The team's `.designinit` defines a
+`magic130` alias that uses `-d X11` for the same reason.
 
-```bash
-cd labs/lab-03-draw-an-inverter/mag
-magic -d X11 my_inv
-```
+### Where Magic gets the technology
 
-Two windows appear: **`layout1`**, where the picture is, and **`tkcon`**, a
-Tcl console. The console is not a debugging aid. It is the primary interface —
-every command in this course can be typed there, and the labs drive Magic by
-feeding it exactly those commands.
+Magic decides which technology to load when it starts, from two startup files:
 
-### `-d X11`, and why it is not optional
+- The image's own `~/.magicrc` loads whichever PDK `$PDK` names. With the image's default
+  `PDK=ihp-sg13g2` you get IHP's layers and none of SKY130's.
+- A file called `.magicrc` in **the directory you start Magic in**. Every lab package has one at
+  its top level. It loads SKY130 if nothing has loaded it yet, and does nothing if
+  `~/.magicrc` already did. Loading it twice makes Magic print `Bad local startup file
+  ".magicrc", continuing without.` as the first line in the console.
 
-Magic has three graphics drivers in this image. `X11` is the one that works.
-The Cairo/OpenGL driver (`-d XR`) can fail with a `BadAlloc` inside the
-container, and when it does the window is black rather than absent, which
-takes a while to diagnose. The team's `.designinit` encodes this as the
-`magic130` alias for the same reason. Use `-d X11`.
+Every lab's Makefile also sets `PDK=sky130A` for the Magic it starts, so `make edit` opens in
+SKY130 even if `.designinit` failed for you.
 
-### `.magicrc`, and why every lab ships one
-
-Magic reads a file called `.magicrc` from **the directory you started it in**.
-Every lab package in this course has one, and it is two lines:
-
-```tcl
-if {[info exists env(PDK_ROOT)]} {
-    source $env(PDK_ROOT)/sky130A/libs.tech/magic/sky130A.magicrc
-}
-```
-
-Without it Magic starts in its own default technology (`scmos`), which has
-about a dozen layers, none of them SKY130's. The symptom is
-`Failed to load technology`, or worse, a Magic that opens fine and simply has
-no `nwell` in the layer list.
-
-If you start Magic somewhere without a `.magicrc`, make one:
-
-```bash
-echo 'source $PDK_ROOT/sky130A/libs.tech/magic/sky130A.magicrc' > .magicrc
-```
+If no technology file gets loaded, Magic starts in its own default technology, `scmos`, which has
+about a dozen layers, none of them SKY130's. The symptom is `Failed to load technology`, or a
+Magic that opens normally and has no `nwell` in its layer list.
 
 ## What the labs give you
 
-Every lab is a directory with a `Makefile`, and `make` alone does the whole
-thing and prints a verdict:
+Every lab is a folder with a `Makefile`, and `make` on its own runs every check and prints a
+verdict:
 
 | | |
 |---|---|
@@ -103,30 +81,29 @@ thing and prints a verdict:
 | `make edit` | open the cell you are working on in Magic |
 | `make clean` | delete `results/` |
 
-The Makefiles pin `PDK=sky130A` themselves, so **the labs work even if
-`.designinit` did not**. If something in this guide does not work, run `make`
-in the lab anyway — it is the ground truth, and it tells you what it found in
-words.
+The Makefiles set `PDK=sky130A` themselves, so **the labs work even if `.designinit` did not**.
+If something in a guide page does not work for you, run `make` in the lab anyway. It is the
+reference answer, and it says what it found in words.
 
 ## Getting help
 
-The [team Discord](https://discord.gg/hrJnP5UsGz) is the place. Layout is a
-craft and it is genuinely faster to be shown than to read. A screenshot of
-your Magic window with the DRC count in the toolbar is usually enough for
-someone to spot it.
+Ask in the [team Discord](https://discord.gg/hrJnP5UsGz). Layout is a craft, and it is faster to
+be shown than to read about it. A screenshot of your Magic window with the DRC count in the
+toolbar is usually enough for someone to spot the problem.
 
-When a tool has an opinion, paste the opinion. `drc why` names a rule; netgen
-names a net. Those names are searchable and specific, and "it doesn't work" is
-not.
+When a tool reports a problem, paste its exact words. `drc why` names a rule and netgen names a
+net. Those names are specific and searchable; "it doesn't work" is not.
 
-## Things that go wrong before you have drawn anything
+## Problems opening Magic
 
-| What you see | What it is |
+Setup problems with `.designinit` and `mod` are covered at the step where they happen, in
+[Lab 01, Part 2](labs/lab-01-open-the-cell-overview.md#part-2-set-up-the-workbench).
+
+| What you see | What it means |
 |---|---|
-| `Failed to load technology "sky130A"` | No `.magicrc` in the directory you started Magic from. Make one — two lines, above. |
-| Magic opens, and there is no `nwell` in the layer list | Same cause. The technology did not load, so you are in `scmos`. |
-| `Cell ... couldn't be read` | You named a cell that does not exist here, or you are in the wrong directory. Magic then creates an empty cell with that name, which is why an empty window is a common symptom. |
+| `Failed to load technology "sky130A"` | No SKY130 startup file was loaded. Open the cell with `make edit` from its lab folder, or copy a lab's `.magicrc` into the folder you start Magic in. |
+| Magic opens, and there is no `nwell` in the layer list | Same cause. The technology did not load. |
+| `Bad local startup file ".magicrc", continuing without.` | A `.magicrc` loaded SKY130 a second time. Use a copy of a lab's `.magicrc`, which checks first. |
+| `Cell ... couldn't be read` | You named a cell that does not exist in this folder, or you are in the wrong folder. Magic then creates an empty cell with that name, which is why an empty window is a common symptom. |
 | The layout is one empty rectangle with a name in it | An unexpanded subcell. Select it and press `x`, or type `expand`. |
-| `.designinit: No such file or directory` | The workspace was not set up. Run `make` in a lab anyway — every lab package pins its own PDK. |
 | Everything looks dim and the title says `[NOT BEING EDITED]` | You are looking at a cell that is not the edit cell. `load <name>` makes it the edit cell. |
-| `couldn't read Username for 'https://github.com'` on `mod add ad104` | The repo did not answer anonymously. That is on us, not you — say so in Discord. |

@@ -39,7 +39,8 @@ A missing tap does not look like a mistake. It looks like nothing at all:
 - The cell extracts.
 - It might even simulate, depending on what the floating body does.
 
-Here is the capstone block before the tap cells go in, checked both ways:
+Here is the block you build in the capstone, a row of four standard cells called `datapath`,
+checked both ways before its tap cells go in:
 
 ```
       DRC, default rule set  0
@@ -63,12 +64,12 @@ have to remember. When you work in Magic by hand, the sequence is:
 drc style drc(full)
 drc check
 drc catchup
-drc count
+drc count total
 ```
 
 `drc style drc(fast)` switches back.
 
-## A second tool sees the same fault
+## The same fault in the netlist
 
 **Two independent tools notice a missing tap**, and neither of them uses the word "tap".
 

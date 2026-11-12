@@ -48,7 +48,7 @@ The foundry library agrees to 2.72 µm and a 0.46 µm site width, so every cell 
 multiple of 0.46 µm wide. In the capstone you place four of them at x = 0, 7.36, 9.66 and 11.96,
 a running total of their widths, and the rails line up on their own.
 
-## Hierarchy: a buffer has no transistors
+## Hierarchy
 
 In outline, Lab 04's buffer is:
 

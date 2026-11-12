@@ -37,12 +37,13 @@ on each side. The rule wants 0.05.
 ```tcl
 drc check          ;# re-run the checker over the whole cell
 drc catchup        ;# wait for it to finish (batch scripts need this)
-drc count          ;# how many, by rule
+drc count total    ;# how many violations
 drc why            ;# name the rules broken under the current box
 ```
 
-`drc why` is the one you'll use most. `drc count` tells you how many violations there are;
-`drc why` tells you what they are.
+`drc why` is the one you'll use most. `drc count total` tells you how many violations there are;
+`drc why` tells you what they are. Use `drc count total` rather than plain `drc count`, whose last
+line is a hierarchical total that reads 0 on a cell with no subcells.
 
 ## "In one direction"
 
@@ -81,7 +82,7 @@ Almost every SKY130 rule you'll meet is one of four kinds:
 Once you can sort a message into one of those four, you know what kind of edit fixes it: make
 the shape wider, move it away, make the shape *around* it bigger, or make it bigger overall.
 
-## Expect several rounds
+## Iterating to a clean layout
 
 The reference inverter in Lab 03 was not drawn correctly the first time. Its first version had
 **62 violations across seven distinct rules**: contacts too close to the edges of their
@@ -96,7 +97,7 @@ change.
 That is why Lab 02 comes before Lab 03. You meet five real violations on somebody else's layout,
 where being wrong costs you nothing, before you meet them on your own.
 
-## Fix by rule
+## Fixing by rule
 
 The worst habit in layout is nudging shapes a little at a time until the white hatching goes
 away. It works eventually, it takes ten times as long, and it teaches you nothing. The layout it

@@ -2,7 +2,7 @@
 
 Before Lab 01 you need three things: the workbench, this course's files inside it, and Magic
 opening with the SKY130 technology loaded. The third is the one that goes wrong, and when it does
-there is no error message. This page explains how the pieces fit together.
+the message you get does not say why. This page explains how the pieces fit together.
 [Lab 01, Part 2](labs/lab-01-open-the-cell-overview.md#part-2-set-up-the-workbench) is where you
 set them up.
 
@@ -84,8 +84,8 @@ verdict:
 | `make clean` | delete `results/` |
 
 The Makefiles set `PDK=sky130A` themselves, so **the labs work even if `.designinit` did not**.
-If something in a guide page does not work for you, run `make` in the lab anyway. It is the
-reference answer, and it says what it found in words.
+If a setup step in Lab 01 does not work for you, run `make` in the lab anyway. It checks
+everything itself and says what it found in words.
 
 ## Getting help
 

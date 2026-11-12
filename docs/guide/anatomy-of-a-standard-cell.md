@@ -2,7 +2,7 @@
 
 Before you draw a cell, read one. The SKY130 high-density library ships **446 cells** in
 `$PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/mag/`, and the smallest of them is the inverter you
-are about to draw yourself, `sky130_fd_sc_hd__inv_1`. In Lab 01 you open it and get four tools to
+are about to draw yourself, `sky130_fd_sc_hd__inv_1`. In Lab 01 you open it and get four checks to
 agree about it. This page tells you what to look for.
 
 ## The constraints every cell obeys

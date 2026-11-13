@@ -103,8 +103,10 @@ drain junction area rows, matching your Part 1 ratios to rounding, and `make` en
 
 Why does the same drawing cost more delay in one test than in the other?
 
-1. Find the two delay ratios: **1.11 x at fan-out 4, 1.27 x in the ring.** Your cell is 11 %
-   slower in one test and 27 % slower in the other. Compare them with your guess from Part 1.
+1. Find the two delay ratios in your table: the fan-out 4 `average` row and the ring
+   `one stage` row. On this page they are **1.11 x at fan-out 4 and 1.27 x in the ring**, so the
+   cell is 11 % slower in one test and 27 % slower in the other. Compare yours with your guess
+   from Part 1.
 
 2. Explain the difference, before you read the `WHAT TO TAKE FROM THIS` block at the end of your
    `make` output: that block gives the answer. Hint: a gate's delay is how long it takes to charge

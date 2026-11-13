@@ -3,8 +3,9 @@
 Before Lab 01 you need three things: the workbench, this course's files inside it, and Magic
 opening with the SKY130 technology loaded. The third is the one that goes wrong, and when it does
 the message you get does not say why. This page explains how the pieces fit together.
-[Lab 01, Part 2](labs/lab-01-open-the-cell-overview.md#part-2-set-up-the-workbench) is where you
-set them up.
+IC101 sets up the workbench, and
+[Lab 01, Part 1](labs/lab-01-open-the-cell-overview.md#part-1-load-the-course) loads this course
+into it.
 
 ## Prerequisites
 
@@ -99,7 +100,7 @@ net. Those names are specific and searchable; "it doesn't work" is not.
 ## Problems opening Magic
 
 Setup problems with `.designinit` and `mod` are covered at the step where they happen, in
-[Lab 01, Part 2](labs/lab-01-open-the-cell-overview.md#part-2-set-up-the-workbench).
+[Lab 01, Part 1](labs/lab-01-open-the-cell-overview.md#part-1-load-the-course).
 
 | What you see | What it means |
 |---|---|

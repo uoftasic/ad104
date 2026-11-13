@@ -1,9 +1,9 @@
 # Lab 05: What it costs
 
-You'll put a price on the drawing: the same two transistors, drawn twice, compared for area and
-delay. First you work out the area price from numbers you already have. Then you extract the
-Lab 03 inverter and the foundry's `inv_1` with every parasitic capacitance kept, simulate both,
-and check your arithmetic against the measurement.
+You'll compare the same two transistors, drawn twice, for area and delay. First you work out the
+area price from numbers you already have. Then you extract the Lab 03 inverter and the foundry's
+`inv_1` with every parasitic capacitance kept, simulate both, and check your arithmetic against
+the measurement.
 
 Package: [`labs/lab-05-what-it-costs/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-05-what-it-costs)
 

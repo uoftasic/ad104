@@ -35,7 +35,7 @@ What goes where, before any dimensions?
 3. Decide which side of the cell the input is on and which side the output is on, and why.
    Part 6 shows where this lab's reference cell puts them.
 
-This takes about ninety seconds and can save you an hour.
+This takes about ninety seconds.
 
 **You should see** a sketch with both taps marked, the output on one side and the input on the
 gate.

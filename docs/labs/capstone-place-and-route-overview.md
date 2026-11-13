@@ -217,14 +217,7 @@ you saw that in Lab 01 on the foundry's own inverter.
    Xbuf0 buf0/A dff0/VGND VSUBS dff0/VPB dff0/VPWR Y sky130_fd_sc_hd__buf_1
    ```
 
-   What are `VSUBS` and `dff0/VPB`?
-
-   <details>
-   <summary>Answer</summary>
-
-   Invented node names, for bodies that connect to nothing.
-
-   </details>
+   `VSUBS` and `dff0/VPB` are invented node names, for bodies that connect to nothing.
 
 2. **The fix is a cell, not a shape.** Place a `sky130_fd_sc_hd__tapvpwrvgnd_1`, 0.46 µm wide, at
    each end of the row. In the console:

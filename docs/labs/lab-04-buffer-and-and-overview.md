@@ -13,12 +13,14 @@ Package: [`labs/lab-04-buffer-and-and/`](https://github.com/uoftasic/ad104/tree/
   [Stick diagrams](guide/stick-diagrams.md) and
   [Layout versus schematic (LVS)](guide/lvs-asks-a-different-question.md).
 
-**Time:** about 2 hours. The full `make` takes about a minute (53, 63 and 74 s on three timed
+**Time:** about 2 hours, not counting the optional Part 7. The full `make` takes about a minute (53, 63 and 74 s on three timed
 clean runs), nearly all of it ngspice reading the SKY130 model library for the truth-table
 simulation. `make layout` runs only the DRC and LVS part, in about 2 s; use it while you are
 wiring.
 
 ## Part 1: Look at the NAND
+
+How is the NAND you were given wired, in silicon?
 
 1. Go into the lab package and build the starting cells:
 
@@ -65,13 +67,24 @@ wiring.
 
    `a_300_260#` is the shared diffusion. Magic named it after its coordinates.
 
-Answer for yourself: why is there no contact on the shared node between the two NMOS?
-([Stick diagrams](guide/stick-diagrams.md#the-nand) has the answer if you need it.)
+Why is there no contact on the shared node between the two NMOS?
+
+<details>
+<summary>Answer</summary>
+
+In series, the drain of one transistor is the source of the other, so on silicon they are the
+same piece of diffusion. The region between the two gates *is* the shared node. A contact there
+would cost area, add junction capacitance to an internal node, and gain you nothing
+([Stick diagrams](guide/stick-diagrams.md#the-nand)).
+
+</details>
 
 **You should see** the NAND's single n-diffusion strip under both gates, and `a_300_260#` in the
 netlist.
 
 ## Part 2: Wire the buffer
+
+What do the two inverters already share, and what is missing?
 
 1. Open the buffer:
 
@@ -99,6 +112,8 @@ the buffer.
 
 ## Part 3: Name the buffer's pins
 
+How do you give the block, rather than the cells inside it, its own pins?
+
 1. Label the input and output, turn the labels into ports, and save:
 
    ```tcl
@@ -109,11 +124,19 @@ the buffer.
    save my_buf
    ```
 
-   Both label lines paint a small patch of `li` first. **A label lands on geometry belonging to
-   the current cell.** The input pin you want to name belongs to `inv1`, so a label placed on it
-   would belong to `inv1`. Painting your own 0.25 µm patch on top (same net, electrically
-   nothing) gives the top cell something of its own to name. The scaffold's metal1 rails exist
-   for the same reason: they give `VGND` and `VPWR` top-cell geometry to sit on.
+   Both label lines paint a small patch of `li` first. Why not put the label straight on the
+   inverter's own pin?
+
+   <details>
+   <summary>Answer</summary>
+
+   **A label lands on geometry belonging to the current cell.** The input pin you want to name
+   belongs to `inv1`, so a label placed on it would belong to `inv1`. Painting your own 0.25 µm
+   patch on top (same net, electrically nothing) gives the top cell something of its own to
+   name. The scaffold's metal1 rails exist for the same reason: they give `VGND` and `VPWR`
+   top-cell geometry to sit on.
+
+   </details>
 
 2. Run the layout checks:
 
@@ -121,14 +144,12 @@ the buffer.
    make layout
    ```
 
-3. Optional: erase the block's two metal1 rail rectangles, `save`, and run `make layout` again to
-   watch the block come out with no supply ports at all. It is a good failure to have met. Undo
-   the erase (`u`) and `save` before you go on.
-
 **You should see** the `my_buf` row read `ok`, `0`, `0`, `match`. The `my_and2` row still fails
 until Part 4.
 
 ## Part 4: Build the AND gate
+
+Can you find the AND gate's pins yourself?
 
 1. Open the AND gate:
 
@@ -158,7 +179,11 @@ until Part 4.
 
 ## Part 5: Simulate the AND gate
 
-1. Run the full check:
+Does the AND gate really AND, on the extracted layout?
+
+1. Before you run it, write down the output `X` you expect for each of the four input rows.
+
+2. Run the full check:
 
    ```bash
    make
@@ -197,6 +222,8 @@ terminals in the wrong order would give a wrong answer without any error.
 
 ## Part 6: Meet the pin-swap message
 
+What does netgen say when the circuit is right but two names are on the wrong shapes?
+
 1. LVS your NAND against a netlist with `A` and `B` exchanged:
 
    ```bash
@@ -223,24 +250,95 @@ terminals in the wrong order would give a wrong answer without any error.
    - **the topology is right**: four devices wired exactly as the schematic says
    - **two names are on the wrong shapes**: netgen had to swap `A` and `B` to make the match work
 
-Answer for yourself: why will nothing else in the flow ever notice this? (A NAND is symmetric in
-its inputs, so simulation passes and DRC passes. The timing model is still wrong, because in a
-series stack the input nearer the output is faster than the one nearer ground.)
+Why will nothing else in the flow ever notice this?
+
+<details>
+<summary>Answer</summary>
+
+A NAND is symmetric in its inputs, so simulation passes and DRC passes. The timing model is
+still wrong, because in a series stack the input nearer the output is faster than the one nearer
+ground.
+
+</details>
 
 **The fix is to swap the labels in the layout, not in the schematic.**
 
 **You should see** `Netlists match uniquely` and `failed pin matching` in the same report.
 
+## Part 7: Take away the block's rails (optional)
+
+What happens to the block's supply ports if it has no rails of its own?
+
+1. Open the buffer with `make edit CELL=my_buf`, and erase the block's two metal1 rail
+   rectangles in the console:
+
+   ```tcl
+   box 0um 0um 6um 0.40um ; erase m1
+   box 0um 5.60um 6um 6um ; erase m1
+   save my_buf
+   ```
+
+   The `VGND` and `VPWR` labels go too, because they sat on those rectangles. The inverters' own
+   rails are untouched.
+
+2. Run `make layout`. The `my_buf` row fails:
+
+   ```
+        my_buf            0         0   Top level cell failed pin matching  my_inv, my_inv
+   ```
+
+   and the verdict names the missing ports:
+
+   ```
+   FAIL  my_buf has no port called VGND, VPWR. Its ports are: A X.
+   ```
+
+   The two inverters' rails still abut into continuous strips. Why does the block lose its supply
+   ports anyway?
+
+   <details>
+   <summary>Answer</summary>
+
+   A label on a subcell's geometry belongs to the subcell. The only rail metal left belongs to
+   `inv1` and `inv2`, so the block has no shape of its own to hang `VGND` and `VPWR` on, and it
+   comes out of extraction with no supply ports at all.
+
+   </details>
+
+3. Put the rails and their labels back with the scaffold's own commands (from
+   `tcl/scaffold.tcl`), then run `make layout` again:
+
+   ```tcl
+   box 0um 0um 6um 0.40um ; paint m1
+   box 0um 5.60um 6um 6um ; paint m1
+   box 2.60um 0.05um 2.85um 0.30um ; label VGND c m1
+   box 2.60um 5.70um 2.85um 5.95um ; label VPWR c m1
+   select top cell
+   port makeall
+   save my_buf
+   ```
+
+**You should see** `my_buf has no port called VGND, VPWR` after step 2, and the `my_buf` row back
+to `ok`, `0`, `0`, `match` after step 3.
+
 ## Finishing
 
-You are done when:
+You're done when `make` ends in `PASS` on the two blocks you wired and named: both clean under
+both rule sets, both `match` in LVS, and all four truth-table rows `ok`.
 
-- [ ] both blocks are at 0 violations under both rule sets
-- [ ] both `match` in LVS
-- [ ] all four rows of the truth table are correct, and `make` ends in `PASS`
-- [ ] you can explain why the shared node in the NAND has no contact
-- [ ] you have run `make swapped` and can read its output
+Questions:
+
+- Why is there no contact on the shared node between the two NMOS in the NAND? Part 1 answers it.
+- `make swapped` reports `Netlists match uniquely` and `failed pin matching` together. What is
+  right, and what is wrong? Part 6 answers it.
+
+Submit: nothing for this lab.
+
+## Going further (optional)
 
 `make ref` and `make refcheck` build and check the reference blocks. The package's
 [`solutions/README.md`](https://github.com/uoftasic/ad104/tree/main/labs/lab-04-buffer-and-and/solutions)
 discusses three decisions in them.
+
+Next on the Course path: read [Area, parasitics and delay](guide/what-your-drawing-costs.md),
+then do [Lab 05: What it costs](labs/lab-05-what-it-costs-overview.md).

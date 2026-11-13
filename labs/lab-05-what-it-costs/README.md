@@ -24,7 +24,7 @@ make
 
 `make mine` currently damages the copied file, and the next `make` fails with
 `results/my_inv.pex.spice is missing - extraction did not run.` `git checkout mag/my_inv.mag`
-restores the reference cell. See Part 5 of the writeup.
+restores the reference cell. See Part 6 of the writeup.
 
 ## Targets
 

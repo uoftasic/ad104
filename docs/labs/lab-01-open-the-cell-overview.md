@@ -102,9 +102,8 @@ What is in the foundry's inverter, and what is missing from it?
    - the contacts, every one of them 0.17 µm square
 
 3. Now look for something that is *not* there: a well tap. A tap is a contacted strip of `ptap`
-   or `ntap`, silicon doped the *same* type as the well under it and tied to a rail. The
-   transistors' source and drain contacts don't count: their diffusion is the opposite type to
-   the well.
+   or `ntap`, silicon doped the *same* type as the well under it and tied to a rail. Source and
+   drain contacts don't count: their diffusion is the opposite type to the well.
    ([What a layout is](guide/what-a-layout-actually-is.md#diffusion-as-a-wire-and-tying-the-wells)
    explains what a tap is for.)
 

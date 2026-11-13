@@ -8,7 +8,8 @@ Package: [`labs/lab-02-break-it-on-purpose/`](https://github.com/uoftasic/ad104/
 
 ## Before you start
 
-- Finish [Lab 01](labs/lab-01-open-the-cell-overview.md), so the workbench is set up.
+- Finish [Lab 01](labs/lab-01-open-the-cell-overview.md), so the course is loaded and your tools
+  check out.
 - Read [Drawing in Magic](guide/drawing-in-magic.md),
   [Reading DRC errors](guide/drc-is-a-conversation.md) and
   [The full DRC rule set](guide/the-rule-set-you-are-not-running.md).
@@ -18,6 +19,8 @@ Package: [`labs/lab-02-break-it-on-purpose/`](https://github.com/uoftasic/ad104/
 runs).
 
 ## Part 1: Run the checker on all five cells
+
+What does each cell break, as the checker sees it?
 
 1. Go into the lab package and run it:
 
@@ -55,20 +58,28 @@ runs).
    FAIL  Still to fix: drc_01, drc_02, drc_03, drc_04, drc_05
    ```
 
-2. Before you touch anything, look at two rows that behave differently from the other three:
+2. Before you touch anything, look at the `drc_03` row. It has 14 violations, and only one number
+   in it was changed. How can one mistake produce fourteen?
 
-   - **`drc_03` has 14 violations from one mistake.** A single contact that is 0.01 µm short of
-     its enclosure produces fourteen error tiles, because Magic reports each edge of the
-     offending region separately. **The violation count is not the number of mistakes.** Fourteen
-     errors can mean one number to change.
-   - **`drc_05` is clean under the default rule set and wrong anyway.** It has zero violations,
-     and netgen says the netlists do not match. You'll come back to it in Part 4.
+   <details>
+   <summary>Answer</summary>
+
+   A single contact that is 0.01 µm short of its enclosure produces fourteen error tiles, because
+   Magic reports each edge of the offending region separately. The violation count is not the
+   number of mistakes: fourteen errors can mean one number to change.
+
+   </details>
+
+3. Look at the `drc_05` row. It has zero violations under the default rule set, and netgen says
+   the netlists do not match. It is clean and wrong at the same time. You'll come back to it in
+   Part 4.
 
 **You should see** `FAIL` and all five cells listed under "Still to fix".
 
 ## Part 2: Read one violation in Magic
 
-Work through `drc_03` once with these steps; Parts 3 and 4 repeat them for the other cells.
+How do you get Magic to show you a violation and name its rule? Work through `drc_03` once with
+these steps; Parts 3 and 4 repeat them for the other cells.
 
 1. Print every violation in cell 3 with its rule name:
 
@@ -89,9 +100,16 @@ Work through `drc_03` once with these steps; Parts 3 and 4 repeat them for the o
    make edit C=3
    ```
 
-   Magic opens with a green `☑ DRC` in the toolbar and **no white hatching anywhere**, on a cell
-   with fourteen violations. The cell is not clean: Magic's background checker only re-checks
-   tiles you have *edited*, and loading a file from disk edits nothing, so it has not looked yet.
+   Magic opens with a green `☑ DRC` in the toolbar and no white hatching anywhere, on a cell with
+   fourteen violations. Why does it look clean?
+
+   <details>
+   <summary>Answer</summary>
+
+   It isn't clean; Magic hasn't looked yet. Its background checker only re-checks tiles you have
+   *edited*, and loading a file from disk edits nothing.
+
+   </details>
 
 3. Ask it to look. In the `tkcon` console:
 
@@ -122,7 +140,7 @@ Work through `drc_03` once with these steps; Parts 3 and 4 repeat them for the o
 
 ## Part 3: Fix the first four cells
 
-For each of `C=1` to `C=4`:
+What does each rule protect, and what change satisfies it? For each of `C=1` to `C=4`:
 
 1. Run `make why C=<n>` to get the rule names.
 2. Run `make edit C=<n>`, then `drc check` in the console.
@@ -137,16 +155,38 @@ axis the outer layer must extend past the inner one by at least the rule's amoun
 sides**. That is why the fix is often free: you only need one axis to be generous.
 [Reading DRC errors](guide/drc-is-a-conversation.md#in-one-direction) explains it with examples.
 
-If you get stuck, read only the row for the cell you are stuck on. Don't read this table before
-you have tried.
+If you get stuck, open the hint for that cell only, and only after you have tried.
 
-| Cell | Rule | Category | The idea |
-|---|---|---|---|
-| `drc_01` | `diff/tap.8` | enclosure | An implant mask has to extend past what it is implanting, because two masks never align perfectly. |
-| `drc_02` | `li.5` | enclosure | A wire has to overhang the contact under it. Paint the wire first, bigger, and put the contact inside it. |
-| `drc_03` | `licon.8` / `licon.8a` | enclosure | A 0.15 µm poly stripe cannot hold a 0.17 µm contact. Gates get a landing pad. |
-| `drc_04` | `li.3` | spacing | Two wires on different nets, too close. |
-| `drc_05` | `nwell.4`, `LU.3` | context | **Invisible to the default rule set.** |
+<details>
+<summary>Hint for drc_01</summary>
+
+`diff/tap.8`, an enclosure rule. An implant mask has to extend past what it is implanting,
+because two masks never align perfectly.
+
+</details>
+
+<details>
+<summary>Hint for drc_02</summary>
+
+`li.5`, an enclosure rule. A wire has to overhang the contact under it. Paint the wire first,
+bigger, and put the contact inside it.
+
+</details>
+
+<details>
+<summary>Hint for drc_03</summary>
+
+`licon.8` and `licon.8a`, enclosure rules. A 0.15 µm poly stripe cannot hold a 0.17 µm contact.
+Gates get a landing pad.
+
+</details>
+
+<details>
+<summary>Hint for drc_04</summary>
+
+`li.3`, a spacing rule. Two wires on different nets, too close.
+
+</details>
 
 [`solutions/README.md`](https://github.com/uoftasic/ad104/tree/main/labs/lab-02-break-it-on-purpose/solutions)
 in the package explains how to get unstuck without reading the answer.
@@ -156,10 +196,10 @@ in the package explains how to get unstuck without reading the answer.
 ## Part 4: Fix drc_05
 
 `drc_05` has been reported clean by the default checker since your first run, and it is wrong.
-Look at how the tools report it before you fix it.
+Which tools notice, and what are they telling you? Look at how they report it before you fix it.
 
 1. Two independent tools notice the problem, and neither uses the word "tap". The full rule set
-   says:
+   says these, both context rules:
 
    ```
    All nwells must contain metal-connected N+ taps (nwell.4)
@@ -172,16 +212,31 @@ Look at how the tools report it before you fix it.
    X1 Y A VPWR w_0_600# sky130_fd_pr__pfet_01v8_hvt w=1 l=0.15
    ```
 
+   What is `w_0_600#`, and why is the PMOS body on it?
+
+   <details>
+   <summary>Answer</summary>
+
    `w_0_600#` is the PMOS body. It is on an invented node instead of on VPWR, because the n-well
    tap has no contact on it and nothing ties the well to VPWR.
+
+   </details>
 
 3. Fix it with the same loop as Part 3 (`make why C=5`, `make edit C=5`, `drc check`,
    `drc why`), then `save` and run `make`. In Magic, type `drc style drc(full)` before
    `drc check`: under the default rule set this cell has no violations, so there is nothing for
    `drc why` to name.
 
-Answer for yourself: if you had only run the default rule set, what would have told you about
-this cell? The habit to keep is one line: **before you believe a DRC count of zero, run
+4. If you had only run the default rule set, what would have told you about this cell?
+
+   <details>
+   <summary>Answer</summary>
+
+   Netgen. LVS reported `Netlists do not match` on a cell the default rule set called clean.
+
+   </details>
+
+The habit to keep is one line: **before you believe a DRC count of zero, run
 `drc style drc(full)`.** Every lab in this course runs both rule sets and shows you both counts.
 Tools outside this course will not.
 
@@ -190,11 +245,13 @@ Tools outside this course will not.
 
 ## Part 5: Erase instead of fix
 
-You can take every one of these cells to zero violations by deleting the shape that broke the
-rule. Try it once, on `drc_04`.
+What happens if you make a violation go away by deleting the shape that broke the rule? You
+could take every one of these cells to zero violations that way. Try it once, on `drc_04`.
 
-1. Run `make edit C=4`, erase the `A` pad, `save`, and run `make`. The li spacing error is gone,
-   and `make` says:
+1. Run `make edit C=4`, erase the `A` pad, and `save`. Before you run `make`, predict what its
+   DRC and LVS columns will say for `drc_04`.
+
+2. Run `make`. The li spacing error is gone, and `make` says:
 
    ```
      Note: drc_04 is clean and no longer an inverter.
@@ -202,22 +259,35 @@ rule. Try it once, on `drc_04`.
      or add the thing it needed - the circuit has to survive.
    ```
 
-2. Put the pad back the way you had fixed it (`u` in the layout window undoes the erase, or
+   Why does this lab run LVS on all five cells, and not only on `drc_05`?
+
+   <details>
+   <summary>Answer</summary>
+
+   Because a change that satisfies DRC can break the circuit, as erasing the pad just did. A
+   layout has two jobs, and satisfying one at the expense of the other is not progress.
+
+   </details>
+
+3. Put the pad back the way you had fixed it (`u` in the layout window undoes the erase, or
    repaint it), `save`, and run `make` again.
 
-This is why the lab runs LVS on all five cells as well as DRC. A layout has two jobs, and
-satisfying one at the expense of the other is not progress.
-
-**You should see** the note in step 1, and `drc_04` back to `match` after step 2.
+**You should see** the note in step 2, and `drc_04` back to `match` after step 3.
 
 ## Finishing
 
-You are done when:
+You're done when `make` ends in `PASS`, with all five of your fixed cells at 0 violations under
+both rule sets and `match` in LVS.
 
-- [ ] all five cells are at 0 violations under **both** rule sets
-- [ ] all five still `match` in LVS
-- [ ] `make` ends in `PASS`
-- [ ] you can say, without looking, what "in one direction" means
+Questions:
+
+- What does "in one direction" mean in a rule name? Part 3 explains it.
+- Which cell would you have shipped broken if you had only run the default rule set, and what
+  would have warned you? Part 4, step 4 answers it.
+
+Submit: nothing for this lab.
+
+## Going further (optional)
 
 To start again or check your answers:
 
@@ -228,3 +298,8 @@ make solutions    # write the answer key into solutions/
 
 `tcl/make_broken.tcl` generates the broken cells and has one `BREAK` comment for each change, so
 it is the answer key too. Read it after you finish, not before.
+
+Next on the Course path: read [Stick diagrams](guide/stick-diagrams.md),
+[Extraction](guide/extraction-is-reverse-engineering.md) and
+[Layout versus schematic (LVS)](guide/lvs-asks-a-different-question.md), then do
+[Lab 03: Draw an inverter](labs/lab-03-draw-an-inverter-overview.md).

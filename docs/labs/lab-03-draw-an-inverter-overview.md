@@ -25,12 +25,15 @@ nearly five times the foundry's area, because area depends on packing, not on $L
 
 ## Part 1: Sketch it on paper
 
+What goes where, before any dimensions?
+
 1. Draw the inverter stick diagram from [Stick diagrams](guide/stick-diagrams.md) **from memory**,
    not copied: PMOS above, NMOS below, one vertical poly stripe crossing both.
 2. Mark **where the two well taps go** and which rail each one connects to. They are not in the
    guide page's sketch. Leaving them out is the most common bug in a first layout, and drawing
    them by hand once is cheap insurance.
 3. Decide which side of the cell the input is on and which side the output is on, and why.
+   Part 6 shows where this lab's reference cell puts them.
 
 This takes about ninety seconds and can save you an hour.
 
@@ -38,6 +41,8 @@ This takes about ninety seconds and can save you an hour.
 gate.
 
 ## Part 2: Start from the frame
+
+What does the frame already give you, and what is missing?
 
 1. Go into the lab package and lay down the frame:
 
@@ -103,6 +108,8 @@ gate.
 
 ## Part 3: Draw the two diffusions
 
+How big is each diffusion, and is a diffusion on its own a transistor?
+
 1. In the `tkcon` console (or by painting with the mouse):
 
    ```tcl
@@ -127,9 +134,21 @@ gate.
    and nothing tells you why the output did not change. **Save before every `make`** from here
    on.
 
-**You should see** still `transistors 0`. A diffusion on its own is not a transistor.
+3. Before you run `make`, predict how many transistors it will find.
+
+   <details>
+   <summary>Answer</summary>
+
+   None. A diffusion on its own is not a transistor: a transistor is where a poly stripe crosses
+   a diffusion, and there is no poly yet.
+
+   </details>
+
+**You should see** still `transistors 0`.
 
 ## Part 4: Draw the gate
+
+Where does the stripe go, and what sets W and L?
 
 1. Paint the poly stripe:
 
@@ -158,6 +177,8 @@ Part 8 fixes it.
 
 ## Part 5: Add the contacts
 
+What do the contacts need around them?
+
 1. Paint four contacts, each **exactly 0.17 × 0.17 µm**:
 
    ```tcl
@@ -176,7 +197,9 @@ Part 8 fixes it.
    box 1.34um 2.44um 1.51um 2.61um ; paint pc
    ```
 
-3. `save my_inv`, then run `make`.
+3. `save my_inv`. Before you run `make`, predict whether the DRC count goes up or stays at zero.
+
+4. Run `make`.
 
 **You should see** DRC jump to 35 under both rule sets, from three rules:
 
@@ -187,10 +210,21 @@ Part 8 fixes it.
         Local interconnect minimum area < 0.0561um^2 (li.6)
 ```
 
-Each contact brought its own li, exactly the size of the cut, and li has to overhang a contact.
+Why did five correctly sized contacts break two li rules?
+
+<details>
+<summary>Answer</summary>
+
+Each contact brought its own li, exactly the size of the cut, and li has to overhang a contact
+(`li.5`). A 0.17 µm square of li is also smaller than li's minimum area of 0.0561 µm² (`li.6`).
+
+</details>
+
 Part 6 fixes all 35 at once.
 
 ## Part 6: Wire it in li
+
+Which contacts join which, and how wide does the li have to be?
 
 1. Paint four li runs. Each has to overhang its contacts by 0.08 µm **on both sides of one axis**
    (`li.5`), which is what the 0.37 µm width is for:
@@ -209,6 +243,8 @@ Part 6 fixes all 35 at once.
 
 ## Part 7: Name the pins
 
+How does netgen know which shape is `A` and which is `Y`?
+
 1. Label the input and output, turn the labels into ports, and save:
 
    ```tcl
@@ -226,6 +262,8 @@ Part 6 fixes all 35 at once.
 
 ## Part 8: Fix the PMOS flavour
 
+Why does LVS still fail when DRC is clean and every pin has a name?
+
 1. Read the device lines in the `make` output again:
 
    ```
@@ -234,8 +272,15 @@ Part 6 fixes all 35 at once.
 
    `pfet_01v8`, not `pfet_01v8_hvt`: **you have built the wrong transistor.** The foundry's PMOS
    is the high-threshold flavour, and which one you get is decided by an implant mask that
-   nothing in your drawing so far mentions. DRC has no opinion, because both are legal devices.
-   LVS catches it, which is the case for always running LVS.
+   nothing in your drawing so far mentions. Why did DRC never complain?
+
+   <details>
+   <summary>Answer</summary>
+
+   Both are legal devices, so DRC has no opinion. Only LVS, which compares your devices with the
+   schematic's, catches it, which is the case for always running LVS.
+
+   </details>
 
 2. Paint the implant over the PMOS gate region and save:
 
@@ -272,6 +317,8 @@ PASS  Two transistors, the right flavours, the right W and L, four ports,
 
 ## Part 9: Read what you drew
 
+Where in your geometry do `w=0.65` and `w=1` come from?
+
 1. Print the netlist Magic extracted from your geometry:
 
    ```bash
@@ -299,11 +346,18 @@ rectangle whose height is `w=0.65`.
 
 ## Finishing
 
-You are done when:
+You're done when `make` ends in `PASS` on your own `mag/my_inv.mag`, and `make netlist` shows
+two devices, `w=0.65` and `w=1`, both at `l=0.15`.
 
-- [ ] `make` ends in `PASS`
-- [ ] `make netlist` shows two devices, `w=0.65` and `w=1`, both at `l=0.15`
-- [ ] you can point at the rectangle whose height is `w=0.65`
+Questions:
+
+- Which rectangle's height is `w=0.65`? Part 9, step 2 answers it.
+- Why did your cell need LVS, as well as DRC, to show that it was the wrong circuit? Part 8
+  answers it.
+
+Submit: nothing for this lab.
+
+## Going further (optional)
 
 After yours passes, compare it with the reference:
 
@@ -312,3 +366,6 @@ After yours passes, compare it with the reference:
   saying which rule set the number. It did not come out right first time either; the package's
   [`solutions/README.md`](https://github.com/uoftasic/ad104/tree/main/labs/lab-03-draw-an-inverter/solutions)
   shows the 62 violations its first version had.
+
+Next on the Course path: read [Instances and hierarchy](guide/cells-are-lego.md), then do
+[Lab 04: A buffer and an AND gate](labs/lab-04-buffer-and-and-overview.md).

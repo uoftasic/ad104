@@ -1,4 +1,4 @@
-# Lab 04 — A buffer and an AND gate
+# Lab 04: A buffer and an AND gate
 
 You'll build two more cells without drawing a single new transistor. A buffer is two of your
 inverters. An AND gate is a NAND gate and one of your inverters. The work is placing, abutting,

@@ -20,7 +20,7 @@ Labs run inside the shared **workspace** you set up in [IC101](https://uoftasic.
 | **Main tool** | **Magic** 8.3.681, the layout editor. You have not used it before, and [Getting started](guide/getting-started.md) assumes that. |
 | **Also** | netgen for LVS, KLayout 0.30.11 for looking at GDS, ngspice 47 for timing what the geometry costs you |
 | **Math level** | Arithmetic and a ruler. Every dimension in this course is a number of microns. |
-| **Time** | 16–20 hours, self-paced |
+| **Time** | About 17 hours, self-paced |
 
 ## Course path
 
@@ -28,23 +28,24 @@ Work down this table in order. A **Read** row is one or more guide pages: concep
 worked examples, with nothing to run. A **Do** row is one lab, where you run every command
 yourself. Each lab lists the pages to read before you start it.
 
-| # | Type | What | Time |
+| # | | What | Time |
 |---|---|---|---|
 | 1 | Read | [Getting started](guide/getting-started.md) · [What a layout is](guide/what-a-layout-actually-is.md) · [SiliWiz](guide/siliwiz.md) · [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) | 1 h |
-| 2 | Do | [Lab 01 — Open a cell you did not draw](labs/lab-01-open-the-cell-overview.md) | 1.5 h |
+| 2 | Do | [Lab 01: Open a cell you did not draw](labs/lab-01-open-the-cell-overview.md). Measure the foundry's inverter from its layout file, then get DRC, extraction and LVS to agree about it. | 1.25 h |
 | 3 | Read | [Drawing in Magic](guide/drawing-in-magic.md) · [Reading DRC errors](guide/drc-is-a-conversation.md) · [The full DRC rule set](guide/the-rule-set-you-are-not-running.md) | 1 h |
-| 4 | Do | [Lab 02 — Break it on purpose](labs/lab-02-break-it-on-purpose-overview.md) | 2 h |
+| 4 | Do | [Lab 02: Break it on purpose](labs/lab-02-break-it-on-purpose-overview.md). Fix five broken inverter layouts, each breaking one real SKY130 rule, until DRC and LVS both pass. | 2 h |
 | 5 | Read | [Stick diagrams](guide/stick-diagrams.md) · [Extraction](guide/extraction-is-reverse-engineering.md) · [Layout versus schematic (LVS)](guide/lvs-asks-a-different-question.md) | 1 h |
-| 6 | Do | [Lab 03 — Draw an inverter](labs/lab-03-draw-an-inverter-overview.md) | 3 h |
+| 6 | Do | [Lab 03: Draw an inverter](labs/lab-03-draw-an-inverter-overview.md). Draw a CMOS inverter in Magic from an empty frame until it is DRC clean and LVS clean. | 3 h |
 | 7 | Read | [Instances and hierarchy](guide/cells-are-lego.md) | 30 min |
-| 8 | Do | [Lab 04 — A buffer and an AND gate](labs/lab-04-buffer-and-and-overview.md) | 2 h |
+| 8 | Do | [Lab 04: A buffer and an AND gate](labs/lab-04-buffer-and-and-overview.md). Wire an inverter and a NAND into a buffer and an AND gate without drawing a new transistor. | 2 h |
 | 9 | Read | [Area, parasitics and delay](guide/what-your-drawing-costs.md) | 30 min |
-| 10 | Do | [Lab 05 — What it costs](labs/lab-05-what-it-costs-overview.md) | 1 h |
+| 10 | Do | [Lab 05: What it costs](labs/lab-05-what-it-costs-overview.md). Work out what the Lab 03 inverter's drawing costs in area, then measure what it costs in delay. | 1 h |
 | 11 | Read | [Routing by hand](guide/routing-by-hand.md) · [What sets the clock frequency](guide/why-the-clock-cannot-go-faster.md) | 45 min |
-| 12 | Do | [Capstone — Place and route](labs/capstone-place-and-route-overview.md) | 3 h |
+| 12 | Do | [Capstone: Place and route](labs/capstone-place-and-route-overview.md). Place four standard cells, route them by hand, and measure how fast the block can be clocked. | 3 h |
 
-The times are estimates. Lab 03 and the capstone take longest: Lab 03 is the first cell you draw
-yourself, and the capstone is the first block you route.
+The times are estimates, and they leave out the optional parts at the end of some labs. Lab 03
+and the capstone take longest: Lab 03 is the first cell you draw yourself, and the capstone is the
+first block you route.
 
 Keep these open while you work: [Magic cheat sheet](reference/magic-cheatsheet.md) ·
 [DRC error decoder](reference/drc-error-decoder.md) ·

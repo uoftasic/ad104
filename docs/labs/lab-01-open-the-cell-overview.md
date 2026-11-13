@@ -1,4 +1,4 @@
-# Lab 01 — Open a cell you did not draw
+# Lab 01: Open a cell you did not draw
 
 You'll set up the workbench, then load the foundry's own inverter, `sky130_fd_sc_hd__inv_1`,
 into Magic and get four checks to agree about it: DRC under two rule sets, extraction, and LVS.

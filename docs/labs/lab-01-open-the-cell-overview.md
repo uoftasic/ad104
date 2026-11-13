@@ -83,8 +83,9 @@ What is in the foundry's inverter, and what is missing from it?
    make gui
    ```
 
-   (`make edit` does the same, and is the name every other lab uses.) Magic opens with the cell
-   loaded, and the terminal comes back to you while Magic stays open.
+   (`make edit` does the same, and is the name every other lab uses.) Magic opens two windows with
+   the cell loaded: `layout1`, which shows the drawing, and `tkcon`, a Tcl console you'll type
+   into in Part 6. The terminal comes back to you while Magic stays open.
 
 2. Using [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) as a map, find:
 
@@ -95,7 +96,10 @@ What is in the foundry's inverter, and what is missing from it?
    - the two metal1 rails, straddling y = 0 and y = 2.72
    - the contacts, every one of them 0.17 µm square
 
-3. Now look for something that is *not* there: a well tap.
+3. Now look for something that is *not* there: a well tap, a strip of diffusion with a contact
+   on it, tied to a rail
+   ([What a layout is](guide/what-a-layout-actually-is.md#diffusion-as-a-wire-and-tying-the-wells)
+   explains what it is for).
 
 **You should see** every item in step 2, and no tap anywhere in the cell. Leave Magic open for
 Part 6.
@@ -281,6 +285,15 @@ own fingers.
    `Total DRC errors found: 0`, and the second prints `Total DRC errors found: 3`. `drc why` then
    names the three rules.
 
+3. The last line wrote the extracted netlist to `/tmp/inv.spice`. In the terminal, compare it with
+   the one `make` wrote:
+
+   ```bash
+   diff /tmp/inv.spice results/sky130_fd_sc_hd__inv_1.lvs.spice
+   ```
+
+   `diff` prints nothing when the files are the same.
+
 Three of those lines are easy to leave out and matter:
 
 - **`select top cell`**: `drc why` only reports on what is inside the cursor box, and a freshly
@@ -293,7 +306,8 @@ Three of those lines are easy to leave out and matter:
   second number is the *hierarchical* total across subcells, which is always 0 on a flat cell, so
   if you read the last line of `drc count` the number never seems to change.
 
-**You should see** `0`, then `3`, then the same three rule names as in Part 4.
+**You should see** `0`, then `3`, then the same three rule names as in Part 4, and no output from
+`diff`: typed by hand, the flow gives the same netlist as `make`.
 
 ## Part 7: Browse the library
 

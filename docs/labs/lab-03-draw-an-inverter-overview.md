@@ -123,7 +123,7 @@ How big is each diffusion, and is a diffusion on its own a transistor?
    The n-well starts at y = 3.00, so the PMOS diffusion clears its edge by 0.50 µm, comfortably
    more than the 0.18 µm that `diff/tap.8` needs.
 
-2. Save, then run `make` in the terminal:
+2. Save:
 
    ```tcl
    save my_inv
@@ -143,6 +143,8 @@ How big is each diffusion, and is a diffusion on its own a transistor?
    a diffusion, and there is no poly yet.
 
    </details>
+
+4. Run `make` in the terminal.
 
 **You should see** still `transistors 0`.
 

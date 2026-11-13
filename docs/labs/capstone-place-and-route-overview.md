@@ -329,13 +329,13 @@ and an `f_max`, and `make gds` has written `results/datapath.gds`.
 
 Questions:
 
-- Why did the default rule set report 0 while 32 rules were broken?
+- Why did the default rule set report 0 while the full one found 32 violations?
 
   <details>
   <summary>Answer</summary>
 
-  All 32 are well-tap rules (`nwell.4`, `LU.2`, `LU.3`), and the default rule set leaves them
-  out; only `drc(full)` checks them
+  All 32 break the three well-tap rules (`nwell.4`, `LU.2`, `LU.3`), and the default rule set
+  leaves those rules out; only `drc(full)` checks them
   ([The full DRC rule set](guide/the-rule-set-you-are-not-running.md)). The cells are drawn
   without taps on purpose, so the row needed tap cells, which you added in Part 5.
 

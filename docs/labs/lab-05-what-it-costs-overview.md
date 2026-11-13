@@ -46,8 +46,10 @@ Does the measurement agree with your arithmetic?
    make
    ```
 
-   By default it compares the **reference** Lab 03 inverter with the foundry's. Part 6 (optional)
-   swaps in your own. It prints:
+   By default it compares the **reference** Lab 03 inverter, in `mag/my_inv.mag`, with the
+   foundry's. The reference uses the same transistor and wiring coordinates as Lab 03's steps, so
+   the `yours` column is the cell you drew if you followed them. Part 6 (optional) swaps in your
+   own file. It prints:
 
    ```
      THE SAME TWO TRANSISTORS, DRAWN TWICE
@@ -81,6 +83,11 @@ Does the measurement agree with your arithmetic?
      period                                2720          2138 ps       1.27 x
      frequency                            367.6         467.8 MHz      0.79 x
      one stage                            43.88         34.48 ps       1.27 x
+     ...
+
+   PASS  Both cells extracted with parasitics, both simulated, and the
+         comparison is above. There is no wrong answer here - it is a
+         measurement, and yours is yours.
    ```
 
 2. Find the four `1.00 x` rows for W and L. They are the control: the transistors are identical,
@@ -155,11 +162,12 @@ Where does the extra capacitance live?
 How long does one gate take when it drives nothing but a copy of itself?
 
 An odd number of inverters in a loop cannot settle: whatever value it holds, it contradicts
-itself one lap later. So it oscillates, with period $2 N t_p$, which makes it the cleanest
-measurement of a single gate delay: no source and no external load, just the cell driving one copy
-of itself.
+itself one lap later. So it oscillates, with period $2 N t_p$ for $N$ stages of delay $t_p$ each.
+That makes it the cleanest measurement of a single gate delay: no source and no external load,
+just the cell driving one copy of itself.
 
-1. Open `src/mkring.py`, which writes both 31-stage rings. It is under fifty lines.
+1. Open `src/mkring.py`, which writes both 31-stage rings. It is under fifty lines, and `N = 31`
+   near the top sets the number of stages.
 
 2. From the `period` row of your table, work out the delay of one stage for each cell,
    $t_p = T / (2 \times 31)$, and write both down. Then compare them with the `one stage` row.

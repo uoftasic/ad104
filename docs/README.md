@@ -93,8 +93,9 @@ rails are purple metal1.*
    the default rule set calls clean.
 3. Draw a **DRC-clean, LVS-clean CMOS inverter** from an empty frame.
 4. Turn it into a **buffer** and an **AND gate** without drawing a single new transistor.
-5. Compare your cell against the foundry's **with parasitics extracted**, and find that
-   identical transistors drawn differently take 4.8× the area and run 27 % slower.
+5. Compare the Lab 03 cell against the foundry's **with parasitics extracted**, and find that
+   identical transistors drawn differently take 4.8× the area and run 27 % slower in a ring
+   oscillator.
 6. **Place and route four standard cells by hand**, get the row clean, and measure the highest
    clock frequency your layout can run at.
 

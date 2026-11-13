@@ -250,7 +250,7 @@ What does netgen say when the circuit is right but two names are on the wrong sh
    - **the topology is right**: four devices wired exactly as the schematic says
    - **two names are on the wrong shapes**: netgen had to swap `A` and `B` to make the match work
 
-Why will nothing else in the flow ever notice this?
+Why will nothing else in the flow notice this?
 
 <details>
 <summary>Answer</summary>

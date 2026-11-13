@@ -294,7 +294,7 @@ own fingers.
 
    `diff` prints nothing when the files are the same.
 
-Three of those lines are easy to leave out and matter:
+Three of those lines are easy to leave out:
 
 - **`select top cell`**: `drc why` only reports on what is inside the cursor box, and a freshly
   opened cell has no box worth speaking of. Without it you get `No errors found.` on a cell with

@@ -13,10 +13,10 @@ Package: [`labs/lab-04-buffer-and-and/`](https://github.com/uoftasic/ad104/tree/
   [Stick diagrams](guide/stick-diagrams.md) and
   [Layout versus schematic (LVS)](guide/lvs-asks-a-different-question.md).
 
-**Time:** about 2 hours, not counting the optional Part 7. The full `make` takes about a minute (53, 63 and 74 s on three timed
-clean runs), nearly all of it ngspice reading the SKY130 model library for the truth-table
-simulation. `make layout` runs only the DRC and LVS part, in about 2 s; use it while you are
-wiring.
+**Time:** about 2 hours, not counting the optional Part 7. The full `make` takes about a minute
+(53, 63 and 74 s on three timed clean runs), nearly all of it ngspice reading the SKY130 model
+library for the truth-table simulation. `make layout` runs only the DRC and LVS part, in about
+2 s; use it while you are wiring.
 
 ## Part 1: Look at the NAND
 

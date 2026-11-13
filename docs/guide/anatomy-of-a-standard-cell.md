@@ -30,7 +30,7 @@ rows.
 ## What is inside `inv_1`
 
 When you open it in
-[Lab 01, Part 4](labs/lab-01-open-the-cell-overview.md#part-4-look-at-the-cell-in-magic), you
+[Lab 01, Part 3](labs/lab-01-open-the-cell-overview.md#part-3-look-at-the-cell-in-magic), you
 will find:
 
 - **an n-well** across the top half, with p-diffusion inside it: the PMOS

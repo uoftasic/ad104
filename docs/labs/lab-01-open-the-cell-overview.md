@@ -1,6 +1,6 @@
 # Lab 01: Open a cell you did not draw
 
-You'll set up the workbench, then load the foundry's own inverter, `sky130_fd_sc_hd__inv_1`,
+You'll load this course into the workbench, then load the foundry's own inverter, `sky130_fd_sc_hd__inv_1`,
 into Magic and get four checks to agree about it: DRC under two rule sets, extraction, and LVS.
 If they agree, your toolchain works, and every problem after this lab is a drawing problem.
 
@@ -15,78 +15,62 @@ Package: [`labs/lab-01-open-the-cell/`](https://github.com/uoftasic/ad104/tree/m
   desktop.
 - Keep the [Magic cheat sheet](reference/magic-cheatsheet.md) open in another tab.
 
-**Time:** about 1.5 hours, including 20 minutes for the optional SiliWiz part. `make` itself
+**Time:** about 1 hour 15 minutes, plus 20 minutes for the optional SiliWiz part. `make` itself
 takes about a second and a half.
 
-## Part 1: Explore SiliWiz (optional)
+## Part 1: Load the course
 
-This part runs in your browser and needs no setup. Do it before you open Magic for the first
-time; it is the cheapest twenty minutes in the course.
+If you haven't set up the workbench yet, do
+[IC101 Lab 03](https://uoftasic.com/ic101/#/labs/lab-03-launch-the-workbench-overview) first.
 
-1. Open **<https://app.siliwiz.com/>**. [SiliWiz](guide/siliwiz.md) describes the interface.
-   Load the inverter from the **Preset** dropdown above the drawing area to see a finished
-   example.
-2. Open **LESSONS** (top right) and do the *nmos* lesson. Drag the cross-section cut line with the
-   blue slider so that it passes through the middle of the poly stripe, and look at the
-   cross-section: substrate, a thin oxide, poly on top, and doped regions on either side.
-3. Drag the cut so that it misses the poly. The cross-section becomes two doped regions with
-   nothing joining them. **The transistor exists only where the poly crosses.**
-4. Move a contact until it hangs off the edge of the diffusion it sits on, and open the
-   **CROSS SECTION & DRC** tab. SiliWiz's rules are not SKY130's, but the shape of the
-   complaint, "this thing does not surround that thing by enough", is the shape of half the
-   errors you'll fix in Lab 02.
-5. Do the *parasitics* lesson. Stretch a metal wire longer and watch what happens to the
-   simulated waveform. That is the argument of Lab 05, in two minutes.
+1. Start the noVNC desktop the way IC101 showed you, and open a terminal on it. Type every
+   command in this lab in that terminal, not on your laptop.
 
-**You should see** the transistor appear and disappear in the cross-section as the cut moves on
-and off the poly, and a DRC complaint as soon as the contact leaves its diffusion.
-
-## Part 2: Set up the workbench
-
-1. Start the noVNC desktop the way [IC101](https://uoftasic.com/ic101/) showed you, open
-   `http://localhost` in a browser, and open a terminal on that desktop. Type every command from
-   here on in that terminal, not on your laptop.
-
-2. Load the course environment. Do this in every new terminal; it does not carry over.
+2. Load the course environment and check the PDK. Load it in every new terminal; it does not
+   carry over.
 
    ```bash
    . /foss/designs/common/.designinit
-   ```
-
-3. Check the PDK:
-
-   ```bash
    echo $PDK
    ```
 
-   It must print `sky130A`. If it prints `ihp-sg13g2`, the image's default, step 2 did not run in
-   this terminal.
+   `echo $PDK` must print `sky130A`. If it prints `ihp-sg13g2`, the image's default, the first
+   line did not run in this terminal.
 
-4. Get the course files. `mod` is a command that `.designinit` defines.
+3. Get the course files. `mod` is a command that `.designinit` defines.
 
    ```bash
    mod add ad104     # first time only
    mod ad104         # puts you in the course folder
    ```
 
-5. Check the Magic version:
+4. Check the versions of the three tools whose output this course prints:
 
    ```bash
    magic --version
+   netgen -batch quit | head -1
+   ngspice --version | grep ngspice-
    ```
 
    ```
    8.3.681
+   Netgen 1.5.323 compiled on Tue Aug 25 11:33:45 AM CEST 2026
+   ** ngspice-47 : Circuit level simulation program
    ```
+
+   With a different version, your outputs may not match the ones printed in these labs.
 
 | What you see | What it means |
 |---|---|
-| `.designinit: No such file or directory` | The workspace was not set up. Finish IC101. You can still run `make` in a lab: every lab package pins its own PDK. |
+| `.designinit: No such file or directory` | The workspace isn't set up: do IC101 Lab 03. You can still run `make` in any lab, because every lab package pins its own PDK. |
 | `couldn't read Username for 'https://github.com'` on `mod add ad104` | The repo did not answer anonymously. That is our problem, not yours; say so in [Discord](https://discord.gg/hrJnP5UsGz). |
 
-**You should see** `sky130A` from step 3 and `8.3.681` from step 5.
+For anything else, see IC101's [Troubleshooting](https://uoftasic.com/ic101/#/reference/troubleshooting)
+page.
 
-## Part 3: Run the check
+**You should see** `sky130A` from step 2 and the three versions from step 4.
+
+## Part 2: Run the check
 
 1. From the course folder, go into the lab package and run it:
 
@@ -143,7 +127,7 @@ and off the poly, and a DRC complaint as soon as the contact leaves its diffusio
 
 **You should see** `PASS`, `0` under the default rule set and `3` under the full one.
 
-## Part 4: Look at the cell in Magic
+## Part 3: Look at the cell in Magic
 
 1. Open the cell:
 
@@ -166,9 +150,9 @@ and off the poly, and a DRC complaint as soon as the contact leaves its diffusio
 3. Now look for something that is *not* there: a well tap.
 
 **You should see** every item in step 2, and no tap anywhere in the cell. Leave Magic open for
-Part 6.
+Part 5.
 
-## Part 5: Read the extracted netlist
+## Part 4: Read the extracted netlist
 
 1. In the terminal, print the netlist Magic extracted from the geometry:
 
@@ -199,13 +183,13 @@ Part 6.
 
 **You should see** two devices, six ports, and `w=0.65 l=0.15` on the NMOS.
 
-## Part 6: Run the flow by hand
+## Part 5: Run the flow by hand
 
-Everything Magic did for `make` in Part 3 is a short list of commands you can type yourself.
+Everything Magic did for `make` in Part 2 is a short list of commands you can type yourself.
 This is the flow for every remaining lab in the course, and it is worth running once with your
 own fingers.
 
-1. In the `tkcon` console (the Tcl console window that opened with Magic in Part 4), type these
+1. In the `tkcon` console (the Tcl console window that opened with Magic in Part 3), type these
    one at a time:
 
    ```tcl
@@ -241,9 +225,9 @@ Three of those lines are easy to leave out and matter:
   second number is the *hierarchical* total across subcells, which is always 0 on a flat cell, so
   if you read the last line of `drc count` the number never seems to change.
 
-**You should see** `0`, then `3`, then the same three rule names as in Part 3.
+**You should see** `0`, then `3`, then the same three rule names as in Part 2.
 
-## Part 7: Browse the library
+## Part 6: Browse the library
 
 1. Count the cells in the library and list the inverters:
 
@@ -265,6 +249,28 @@ Three of those lines are easy to leave out and matter:
 3. Open `inv_8` next to `inv_1` and see where the factor of eight went.
 
 **You should see** 446 cells, seven inverters, and an `inv_8` that is visibly wider than `inv_1`.
+
+## Part 7: Explore SiliWiz (optional)
+
+This part runs in your browser and needs no setup. It takes about twenty minutes.
+
+1. Open **<https://app.siliwiz.com/>**. [SiliWiz](guide/siliwiz.md) describes the interface.
+   Load the inverter from the **Preset** dropdown above the drawing area to see a finished
+   example.
+2. Open **LESSONS** (top right) and do the *nmos* lesson. Drag the cross-section cut line with the
+   blue slider so that it passes through the middle of the poly stripe, and look at the
+   cross-section: substrate, a thin oxide, poly on top, and doped regions on either side.
+3. Drag the cut so that it misses the poly. The cross-section becomes two doped regions with
+   nothing joining them. **The transistor exists only where the poly crosses.**
+4. Move a contact until it hangs off the edge of the diffusion it sits on, and open the
+   **CROSS SECTION & DRC** tab. SiliWiz's rules are not SKY130's, but the shape of the
+   complaint, "this thing does not surround that thing by enough", is the shape of half the
+   errors you'll fix in Lab 02.
+5. Do the *parasitics* lesson. Stretch a metal wire longer and watch what happens to the
+   simulated waveform. That is the argument of Lab 05, in two minutes.
+
+**You should see** the transistor appear and disappear in the cross-section as the cut moves on
+and off the poly, and a DRC complaint as soon as the contact leaves its diffusion.
 
 ## Finishing
 

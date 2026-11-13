@@ -48,7 +48,7 @@ beginner's DRC errors come from trying to skip a step.
 ![The inverter, layer by layer](../assets/img/ad104-magic-my-inv.png)
 
 *Read this bottom to top. Purple at the very bottom and very top: the metal1 supply rails. The
-orange hatch below the lower rail and the green block above it: the p-tap and the NMOS
+orange hatch just above the lower rail and the green block above that: the p-tap and the NMOS
 n-diffusion. The red stripe running the full height: one strip of polysilicon, the gate of both
 transistors. The pale-blue vertical runs: local interconnect. The boxed X's: contacts, every one
 of them 0.17 µm square because that is the only size the process makes.*

@@ -84,13 +84,15 @@ What is in the foundry's inverter, and what is missing from it?
    ```
 
    (`make edit` does the same, and is the name every other lab uses.) Magic opens two windows with
-   the cell loaded: `layout1`, which shows the drawing, and `tkcon`, a Tcl console you'll type
-   into in Part 6. The terminal comes back to you while Magic stays open.
+   the cell loaded: `layout1`, which shows the drawing, and `tkcon`, a Tcl console where you type
+   Magic commands. The terminal comes back to you while Magic stays open.
 
 2. Using [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) as a map, find the
-   items below. To check a position or a size, put the cursor box on it (left-click one corner,
-   right-click the other) and type `box` in the console: it prints the box's width, height and
-   corners in microns.
+   items below. The figure in
+   [What a layout is](guide/what-a-layout-actually-is.md#the-layers-bottom-to-top) shows which
+   colour is which layer. To check a position or a size, put the cursor box on it (left-click its
+   lower-left corner, right-click its upper-right) and type `box` in the console: it prints the
+   box's width, height and corners in microns.
 
    - the n-well across the top, and the p-diffusion inside it
    - the n-diffusion in the bottom half
@@ -99,10 +101,12 @@ What is in the foundry's inverter, and what is missing from it?
    - the two metal1 rails, straddling y = 0 and y = 2.72
    - the contacts, every one of them 0.17 µm square
 
-3. Now look for something that is *not* there: a well tap, a strip of diffusion with a contact
-   on it, tied to a rail
+3. Now look for something that is *not* there: a well tap. A tap is a contacted strip of `ptap`
+   or `ntap`, silicon doped the *same* type as the well under it and tied to a rail. The
+   transistors' source and drain contacts don't count: their diffusion is the opposite type to
+   the well.
    ([What a layout is](guide/what-a-layout-actually-is.md#diffusion-as-a-wire-and-tying-the-wells)
-   explains what it is for).
+   explains what a tap is for.)
 
 **You should see** every item in step 2, and no tap anywhere in the cell. Leave Magic open for
 Part 6.
@@ -243,8 +247,9 @@ What circuit did Magic pull out of the geometry?
    <details>
    <summary>Answer</summary>
 
-   They are the bulk terminals. The cell exposes its own substrate and well as pins because it
-   does not tie them to anything itself: it has no well tap, as you found in Part 2.
+   They are the bulk terminals: the fourth terminal on each device line. `VNB` is the NMOS body
+   (the p-substrate) and `VPB` the PMOS body (the n-well). The cell exposes them as pins because
+   it does not tie them to anything itself: it has no well tap, as you found in Part 2.
 
    </details>
 

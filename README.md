@@ -25,8 +25,8 @@ cd labs/lab-01-open-the-cell && make      # ~1.5 s, ends in PASS
 
 Every lab pins `PDK=sky130A` itself and ships its own `.magicrc`, so `make`
 works in a bare container with no environment setup, and every lab ends in
-`PASS` or `FAIL` with a reason. Lab 01 walks students through the workbench
-setup.
+`PASS` or `FAIL` with a reason. IC101 sets up the workbench; Lab 01 loads this
+course into it and checks the tool versions.
 
 ## Labs
 

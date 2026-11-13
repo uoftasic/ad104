@@ -1,8 +1,9 @@
 # Lab 01: Open a cell you did not draw
 
-You'll load this course into the workbench, then load the foundry's own inverter, `sky130_fd_sc_hd__inv_1`,
-into Magic and get four checks to agree about it: DRC under two rule sets, extraction, and LVS.
-If they agree, your toolchain works, and every problem after this lab is a drawing problem.
+You'll load this course into the workbench, open the foundry's own inverter,
+`sky130_fd_sc_hd__inv_1`, in Magic, and measure its two transistors from the layout file. Then
+you get four checks to agree about it: DRC under two rule sets, extraction, and LVS. If they
+agree, your toolchain works, and every problem after this lab is a drawing problem.
 
 Package: [`labs/lab-01-open-the-cell/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-01-open-the-cell)
 
@@ -14,6 +15,7 @@ Package: [`labs/lab-01-open-the-cell/`](https://github.com/uoftasic/ad104/tree/m
 - Finish [IC101](https://uoftasic.com/ic101/): you need the `workspace` clone and the noVNC
   desktop.
 - Keep the [Magic cheat sheet](reference/magic-cheatsheet.md) open in another tab.
+- Have paper or a text file ready for the numbers you work out in Part 3.
 
 **Time:** about 1 hour 15 minutes, plus 20 minutes for the optional SiliWiz part. `make` itself
 takes about a second and a half.
@@ -70,12 +72,76 @@ page.
 
 **You should see** `sky130A` from step 2 and the three versions from step 4.
 
-## Part 2: Run the check
+## Part 2: Look at the cell in Magic
 
-1. From the course folder, go into the lab package and run it:
+What is in the foundry's inverter, and what is missing from it?
+
+1. From the course folder, go into the lab package and open the cell:
 
    ```bash
    cd labs/lab-01-open-the-cell
+   make gui
+   ```
+
+   (`make edit` does the same, and is the name every other lab uses.) Magic opens with the cell
+   loaded, and the terminal comes back to you while Magic stays open.
+
+2. Using [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) as a map, find:
+
+   - the n-well across the top, and the p-diffusion inside it
+   - the n-diffusion in the bottom half
+   - the **single** poly stripe crossing both, which is why the two gates are connected without a
+     wire
+   - the two metal1 rails, straddling y = 0 and y = 2.72
+   - the contacts, every one of them 0.17 µm square
+
+3. Now look for something that is *not* there: a well tap.
+
+**You should see** every item in step 2, and no tap anywhere in the cell. Leave Magic open for
+Part 6.
+
+## Part 3: Measure the transistors
+
+How wide and how long are the two transistors? You can work it out from the layout file before
+any tool extracts it.
+
+1. In the terminal, print the file's header and its two transistor layers:
+
+   ```bash
+   F=$PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/mag/sky130_fd_sc_hd__inv_1.mag
+   head -4 $F
+   grep -A1 -e '<< scnmos >>' -e '<< scpmoshvt >>' $F
+   ```
+
+   ```
+   magic
+   tech sky130A
+   magscale 1 2
+   timestamp 1785844050
+   << scnmos >>
+   rect 120 47 150 177
+   << scpmoshvt >>
+   rect 120 297 150 497
+   ```
+
+   `scnmos` is the NMOS and `scpmoshvt` the high-threshold PMOS. Each `rect` line is one rectangle,
+   `x1 y1 x2 y2`, and it covers the patch of diffusion under the poly stripe: the channel
+   ([What a layout is](guide/what-a-layout-actually-is.md#where-the-transistor-is)).
+
+2. The header says `magscale 1 2`, so one unit is 0.005 µm
+   ([Drawing in Magic](guide/drawing-in-magic.md#the-mag-file)). For each rectangle, work out its
+   height and its width in µm, and write them down. The height is W and the width is L.
+
+**You should see** two `rect` lines, and four numbers in your notes: W and L for each transistor.
+Part 4 checks them.
+
+## Part 4: Run the check
+
+Do the tools measure the cell the way you did?
+
+1. Run the lab:
+
+   ```bash
    make
    ```
 
@@ -115,46 +181,41 @@ page.
          they are the circuit the foundry says the cell is.
    ```
 
-2. Look at the full-rule-set count. **The foundry's own cell fails the full rule set**, and that
-   is the expected answer. (Magic calls a rule set a DRC *style*, which is why the output says
-   `default style` and `full style`.) Before you read on, answer for yourself: why does the full
-   rule set find three violations in a cell that has been taped out hundreds of times?
+   If it stops or a number differs:
 
-3. Check your answer. All three violations come from one omission: the cell has no well tap,
-   because the library puts taps in a separate cell
-   ([Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md#why-the-cell-has-no-well-tap)
-   explains why).
+   | What you see | What it means |
+   |---|---|
+   | `DRC violations, default style` is not 0 | The technology did not load. Check that `$PDK_ROOT` points at the PDKs (`/foss/pdks` in the workbench image) and that `.magicrc` is in the folder you ran `make` from. |
+   | `results/report.txt is missing` | Magic did not finish. Read `results/magic.log`. |
+   | `LVS: netgen wrote no report` | Read `results/netgen.log`. The cause is usually `$PDK_ROOT` again. |
+   | `magic: command not found` | You are not in the workbench container. |
 
-**You should see** `PASS`, `0` under the default rule set and `3` under the full one.
+2. Compare the two transistor lines with the W and L you wrote down in Part 3.
 
-## Part 3: Look at the cell in Magic
+3. Look at the full-rule-set count. The foundry's own cell fails the full rule set, and that is
+   the expected answer. (Magic calls a rule set a DRC *style*, which is why the output says
+   `default style` and `full style`.) Why does the full rule set find three violations in a cell
+   that has been taped out hundreds of times?
 
-1. Open the cell:
+   <details>
+   <summary>Answer</summary>
 
-   ```bash
-   make gui
-   ```
+   All three come from one omission: the cell has no well tap, because the library puts taps in
+   a separate cell.
+   [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md#why-the-cell-has-no-well-tap)
+   explains why. `make` prints the same explanation under the three rule names, where the output
+   above shows `...`.
 
-   (`make edit` does the same, and is the name every other lab uses.) Magic opens with the cell
-   loaded, and the terminal comes back to you while Magic stays open.
+   </details>
 
-2. Using [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) as a map, find:
+**You should see** `PASS`, `0` under the default rule set and `3` under the full one, and
+`W=0.65 L=0.15` and `W=1 L=0.15` matching the numbers you wrote down.
 
-   - the n-well across the top, and the p-diffusion inside it
-   - the n-diffusion in the bottom half
-   - the **single** poly stripe crossing both, which is why the two gates are connected without a
-     wire
-   - the two metal1 rails, straddling y = 0 and y = 2.72
-   - the contacts, every one of them 0.17 µm square
+## Part 5: Read the extracted netlist
 
-3. Now look for something that is *not* there: a well tap.
+What circuit did Magic pull out of the geometry?
 
-**You should see** every item in step 2, and no tap anywhere in the cell. Leave Magic open for
-Part 5.
-
-## Part 4: Read the extracted netlist
-
-1. In the terminal, print the netlist Magic extracted from the geometry:
+1. Print the netlist Magic extracted:
 
    ```bash
    make netlist
@@ -169,27 +230,34 @@ Part 5.
    .ends
    ```
 
-2. Count the ports. There are six, and two of them, `VNB` and `VPB`, are the bulk terminals. The
-   cell exposes its own substrate and well as pins because it does not tie them to anything
-   itself.
+2. Count the ports: there are six. `A` and `Y` are the input and output, and `VPWR` and `VGND`
+   the supplies. What are `VNB` and `VPB`, and why are they pins?
 
-3. Find `w=0.65` and `w=1`. Nobody typed those numbers; Magic measured the height of two
-   rectangles. Answer for yourself: which rectangle's height is `w=0.65`?
-   ([What a layout is](guide/what-a-layout-actually-is.md#where-the-transistor-is) has the rule
-   if you need it.)
+   <details>
+   <summary>Answer</summary>
+
+   They are the bulk terminals. The cell exposes its own substrate and well as pins because it
+   does not tie them to anything itself: it has no well tap, as you found in Part 2.
+
+   </details>
+
+3. Find `w=0.65` and `w=1`. Nobody typed those numbers: Magic measured the same two rectangles
+   you measured in Part 3.
 
 4. Find `pfet_01v8_hvt`. The PMOS is the high-threshold flavour, and you'll need to remember that
    in Lab 03.
 
 **You should see** two devices, six ports, and `w=0.65 l=0.15` on the NMOS.
 
-## Part 5: Run the flow by hand
+## Part 6: Run the flow by hand
 
-Everything Magic did for `make` in Part 2 is a short list of commands you can type yourself.
+Which commands does Magic run for `make`, and which of them are easy to get wrong?
+
+Everything Magic did for `make` in Part 4 is a short list of commands you can type yourself.
 This is the flow for every remaining lab in the course, and it is worth running once with your
 own fingers.
 
-1. In the `tkcon` console (the Tcl console window that opened with Magic in Part 3), type these
+1. In the `tkcon` console (the Tcl console window that opened with Magic in Part 2), type these
    one at a time:
 
    ```tcl
@@ -225,9 +293,11 @@ Three of those lines are easy to leave out and matter:
   second number is the *hierarchical* total across subcells, which is always 0 on a flat cell, so
   if you read the last line of `drc count` the number never seems to change.
 
-**You should see** `0`, then `3`, then the same three rule names as in Part 2.
+**You should see** `0`, then `3`, then the same three rule names as in Part 4.
 
-## Part 6: Browse the library
+## Part 7: Browse the library
+
+How does the library offer more drive strength for the same logic?
 
 1. Count the cells in the library and list the inverters:
 
@@ -246,11 +316,22 @@ Three of those lines are easy to leave out and matter:
    make klayout
    ```
 
-3. Open `inv_8` next to `inv_1` and see where the factor of eight went.
+3. Before you look, predict: is `inv_8` taller than `inv_1`, wider, or both? Then open `inv_8`
+   next to `inv_1` and see where the factor of eight went.
+
+   <details>
+   <summary>Answer</summary>
+
+   Wider only. Every cell in the library is 2.72 µm tall, and each step up in drive strength is
+   the same logic with wider transistors
+   ([Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md#drive-strength)), so the
+   extra area has to go sideways.
+
+   </details>
 
 **You should see** 446 cells, seven inverters, and an `inv_8` that is visibly wider than `inv_1`.
 
-## Part 7: Explore SiliWiz (optional)
+## Part 8: Explore SiliWiz (optional)
 
 This part runs in your browser and needs no setup. It takes about twenty minutes.
 
@@ -274,20 +355,19 @@ and off the poly, and a DRC complaint as soon as the contact leaves its diffusio
 
 ## Finishing
 
-You are done when:
+You're done when `make` ends in `PASS` and the W and L you worked out from the `.mag` file in
+Part 3 match the `W=` and `L=` it prints for both transistors.
 
-- [ ] `make` ends in `PASS`
-- [ ] you can point at the n-well, the two diffusions, the poly stripe and the two rails in the
-      Magic window
-- [ ] you can say why the full rule set finds three violations in a cell that has been taped out
-      hundreds of times
-- [ ] you know which rectangle's height `w=0.65` in the extracted netlist is
+Questions:
 
-## If something goes wrong
+- Why does the full rule set find three violations in a cell that has been taped out hundreds of
+  times? Part 4, step 3 answers it.
+- Why does the last line of `drc count` never seem to change when you switch rule sets? Part 6
+  answers it.
 
-| What you see | What it means |
-|---|---|
-| `DRC violations, default style` is not 0 | The technology did not load. Check that `$PDK_ROOT` points at the PDKs (`/foss/pdks` in the workbench image) and that `.magicrc` is in the folder you ran `make` from. |
-| `results/report.txt is missing` | Magic did not finish. Read `results/magic.log`. |
-| `LVS: netgen wrote no report` | Read `results/netgen.log`. The cause is usually `$PDK_ROOT` again. |
-| `magic: command not found` | You are not in the workbench container. |
+Submit: nothing for this lab.
+
+Next on the Course path: read [Drawing in Magic](guide/drawing-in-magic.md),
+[Reading DRC errors](guide/drc-is-a-conversation.md) and
+[The full DRC rule set](guide/the-rule-set-you-are-not-running.md), then do
+[Lab 02: Break it on purpose](labs/lab-02-break-it-on-purpose-overview.md).

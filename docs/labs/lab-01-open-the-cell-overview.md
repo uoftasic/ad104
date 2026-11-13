@@ -50,7 +50,7 @@ If you haven't set up the workbench yet, do
 
    ```bash
    magic --version
-   netgen -batch quit | head -1
+   netgen -batch quit | grep '^Netgen'
    ngspice --version | grep ngspice-
    ```
 

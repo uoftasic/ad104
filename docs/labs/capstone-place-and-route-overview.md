@@ -1,4 +1,4 @@
-# Capstone — Place and route
+# Capstone: Place and route
 
 You'll place four standard cells in a row, route three wires between them by hand, and then
 measure how fast you can clock what you built. This is the job a place-and-route tool does, at a

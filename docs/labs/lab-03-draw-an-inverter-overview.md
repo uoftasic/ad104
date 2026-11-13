@@ -1,4 +1,4 @@
-# Lab 03 — Draw an inverter
+# Lab 03: Draw an inverter
 
 AD103's capstone was a CMOS inverter you could simulate. In this lab you draw the same circuit
 as geometry: two transistors and one shared gate, DRC clean under both rule sets, and proved by

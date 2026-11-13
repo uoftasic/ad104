@@ -1,4 +1,4 @@
-# Lab 02 — Break it on purpose
+# Lab 02: Break it on purpose
 
 You'll fix five copies of the same inverter. Each has exactly one number changed, and each change
 breaks exactly one real SKY130 design rule. You haven't drawn anything yet, and that is

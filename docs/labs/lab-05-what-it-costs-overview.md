@@ -1,4 +1,4 @@
-# Lab 05 — What it costs
+# Lab 05: What it costs
 
 You'll extract the Lab 03 inverter and the foundry's `inv_1` with every parasitic capacitance
 kept, simulate both, and put a price on the drawing: the same two transistors, drawn twice,

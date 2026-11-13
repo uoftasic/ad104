@@ -4,27 +4,27 @@
   - [What a layout is](guide/what-a-layout-actually-is.md)
   - [SiliWiz](guide/siliwiz.md)
   - [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md)
-  - [Lab 01 — Open a cell you did not draw](labs/lab-01-open-the-cell-overview.md)
+  - [Lab 01: Open a cell you did not draw](labs/lab-01-open-the-cell-overview.md)
 - **Design rules**
   - [Drawing in Magic](guide/drawing-in-magic.md)
   - [Reading DRC errors](guide/drc-is-a-conversation.md)
   - [The full DRC rule set](guide/the-rule-set-you-are-not-running.md)
-  - [Lab 02 — Break it on purpose](labs/lab-02-break-it-on-purpose-overview.md)
+  - [Lab 02: Break it on purpose](labs/lab-02-break-it-on-purpose-overview.md)
 - **Your first cell**
   - [Stick diagrams](guide/stick-diagrams.md)
   - [Extraction](guide/extraction-is-reverse-engineering.md)
   - [Layout versus schematic (LVS)](guide/lvs-asks-a-different-question.md)
-  - [Lab 03 — Draw an inverter](labs/lab-03-draw-an-inverter-overview.md)
+  - [Lab 03: Draw an inverter](labs/lab-03-draw-an-inverter-overview.md)
 - **Building with cells**
   - [Instances and hierarchy](guide/cells-are-lego.md)
-  - [Lab 04 — A buffer and an AND gate](labs/lab-04-buffer-and-and-overview.md)
+  - [Lab 04: A buffer and an AND gate](labs/lab-04-buffer-and-and-overview.md)
 - **What layout costs**
   - [Area, parasitics and delay](guide/what-your-drawing-costs.md)
-  - [Lab 05 — What it costs](labs/lab-05-what-it-costs-overview.md)
+  - [Lab 05: What it costs](labs/lab-05-what-it-costs-overview.md)
 - **Place and route**
   - [Routing by hand](guide/routing-by-hand.md)
   - [What sets the clock frequency](guide/why-the-clock-cannot-go-faster.md)
-  - [Capstone — Place and route](labs/capstone-place-and-route-overview.md)
+  - [Capstone: Place and route](labs/capstone-place-and-route-overview.md)
 - **Reference**
   - [Magic cheat sheet](reference/magic-cheatsheet.md)
   - [DRC error decoder](reference/drc-error-decoder.md)

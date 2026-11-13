@@ -87,7 +87,10 @@ What is in the foundry's inverter, and what is missing from it?
    the cell loaded: `layout1`, which shows the drawing, and `tkcon`, a Tcl console you'll type
    into in Part 6. The terminal comes back to you while Magic stays open.
 
-2. Using [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) as a map, find:
+2. Using [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) as a map, find the
+   items below. To check a position or a size, put the cursor box on it (left-click one corner,
+   right-click the other) and type `box` in the console: it prints the box's width, height and
+   corners in microns.
 
    - the n-well across the top, and the p-diffusion inside it
    - the n-diffusion in the bottom half
@@ -302,9 +305,10 @@ Three of those lines are easy to leave out:
 - **`drc catchup`**: `drc check` queues the re-check, and `drc catchup` waits for it to finish.
   Count too early and you count nothing.
 - **`drc count total`**, not `drc count`. Plain `drc count` prints two lines,
-  `Cell sky130_fd_sc_hd__inv_1 has 3 error tiles.` and then `Total DRC errors found: 0`. The
-  second number is the *hierarchical* total across subcells, which is always 0 on a flat cell, so
-  if you read the last line of `drc count` the number never seems to change.
+  `Cell sky130_fd_sc_hd__inv_1 has 3 error tiles.` and then `Total DRC errors found: 0`. That
+  second line has the same label as `drc count total`'s output but counts something else: the
+  *hierarchical* total across subcells, which is always 0 on a flat cell. So if you read the last
+  line of `drc count`, the number never seems to change.
 
 **You should see** `0`, then `3`, then the same three rule names as in Part 4, and no output from
 `diff`: typed by hand, the flow gives the same netlist as `make`.

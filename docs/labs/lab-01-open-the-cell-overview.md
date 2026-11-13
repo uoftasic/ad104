@@ -332,8 +332,8 @@ How does the library offer more drive strength for the same logic?
    The first prints `446`. The second lists seven inverters: `inv_1`, `inv_2`, `inv_4`, `inv_6`,
    `inv_8`, `inv_12` and `inv_16`. They are the same logic with increasing drive strength.
 
-2. Open the whole library GDS in KLayout, which is a much better viewer than Magic and cannot
-   edit anything, so it is safe to browse:
+2. Open the whole library GDS in KLayout, a much better viewer than Magic. `make klayout` starts
+   it in viewer mode, where it cannot edit anything, so it is safe to browse:
 
    ```bash
    make klayout

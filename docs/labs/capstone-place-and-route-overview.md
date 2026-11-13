@@ -35,6 +35,8 @@ question at the end a real one.
 
 ## Part 1: Look at the placement
 
+What does a row of four standard cells look like before you wire anything?
+
 1. Go into the lab package, lay down the placement, and open it:
 
    ```bash
@@ -50,7 +52,8 @@ question at the end a real one.
    rails at the same heights, so the rails abut into two continuous strips and the wells merge.
    **At this scale, placement is arithmetic.** `tcl/place.tcl` is four `getcell` calls.
 
-2. Run the layout checks on the bare placement:
+2. Before you run the layout checks on the bare placement, predict the DRC count under each
+   rule set. The foundry's inverter in Lab 01 is a clue. Then run them:
 
    ```bash
    make layout
@@ -80,6 +83,8 @@ question at the end a real one.
 
 ## Part 2: Check what is above each cell
 
+Where can your metal1 go without hitting metal1 that is already inside a cell?
+
 `and2_0` and `buf_1` contain metal1 only in their rails. **`dfxtp_1` does not.**
 
 1. List the flip-flop's metal1:
@@ -97,15 +102,24 @@ question at the end a real one.
    running most of its width. The file is in units of 0.005 µm, so look for rectangles between
    y = 283 and 397.
 
-3. Work out what that means for the `D` input. The obvious place for its via, at the D label
-   around y ≈ 1.19, puts a metal1 pad 0.07 µm from a strap and breaks `met1.2`. The D pin's li
-   shape runs all the way down to y = 0.715, so take the via down there instead.
+3. The obvious place for the `D` input's via is at the D label, around y ≈ 1.19. Work out what
+   a metal1 pad there does next to the straps (`met1.2` is metal1 spacing, 0.14 µm), and where
+   else on the D pin you could land instead.
 
-**Finding somewhere else on the same pin to land** is the routing move you will make most often.
+   <details>
+   <summary>Answer</summary>
+
+   A pad at the label sits 0.07 µm from a strap and breaks `met1.2`. The D pin's li shape runs all
+   the way down to y = 0.715, so take the via down there instead. **Finding somewhere else on the
+   same pin to land** is the routing move you will make most often.
+
+   </details>
 
 **You should see** the two straps in the listing, and a plan for where `D`'s via goes.
 
 ## Part 3: Route the three nets
+
+How do you get from each pin to the next without touching anything else?
 
 | net | from | to |
 |---|---|---|
@@ -141,6 +155,8 @@ Part 5.*
 still reports 32, and LVS still fails, until Parts 4 and 5.
 
 ## Part 4: Bring out the pins
+
+How does your block get pins of its own?
 
 1. Bring out the block's own pins, `CLK`, `D`, `A`, `B` and `Y`: each one an `mcon` on a cell's li
    pin, a metal1 pad, and a label on the pad. The circuit at the top tells you which cell each
@@ -184,6 +200,8 @@ set still at 32.
 
 ## Part 5: Add the tap cells
 
+What are the 32 violations, and what fixes them?
+
 Every one of the 32 violations is about **well taps**. Nothing in your row ties the n-well to
 VPWR or the substrate to VGND, because `sky130_fd_sc_hd` cells are drawn without taps on purpose;
 you saw that in Lab 01 on the foundry's own inverter.
@@ -199,7 +217,14 @@ you saw that in Lab 01 on the foundry's own inverter.
    Xbuf0 buf0/A dff0/VGND VSUBS dff0/VPB dff0/VPWR Y sky130_fd_sc_hd__buf_1
    ```
 
-   `VSUBS` and `dff0/VPB` are invented node names, for bodies that connect to nothing.
+   What are `VSUBS` and `dff0/VPB`?
+
+   <details>
+   <summary>Answer</summary>
+
+   Invented node names, for bodies that connect to nothing.
+
+   </details>
 
 2. **The fix is a cell, not a shape.** Place a `sky130_fd_sc_hd__tapvpwrvgnd_1`, 0.46 µm wide, at
    each end of the row. In the console:
@@ -211,8 +236,8 @@ you saw that in Lab 01 on the foundry's own inverter.
 
    Two taps 14.26 µm apart satisfy `LU.2` and `LU.3`, which only ask for a tap within 15 µm.
 
-3. `save datapath`, run `make layout`, and run the `grep` from step 1 again. The same line now
-   reads:
+3. `save datapath` and run `make layout`. Before you run the `grep` from step 1 again, predict
+   what the body terminals on the `Xbuf0` line will be now. Then run it. The same line now reads:
 
    ```spice
    Xbuf0 buf0/A VGND VGND VPWR VPWR Y sky130_fd_sc_hd__buf_1
@@ -221,6 +246,8 @@ you saw that in Lab 01 on the foundry's own inverter.
 **You should see** 0 under both rule sets and `match` in LVS.
 
 ## Part 6: Time it
+
+How fast can you clock what you built?
 
 1. Run the full check:
 
@@ -257,14 +284,24 @@ you saw that in Lab 01 on the foundry's own inverter.
    `sky130_fd_sc_hd__tt_025C_1v80.lib`, is the same one the digital track synthesises against in
    [DD103](https://uoftasic.com/dd103/); here the two tracks read the same document.
 
-3. Using the 34.48 ps per stage you measured in Lab 05, 601 ps is **17 inverter delays**.
-   Answer for yourself: why do four gates cost seventeen inverters? (Most of it is the flip-flop's
-   clock-to-Q, and the `and2_0` cells you were given are the weakest AND in the library. `and2_2`
-   would buy some of that back, for area.)
+3. Divide your `CLK rise -> Y rise` by the foundry cell's `one stage` delay from Lab 05 (34.48 ps
+   on that page), and write down how many inverter delays it is. Why do four gates cost that
+   many?
+
+   <details>
+   <summary>Answer</summary>
+
+   With the numbers on these pages, 601 ps is **17 inverter delays**. Most of it is the
+   flip-flop's clock-to-Q, and the `and2_0` cells you were given are the weakest AND in the
+   library. `and2_2` would buy some of that back, for area.
+
+   </details>
 
 **You should see** an `f_max` printed. The reference block gives 1419.71 MHz.
 
 ## Part 7: Write the GDS
+
+What do you hand to a foundry, and what is in it?
 
 1. Write the file a foundry would accept:
 
@@ -294,14 +331,40 @@ cell tree.
 
 ## Finishing
 
-You are done when:
+You're done when `make` on your own routed block reports 0 under both rule sets, `match` in LVS
+and an `f_max`, and `make gds` has written `results/datapath.gds`.
 
-- [ ] `make layout` reports **0** under both rule sets and `match` in LVS
-- [ ] `make` prints an `f_max`
-- [ ] `make gds` writes a GDS
-- [ ] you can say, without looking it up, why the default rule set reported 0 while 32 rules were
-      broken
-- [ ] you can name three reasons a real chip runs at a fraction of your 1.42 GHz
+Questions:
+
+- Why did the default rule set report 0 while 32 rules were broken?
+
+  <details>
+  <summary>Answer</summary>
+
+  All 32 are well-tap rules (`nwell.4`, `LU.2`, `LU.3`), and the default rule set leaves them
+  out; only `drc(full)` checks them
+  ([The full DRC rule set](guide/the-rule-set-you-are-not-running.md)). The cells are drawn
+  without taps on purpose, so the row needed tap cells, which you added in Part 5.
+
+  </details>
+
+- Name three reasons a real chip runs at a fraction of your 1.42 GHz.
+
+  <details>
+  <summary>Answer</summary>
+
+  Any three of: logic depth (a real critical path is twenty to forty levels, not four), wires
+  (delay grows roughly with the square of length, and real nets are hundreds of microns to
+  millimetres long), clock skew and jitter, and margin (sign-off is at the slow-slow corner,
+  125 °C and low supply, where everything is 30–50 % worse).
+  [What sets the clock frequency](guide/why-the-clock-cannot-go-faster.md#why-a-real-chip-runs-at-200-mhz)
+  works through each one.
+
+  </details>
+
+Submit: nothing for this lab.
+
+## Going further (optional)
 
 `make ref` and `make refcheck` build and check the reference block. `tcl/route_ref.tcl` routes it
 with a comment on every coordinate; the package's
@@ -312,3 +375,6 @@ You have now done by hand, for four cells, what [DD103](https://uoftasic.com/dd1
 LibreLane for a whole design in 54 seconds: place cells in rows, insert taps, route, check DRC,
 check LVS, and write GDS. The tool does the same steps a hundred thousand times, with a cost
 function, and it never forgets the taps.
+
+Next on the Course path: this is the last lab in AD104. The home page lists the
+[next courses](README.md#next-courses).

@@ -30,6 +30,8 @@ Only these three are fillable:
 | Lab IDs | `lab-NN-short-name` |
 | Adding a guide page | add `.md` under `docs/guide/` (reading only; activities go in a lab), add it to the Course path, link it in `docs/_sidebar.md` |
 | Adding a lab | `labs/<id>/` + `docs/labs/<id>-overview.md` + a Course path row in `docs/README.md` + sidebar entry in the same order |
+| Lab writeup | titled `# Lab NN: Title`; each part opens with the question it answers and ends in a "You should see" check; at least one required part has the student produce something; explanations go in collapsed `<details>` answers; optional parts last. Ends with You're done when (the student's own work), Questions, Submit, then Going further and the "Next on the Course path" line. Full shape in [AGENTS.md](AGENTS.md#lab-writeup-shape) |
+| Course path row | `#`, Read or Do in plain text, the page links (a Do row's lab as "Lab NN: Title" plus one sentence on what you'll do), and a time. Row times add up to the course total. Format in [AGENTS.md](AGENTS.md#course-path-format) |
 | Binaries | small images in `docs/assets/`; large data → Git LFS or external |
 
 ## Docs vs labs

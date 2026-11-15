@@ -173,9 +173,10 @@ Can you find the AND gate's pins yourself?
 
 3. Paint li patches and label them: `A` and `B` over the NAND's two inputs, and `X` over the
    inverter's output. This time you work out the coordinates yourself. You'll find the NAND's
-   input li runs on the `A` and `B` lines in `tcl/nand2.tcl`, and the inverter's output is the
-   same `Y` run you used in Part 2, except that the inverter now sits 4.0 µm from the block's
-   origin instead of 3.0.
+   input li runs on the `A` and `B` lines in `tcl/nand2.tcl`. For the inverter's output, start
+   from the `X` patch you painted in Part 3, at x = 5.20–5.45 on `inv2`'s `Y`. That inverter sat
+   3.0 µm from the block's origin and `in0` sits 4.0 µm from it, so the patch moves 1.0 µm to the
+   right.
 
 4. Run `select top cell`, `port makeall` and `save my_and2`, and then run `make layout`.
 
@@ -201,7 +202,7 @@ Does the AND gate really AND, on the extracted layout?
      TWO BLOCKS, BUILT OUT OF CELLS
 
      block      DRC default  DRC full   LVS                       contains
-     --------------------------------   ------------------------  ----------------
+     --------------------------------   ------------------------  ----------------------------
      ok my_buf            0         0   match                     my_inv, my_inv
      ok my_and2           0         0   match                     my_inv, my_nand2
 

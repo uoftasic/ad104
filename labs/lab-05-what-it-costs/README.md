@@ -2,8 +2,9 @@
 
 Writeup: [uoftasic.com/ad104 → Lab 05](https://uoftasic.com/ad104/labs/lab-05-what-it-costs-overview.html)
 
-Extracts the Lab 03 inverter and the foundry's `inv_1` with every parasitic capacitance kept,
-simulates both, and prints a table comparing area, junction area, capacitance and delay.
+This package extracts the Lab 03 inverter and the foundry's `inv_1` with every parasitic
+capacitance kept, simulates both, and prints a table comparing their area, junction area,
+capacitance and delay.
 
 ## Run it
 
@@ -12,19 +13,21 @@ cd labs/lab-05-what-it-costs
 make
 ```
 
-It takes two to three minutes (114 s and 182 s on two timed clean runs), nearly all of it the two
-31-stage ring oscillators.
+A clean run takes two to three minutes (114 s and 182 s on the two we timed), and nearly all of
+that time goes into simulating the two 31-stage ring oscillators.
 
-By default it compares the **reference** Lab 03 inverter with the foundry's. To use your own:
+By default it compares the reference Lab 03 inverter, in `mag/my_inv.mag`, with the foundry's.
+To compare your own cell instead, copy it in with `make mine` and then run `make`:
 
 ```bash
 make mine MAG=../lab-03-draw-an-inverter/mag/my_inv.mag
 make
 ```
 
-`make mine` currently damages the copied file, and the next `make` fails with
-`results/my_inv.pex.spice is missing - extraction did not run.` `git checkout mag/my_inv.mag`
-restores the reference cell. See Part 6 of the writeup.
+There is a known bug here: `make mine` currently damages the file as it copies it, so the next
+`make` fails with `results/my_inv.pex.spice is missing - extraction did not run.` You can
+restore the reference cell with `git checkout mag/my_inv.mag`, and the writeup's Part 6
+describes the problem.
 
 ## Targets
 

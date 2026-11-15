@@ -178,7 +178,7 @@ $t_p$ each. That makes it the cleanest way to measure a single gate delay, becau
 source and no external load, only the cell driving one copy of itself.
 
 1. Open `src/mkring.py`, which writes both 31-stage rings. It is about fifty lines long, and
-   `N = 31` near the top sets the number of stages. Near the end it starts the ring's nodes
+   `N = 31` near the top sets the number of stages. Near the end it starts each ring's nodes
    alternately low and high, so that a single edge runs round each ring.
 
 2. From the `period` row of your table, work out the delay of one stage for each cell,

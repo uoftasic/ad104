@@ -1,9 +1,11 @@
-# Capstone — Place and route
+# Capstone: Place and route
 
-Writeup: [uoftasic.com/ad104 → Capstone](https://uoftasic.com/ad104/labs/capstone-place-and-route-overview.html)
+Writeup: [uoftasic.com/ad104 → Capstone](https://uoftasic.com/ad104/labs/capstone-place-and-route-overview.html).
+The writeup has the steps, the expected output and the explanations; this file is a quick
+reference.
 
-Four standard cells in a row, three wires routed by hand, then a timing simulation of the
-extracted layout:
+You place four standard cells in a row, route the three wires between them by hand, and then run
+a timing simulation of the extracted layout. The four cells make this circuit:
 
 ```
    Q  = DFF(CLK, D)          sky130_fd_sc_hd__dfxtp_1
@@ -22,9 +24,9 @@ make layout       # DRC + LVS only, about 1.4 s
 make              # ...and the timing, about a minute
 ```
 
-`spice/datapath_sch.spice` includes the library's own SPICE by absolute path (`/foss/pdks/...`),
-which is `$PDK_ROOT` in the workbench image. If your `PDK_ROOT` is somewhere else, edit that one
-line.
+`spice/datapath_sch.spice` includes the cell library's own SPICE by absolute path
+(`/foss/pdks/...`), because that is where `$PDK_ROOT` points in the workbench image. If your
+`PDK_ROOT` is somewhere else, edit that one line.
 
 ## Targets
 

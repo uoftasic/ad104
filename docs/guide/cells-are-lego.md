@@ -25,7 +25,7 @@ identify inv2                     ;# give this copy a name
 ```
 use my_inv  inv2 ../mag
 transform 1 0 300 0 1 0
-box -19 -24 249 296
+box 0 0 300 600
 ```
 
 Because every instance refers back to `my_inv.mag`, editing that one file changes all of them.

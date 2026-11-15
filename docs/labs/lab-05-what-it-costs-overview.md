@@ -147,9 +147,10 @@ Where does the extra capacitance live?
           ... of it on the output        0.3035        0.3889 fF       0.78 x
    ```
 
-   On the second row the foundry's cell comes out *worse*, and that is a real result. The
-   extracted `C` elements are wire-to-wire coupling capacitance, and the foundry cell has more of
-   it on its output because everything in it is packed close together.
+   On the second row the foundry's cell comes out *worse*, and that is a real result. As
+   [Area, parasitics and delay](../guide/what-your-drawing-costs.md#where-the-femtofarads-come-from)
+   explains, the extracted `C` elements are wire-to-wire coupling capacitance, and the foundry
+   cell has more of it on its output because everything in it is packed close together.
 
 3. Where does the junction capacitance of the source and drain diffusions live, and why isn't it
    in the `C` lines?

@@ -1,6 +1,6 @@
 # SiliWiz
 
-SiliWiz runs in a browser tab at **<https://app.siliwiz.com/>**, so you don't need an account and
+SiliWiz runs in a browser tab at **<https://app.siliwiz.com/>**. You don't need an account, and
 there's nothing to install.
 
 You paint layout layers in SiliWiz, and it shows you the **cross-section** of the silicon you've

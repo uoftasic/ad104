@@ -10,8 +10,10 @@ to build. You need both answers, and they come from different tools.
 ## netgen
 
 The LVS tool you'll use is **netgen**, which compares two SPICE netlists as graphs. It
-ignores coordinates, port order and names. Instead it walks through the two circuits and asks
-whether there is a one-to-one correspondence between their devices and between their nets.
+ignores coordinates, port order, and the names of devices and internal nets. Instead it walks
+through the two circuits and asks whether there is a one-to-one correspondence between their
+devices and between their nets. The names of the cell's pins are the exception, and the first
+failure below is what you get when they disagree.
 
 ```bash
 netgen -batch lvs \
@@ -114,16 +116,16 @@ so that it doesn't cost you an afternoon later:
 > *wrapper* schematic that instantiates your symbol, so that the netlist has a subcircuit in it
 > for netgen to compare.
 
-## Why every lab runs LVS
+## Why the labs run LVS {#why-every-lab-runs-lvs}
 
-DRC failures are loud and local, and cheap to fix. LVS failures are quiet, and the cause can be
-anywhere.
+DRC failures are loud and local: Magic hatches the spot and `drc why` names the rule, so they're
+cheap to fix. LVS failures are quiet, and the cause can be anywhere in the cell.
 
 Take a wire that stops 0.02 µm short of its pin. At any zoom you would normally use, it looks
 perfect. It passes DRC, because a gap doesn't violate any rule, and it extracts without
 complaint. Netgen is the only tool in the flow that notices, because it counts the nets and finds
 one too many.
 
-That's why every lab in this course runs LVS, including Lab 02. In Lab 02 the point is that
-**erasing the shape that broke a DRC rule doesn't fix it**: the DRC count drops to zero, but LVS
-immediately reports that the cell is no longer an inverter.
+That's why every lab in this course except Lab 05 runs LVS, including Lab 02. In Lab 02 the
+point is that **erasing the shape that broke a DRC rule doesn't fix it**: the DRC count drops to
+zero, but LVS immediately reports that the cell is no longer an inverter.

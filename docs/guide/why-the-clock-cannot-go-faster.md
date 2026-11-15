@@ -23,22 +23,21 @@ three terms.
 
 ## One gate delay
 
-The fastest thing this process can do is one inverter driving one inverter and nothing else. You
-can measure that directly with a **ring oscillator**, which is an odd number of inverters
-connected in a loop. A loop with an odd number of inversions can't settle, because whatever value
-a node holds comes back inverted one lap later. So the ring oscillates, with a period of
-$2 N t_p$ for $N$ stages that each take $t_p$.
-
-[Lab 05](../labs/lab-05-what-it-costs-overview.md) builds two 31-stage rings out of extracted
-layouts, one from the foundry's inverter and one from yours, and measures them:
+The fastest thing this process can do is one inverter driving one inverter and nothing else, and
+you measured exactly that in Lab 05 with a **ring oscillator**, an odd number of inverters
+connected in a loop.
+[Lab 05, Part 5](../labs/lab-05-what-it-costs-overview.md#part-5-read-the-ring-oscillator)
+explains why such a loop can't settle and oscillates instead, with a period of $2 N t_p$ for $N$
+stages that each take $t_p$. The lab builds two 31-stage rings out of extracted layouts, one from
+the foundry's inverter and one from yours, and measures them:
 
 | | period | frequency | one stage |
 |---|---|---|---|
 | the foundry's `inv_1` | 2137.8 ps | 467.8 MHz | **34.48 ps** |
 | your Lab 03 inverter | 2720.4 ps | 367.6 MHz | **43.88 ps** |
 
-So **34 picoseconds** is the floor: the delay of one unloaded gate in SKY130 at 1.8 V. Every
-other delay on this page can be counted in multiples of it.
+So **34 picoseconds** is the floor: the delay of one gate in SKY130 at 1.8 V driving nothing but a
+copy of itself. Every other delay on this page can be counted in multiples of it.
 
 ## A real path
 
@@ -63,9 +62,9 @@ The two delays in it come from two different places:
   on the flip-flop's internals, so you can't get it from your own layout. This is the point
   where the analog and digital tracks read the same file.
 
-Six hundred picoseconds is **17 inverter delays** for only four gates, so the gates themselves
-aren't the problem. Most of it is the flip-flop's clock-to-Q, and the two `and2_0` cells
-you are given are the weakest AND in the library.
+Six hundred picoseconds is **17 inverter delays** for only four gates, so it isn't the number of
+gates that makes the path slow. Most of it is the flip-flop's clock-to-Q, and the two `and2_0`
+cells you are given are the weakest AND in the library.
 
 ## Why a real chip runs at 200 MHz
 

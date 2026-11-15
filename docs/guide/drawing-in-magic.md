@@ -85,14 +85,14 @@ That has a few consequences, and it's worth knowing them before they confuse you
 - For a single cut, the contact region must be **exactly 0.17 µm** in each direction (rule
   `licon.1`). If you make it bigger, Magic generates an array of cuts instead.
 - The plain layers still have to surround the contact. The diffusion has to extend past the
-  contact, and so does the li. The rules for those are `licon.5c` and `li.5`, which are two of
-  the five rules you fix in Lab 02.
+  contact, and so does the li. The rules for those are `licon.5c` and `li.5`, and `li.5` is one
+  of the five rules you fix in Lab 02.
 - Erasing `li` from a contact doesn't remove the contact; Magic demotes it instead.
 
 ## Labels and ports
 
-As far as LVS is concerned, a shape with no name doesn't exist, and there are two commands that
-give things names:
+As far as LVS is concerned, a cell has no terminals until you name them, and there are two
+commands that give things names:
 
 ```tcl
 box 1.30um 2.40um 1.55um 2.65um

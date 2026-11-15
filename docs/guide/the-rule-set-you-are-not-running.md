@@ -61,9 +61,9 @@ that.
 
 > **Before you believe a DRC count of zero, run it again with `drc style drc(full)`.**
 
-Every lab in this course runs both rule sets and prints both counts side by side, so inside a lab
-you never have to remember to do this. When you work in Magic by hand, you have to switch to the
-full set yourself, with this sequence:
+Every lab in this course that runs DRC runs both rule sets and prints both counts side by side,
+so inside a lab you never have to remember to do this. When you work in Magic by hand, you have
+to switch to the full set yourself, with this sequence:
 
 ```tcl
 drc style drc(full)

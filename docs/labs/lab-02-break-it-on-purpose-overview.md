@@ -154,11 +154,11 @@ What does each rule protect, and what change satisfies it? For each of `C=1` to 
    rule asks for, rather than nudging shapes until the hatching disappears.
 5. Type `save` in the console, then run `make` in the terminal again.
 
-The rules that two of the five cells break use the phrase "in one direction". It means that you
-pick an axis, x or y, and on that axis the outer layer must extend past the inner one by at least
-the rule's amount **on both sides**. Only one axis needs to be generous, which is why the fix often
-costs you nothing.
-[Reading DRC errors](../guide/drc-is-a-conversation.md#in-one-direction) explains it with examples.
+The rules that two of the five cells break use the phrase "in one direction". As
+[Reading DRC errors](../guide/drc-is-a-conversation.md#in-one-direction) explains with examples,
+it means that you pick an axis, x or y, and on that axis the outer layer must extend past the
+inner one by at least the rule's amount **on both sides**. Only one axis needs to be generous,
+which is why the fix often costs you nothing.
 
 If you get stuck, open the hint for that cell only, and only after you have tried.
 
@@ -205,16 +205,20 @@ The default checker has reported `drc_05` clean since your first run, yet the ce
 Which tools notice, and what are they telling you? Look at how each one reports the problem before
 you fix it.
 
-1. Two independent tools notice the problem, and neither of them uses the word "tap". The first
-   is the full rule set, which reports these two violations, both of them context rules:
+1. Two independent tools notice the problem. The first is the full rule set, which names these two
+   rules:
 
    ```
    All nwells must contain metal-connected N+ taps (nwell.4)
    P-diff distance to N-tap must be < 15.0um (LU.3)
    ```
 
-2. The second is netgen, which reports a mismatch. Open `results/drc_05.lvs.spice` and find the
-   PMOS line:
+   Both are context rules, which a cell can satisfy only with help from what is placed around it
+   ([Anatomy of a standard cell](../guide/anatomy-of-a-standard-cell.md#why-the-cell-has-no-well-tap)
+   explains why).
+
+2. The second is netgen, which reports a mismatch without ever using the word "tap". Open
+   `results/drc_05.lvs.spice` and find the PMOS line:
 
    ```spice
    X1 Y A VPWR w_0_600# sky130_fd_pr__pfet_01v8_hvt w=1 l=0.15
@@ -245,9 +249,10 @@ you fix it.
 
    </details>
 
-The habit to take from this part is this one: **before you believe a DRC count of zero, run
-`drc style drc(full)`.** Every lab in this course runs both rule sets and shows you both counts,
-but tools outside this course won't do that for you.
+The habit to take from this part is the rule of thumb from
+[The full DRC rule set](../guide/the-rule-set-you-are-not-running.md#the-rule-of-thumb):
+**before you believe a DRC count of zero, run `drc style drc(full)`.** The labs that run DRC show
+you both counts, but tools outside this course won't do that for you.
 
 **You should see** `drc_05` at `0` under both rule sets and `match` in LVS, and `make` ending in
 `PASS`.

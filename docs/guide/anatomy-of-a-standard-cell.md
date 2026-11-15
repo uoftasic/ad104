@@ -39,7 +39,7 @@ will find:
 - **one poly stripe** crossing both, which is the gate of both transistors. Lab 01 reads
   `w=0.65 l=0.15` for the NMOS and `w=1 l=0.15` for the PMOS back out of the geometry.
 - **six ports**: `A`, `Y`, `VPWR`, `VGND`, and two you might not expect, `VPB` and `VNB`, the
-  p-bulk and n-bulk. The cell exposes its own well and substrate as terminals.
+  bodies of the PMOS and the NMOS. The cell exposes its own well and substrate as terminals.
 
 The cell needs those last two ports because it leaves out the taps that would tie its well and
 substrate to the supplies, as the next section explains.
@@ -131,7 +131,7 @@ This course uses Magic anyway, for reasons that have to do with the flow rather 
   count in the toolbar. KLayout has no such checker, and seeing your errors as you make them is
   what teaches you the rules.
 - Magic extracts: it turns geometry back into a SPICE netlist, with parasitics, in one command.
-  Labs 01, 03, 04, 05 and the capstone all rely on that.
+  Every lab from Lab 01 to the capstone relies on that.
 - The open SKY130 ecosystem (netgen's setup file, `open_pdks`, LibreLane's sign-off) is wired to
   Magic's output formats.
 

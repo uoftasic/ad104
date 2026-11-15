@@ -47,12 +47,12 @@ four cells placed and no wires, it prints:
 ```
 
 The default rule set finds zero errors in that geometry and the full rule set finds thirty-two.
-That pair of numbers is the most important thing in this lab, and it is the reason every `make`
-in this course runs both rule sets and prints both counts.
+That pair of numbers is the most important thing in this lab, and it is the reason every lab
+`make` that runs DRC in this course runs both rule sets and prints both counts.
 
 ## Compared with a place-and-route tool
 
 You built four cells, three nets and one row in about ninety minutes. In
 [DD103](https://uoftasic.com/dd103/), a tool hardens a whole design (place, tap, route, DRC, LVS,
-GDS) in 54 seconds. It does nothing you haven't now done by hand; it just does it a hundred
+GDS) in about a minute. It does nothing you haven't now done by hand; it just does it a hundred
 thousand times, guided by a cost function, and it never forgets the taps.

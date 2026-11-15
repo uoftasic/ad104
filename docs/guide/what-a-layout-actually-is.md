@@ -52,11 +52,11 @@ and half of a beginner's DRC errors come from trying to skip one of those steps.
 ![The inverter, layer by layer](../assets/img/ad104-magic-my-inv.png)
 
 *Read this picture from the bottom up. The purple bands at the very bottom and very top are the
-metal1 supply rails. The orange hatch just above the lower rail is the p-tap, and the green block
-above that is the NMOS n-diffusion. The red stripe running the full height is a single strip of
-polysilicon, which forms the gate of both transistors. The pale-blue vertical runs are local
-interconnect, and the boxed X's are contacts. Every contact is 0.17 µm square, because that's the
-only size the process makes.*
+metal1 supply rails. The brown strip just above the lower rail is the p-tap, and the green block
+above that is the NMOS n-diffusion. The red stripe running from below the n-diffusion to above the
+p-diffusion is a single strip of polysilicon, which forms the gate of both transistors. The
+pale-blue vertical runs are local interconnect, and the boxed X's are contacts. Every contact is
+0.17 µm square, because that's the only size the process makes.*
 
 ## Where the transistor is
 

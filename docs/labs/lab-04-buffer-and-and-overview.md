@@ -1,8 +1,9 @@
 # Lab 04: A buffer and an AND gate
 
-You'll build two more cells without drawing a single new transistor. A buffer is two of your
-inverters. An AND gate is a NAND gate and one of your inverters. The work is placing, abutting,
-wiring and naming, which is what the rest of a chip is made of.
+In this lab you'll build two more cells without drawing a single new transistor, because both are
+made from cells you already have: a buffer is two of your inverters, and an AND gate is a NAND
+gate followed by one of your inverters. The work is placing the cells, abutting them, wiring them
+together and naming their pins, which is also what the rest of a chip is made of.
 
 Package: [`labs/lab-04-buffer-and-and/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-04-buffer-and-and)
 
@@ -14,9 +15,9 @@ Package: [`labs/lab-04-buffer-and-and/`](https://github.com/uoftasic/ad104/tree/
   [Layout versus schematic (LVS)](../guide/lvs-asks-a-different-question.md).
 
 **Time:** about 2 hours, not counting the optional Part 7. The full `make` takes about a minute
-(53, 63 and 74 s on three timed clean runs), nearly all of it ngspice reading the SKY130 model
-library for the truth-table simulation. `make layout` runs only the DRC and LVS part, in about
-2 s; use it while you are wiring.
+(53, 63 and 74 s on three timed clean runs), and nearly all of that is ngspice reading the SKY130
+model library for the truth-table simulation. `make layout` runs only the DRC and LVS part, which
+takes about 2 s, so use it while you are wiring.
 
 ## Part 1: Look at the NAND
 
@@ -30,12 +31,12 @@ How is the NAND you were given wired, in silicon?
    make scaffold     # two blocks, each with its two cells already placed
    ```
 
-   `mag/my_inv.mag` is the Lab 03 reference inverter, so this lab works on its own. `make
-   scaffold` **throws away your work in `my_buf` and `my_and2`**; use it again only to start
-   over.
+   `mag/my_inv.mag` is the Lab 03 reference inverter rather than the one you drew, so this lab
+   works on its own. Be careful with `make scaffold`: it **throws away your work in `my_buf` and
+   `my_and2`**, so run it again only if you want to start over.
 
-2. The NAND comes finished, and `tcl/nand2.tcl` is how it was drawn, commented line by line. Open
-   it:
+2. The NAND comes already drawn, and `tcl/nand2.tcl` is the script that drew it, commented line
+   by line. Open the cell:
 
    ```bash
    make edit CELL=my_nand2
@@ -43,13 +44,12 @@ How is the NAND you were given wired, in silicon?
 
    ![The NAND2](../assets/img/ad104-magic-nand2.png)
 
-   *Two red poly stripes crossing one strip of green n-diffusion, with contacts at the far left
-   and far right only and nothing between the gates. The two NMOS are in **series**, which on
-   silicon means the drain of one and the source of the other are the same piece of doped
-   silicon.*
+   *Two red poly stripes cross one strip of green n-diffusion, with contacts only at the far left
+   and far right and nothing between the gates. The two NMOS are in **series**, and on silicon
+   that means the drain of one and the source of the other are the same piece of doped silicon.*
 
-   The PMOS above are in **parallel**: three contacts, alternating source, drain, source, with
-   the middle one going to `Y`.
+   The PMOS above them are in **parallel**, with three contacts that alternate source, drain,
+   source, and the middle one goes to `Y`.
 
 3. Run the layout checks once, so that Magic extracts the blocks:
 
@@ -57,15 +57,17 @@ How is the NAND you were given wired, in silicon?
    make layout
    ```
 
-   It fails, because nothing is wired or named yet. Open `results/my_and2.lvs.spice` and find the
-   `my_nand2` subcircuit. Its two NMOS lines share a node you never named:
+   It fails, because nothing is wired or named yet, but it extracts both blocks on the way. Open
+   `results/my_and2.lvs.spice` and find the `my_nand2` subcircuit, where the two NMOS lines share
+   a node you never named:
 
    ```spice
    X0 a_300_260# A VGND VGND sky130_fd_pr__nfet_01v8 ... w=0.65 l=0.15
    X3 Y B a_300_260# VGND sky130_fd_pr__nfet_01v8 ... w=0.65 l=0.15
    ```
 
-   `a_300_260#` is the shared diffusion. Magic named it after its coordinates.
+   `a_300_260#` is the shared diffusion between the two gates. You never gave it a name, so Magic
+   made one up from its coordinates.
 
 Why is there no contact on the shared node between the two NMOS?
 
@@ -73,9 +75,9 @@ Why is there no contact on the shared node between the two NMOS?
 <summary>Answer</summary>
 
 In series, the drain of one transistor is the source of the other, so on silicon they are the
-same piece of diffusion. The region between the two gates *is* the shared node. A contact there
-would cost area, add junction capacitance to an internal node, and gain you nothing
-([Stick diagrams](../guide/stick-diagrams.md#the-nand)).
+same piece of diffusion, and the region between the two gates is itself the shared node. A
+contact there would cost area and add junction capacitance to an internal node without gaining
+you anything ([Stick diagrams](../guide/stick-diagrams.md#the-nand)).
 
 </details>
 
@@ -95,20 +97,20 @@ What do the two inverters already share, and what is missing?
    `make scaffold` gave you `my_buf` containing two `my_inv` instances, at x = 0 and x = 3.0, with
    the block's own metal1 rails painted over the row and already labelled `VGND` and `VPWR`.
    Both cells are 6.00 µm tall with their rails at the same heights, so the rails already abut
-   into two continuous strips and the wells have merged. **You have not drawn anything, and power
-   is connected.**
+   into two continuous strips and the wells have merged. That means power is already connected,
+   even though you haven't drawn anything yet.
 
-2. What is missing is the signal. `inv1`'s output `Y` is an li shape at x = 2.18–2.55, and
-   `inv2`'s input `A` is at x = 3 + 1.24 = 4.24–4.61, both around y = 2.4. One li rectangle joins
-   them:
+2. What's missing is the signal from the first inverter to the second. `inv1`'s output `Y` is an
+   li shape at x = 2.18–2.55, and `inv2`'s input `A` is at x = 3 + 1.24 = 4.24–4.61, both at
+   around y = 2.4, so a single li rectangle can join them:
 
    ```tcl
    box 2.18um 2.40um 4.61um 2.65um
    paint li
    ```
 
-**You should see** a single li rectangle running from `inv1`'s output to `inv2`'s input. That is
-the buffer.
+**You should see** a single li rectangle running from `inv1`'s output to `inv2`'s input, which is
+all the wiring the buffer needs.
 
 ## Part 3: Name the buffer's pins
 
@@ -124,17 +126,17 @@ How do you give the block, rather than the cells inside it, its own pins?
    save my_buf
    ```
 
-   Both label lines paint a small patch of `li` first. Why not put the label straight on the
-   inverter's own pin?
+   Each of the two label lines paints a small patch of `li` before it places the label. Why not
+   put the label straight on the inverter's own pin?
 
    <details>
    <summary>Answer</summary>
 
    **A label lands on geometry belonging to the current cell.** The input pin you want to name
-   belongs to `inv1`, so a label placed on it would belong to `inv1`. Painting your own 0.25 µm
-   patch on top (same net, electrically nothing) gives the top cell something of its own to
-   name. The scaffold's metal1 rails exist for the same reason: they give `VGND` and `VPWR`
-   top-cell geometry to sit on.
+   belongs to `inv1`, so a label placed on it would belong to `inv1` as well, rather than to `my_buf`.
+   Painting your own 0.25 µm patch on top of the pin (it's the same net, and electrically it adds
+   nothing) gives the top cell a shape of its own to name. The scaffold's metal1 rails are there
+   for the same reason: they give the `VGND` and `VPWR` labels top-cell geometry to sit on.
 
    </details>
 
@@ -144,8 +146,8 @@ How do you give the block, rather than the cells inside it, its own pins?
    make layout
    ```
 
-**You should see** the `my_buf` row read `ok`, `0`, `0`, `match`. The `my_and2` row still fails
-until Part 4.
+**You should see** the `my_buf` row read `ok`, `0`, `0`, `match`. The `my_and2` row will keep
+failing until you wire it in Part 4.
 
 ## Part 4: Build the AND gate
 
@@ -157,10 +159,11 @@ Can you find the AND gate's pins yourself?
    make edit CELL=my_and2
    ```
 
-   It has `my_nand2` (instance `nd0`) at x = 0 and `my_inv` (instance `in0`) at x = 4.0, with the
-   rails painted and labelled as in `my_buf`.
+   It contains `my_nand2` (instance `nd0`) at x = 0 and `my_inv` (instance `in0`) at x = 4.0,
+   with the block's rails painted and labelled the same way as in `my_buf`.
 
-2. `nd0`'s output is at x = 3.20–3.53, and `in0`'s input is at 4 + 1.24 = 5.24–5.61. Join them:
+2. `nd0`'s output is at x = 3.20–3.53, and `in0`'s input is at 4 + 1.24 = 5.24–5.61, so join
+   them with one li rectangle, as you did in the buffer:
 
    ```tcl
    box 3.20um 2.40um 5.61um 2.65um
@@ -168,11 +171,12 @@ Can you find the AND gate's pins yourself?
    ```
 
 3. Paint li patches and label them: `A` and `B` over the NAND's two inputs, and `X` over the
-   inverter's output. Work out the coordinates yourself. The NAND's input li runs are the `A` and
-   `B` lines in `tcl/nand2.tcl`, and the inverter's output is the same `Y` run you used in
-   Part 2, now 4.0 µm from the block's origin instead of 3.0.
+   inverter's output. This time you work out the coordinates yourself. You'll find the NAND's
+   input li runs on the `A` and `B` lines in `tcl/nand2.tcl`, and the inverter's output is the
+   same `Y` run you used in Part 2, except that the inverter now sits 4.0 µm from the block's
+   origin instead of 3.0.
 
-4. `select top cell`, `port makeall`, `save my_and2`, and run `make layout`.
+4. Run `select top cell`, `port makeall` and `save my_and2`, and then run `make layout`.
 
 **You should see** both rows read `ok`, with `0`, `0` and `match`, and
 `PASS  Both blocks are clean under both rule sets`.
@@ -189,8 +193,8 @@ Does the AND gate really AND, on the extracted layout?
    make
    ```
 
-   It extracts both blocks, LVSes them against `spice/cells_sch.spice`, and then simulates the AND
-   gate's truth table on the **extracted layout, with parasitics**:
+   This extracts both blocks, runs LVS on them against `spice/cells_sch.spice`, and then
+   simulates the AND gate's truth table on the **extracted layout, with parasitics**:
 
    ```
      TWO BLOCKS, BUILT OUT OF CELLS
@@ -211,12 +215,13 @@ Does the AND gate really AND, on the extracted layout?
          matching their schematics, and the AND gate really does AND.
    ```
 
-That AND gate has six transistors, and you drew none of them in this lab.
+The AND gate you just simulated has six transistors, and you didn't draw any of them in this lab.
 
-The testbench is generated by `src/mktb.py` **around your netlist's own port order**, instead of
-assuming one. Magic numbers a cell's ports in the order the labels were created, so if you
-labelled `X` before `A`, your `.subckt` line differs from the reference's. A testbench with the
-terminals in the wrong order would give a wrong answer without any error.
+`src/mktb.py` generates the testbench **around your netlist's own port order**, instead of
+assuming one. It does this because Magic numbers a cell's ports in the order you created the
+labels, so if you labelled `X` before `A`, your `.subckt` line lists the ports in a different
+order from the reference's. A testbench that connected the terminals in the wrong order would
+give a wrong answer without raising any error.
 
 **You should see** all four truth-table rows marked `ok`, and `PASS`.
 
@@ -245,9 +250,9 @@ What does netgen say when the circuit is right but two names are on the wrong sh
    Final result: Top level cell failed pin matching.
    ```
 
-2. Read it as two statements. They do not contradict each other:
+2. Read the report as two separate statements, which don't contradict each other:
 
-   - **the topology is right**: four devices wired exactly as the schematic says
+   - **the topology is right**: all four devices are wired exactly as the schematic says
    - **two names are on the wrong shapes**: netgen had to swap `A` and `B` to make the match work
 
 Why will nothing else in the flow notice this?
@@ -255,13 +260,13 @@ Why will nothing else in the flow notice this?
 <details>
 <summary>Answer</summary>
 
-A NAND is symmetric in its inputs, so simulation passes and DRC passes. The timing model is
-still wrong, because in a series stack the input nearer the output is faster than the one nearer
-ground.
+A NAND is logically symmetric in its inputs, so with `A` and `B` swapped both simulation and DRC
+still pass. What the swap does get wrong is the timing model, because in a series stack the
+input nearer the output is faster than the one nearer ground.
 
 </details>
 
-**The fix is to swap the labels in the layout, not in the schematic.**
+To fix it, swap the two labels in the layout rather than the pin names in the schematic.
 
 **You should see** `Netlists match uniquely` and `failed pin matching` in the same report.
 
@@ -278,16 +283,16 @@ What happens to the block's supply ports if it has no rails of its own?
    save my_buf
    ```
 
-   The `VGND` and `VPWR` labels go too, because they sat on those rectangles. The inverters' own
-   rails are untouched.
+   The `VGND` and `VPWR` labels go too, because they sat on those rectangles, while the inverters'
+   own rails are left untouched.
 
-2. Run `make layout`. The `my_buf` row fails:
+2. Run `make layout`, and the `my_buf` row fails:
 
    ```
         my_buf            0         0   Top level cell failed pin matching  my_inv, my_inv
    ```
 
-   and the verdict names the missing ports:
+   and the `FAIL` line names the missing ports:
 
    ```
    FAIL  my_buf has no port called VGND, VPWR. Its ports are: A X.

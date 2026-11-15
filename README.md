@@ -43,7 +43,7 @@ course into it and checks the tool versions.
 
 | Path | |
 |---|---|
-| `docs/` | the published site (Docsify, no build step) |
+| `docs/` | the published site, built with Quarto (`docs/_quarto.yml`) |
 | `docs/guide/` | guide pages: reading only, no commands to run |
 | `docs/labs/` | lab writeups: numbered parts where students run everything |
 | `labs/<id>/mag/` | `.mag` layouts: the files you edit |
@@ -55,9 +55,21 @@ course into it and checks the tool versions.
 
 ## Preview the site locally
 
+You need [Quarto](https://quarto.org/docs/get-started/) 1.11:
+
 ```bash
-npx docsify-cli serve docs     # http://localhost:3000
+quarto preview docs                            # -> http://localhost:4200
+quarto render docs --profile pdf --to typst    # whole course as one PDF in docs/_book/
 ```
+
+## Publishing
+
+GitHub Pages is set to **Source: GitHub Actions**. On every push to `main`
+that touches `docs/`, `scripts/check_site.py` or the workflow itself,
+`.github/workflows/site.yml` renders the site with
+Quarto, renders the course PDF, checks every local link and anchor with
+`scripts/check_site.py`, and deploys `docs/_site`, which includes a PDF of
+every page.
 
 ## Contributing
 

@@ -22,7 +22,7 @@ horizontally still passes.
 | `poly overlap of poly contact < 0.08um in one direction (licon.8a)` | 0.08 | This is the directional half of the same rule, and it usually fires together with `licon.8`. |
 | `Diffusion contact to standard cell gate < 0.05um (licon.11)` | 0.05 | A source or drain contact is too close to the poly. Move it away from the gate. |
 | `poly contact spacing to diffusion < 0.19um (licon.14)` | 0.19 | The contact on the poly landing pad is too near the diffusion. Move the pad out into the gap between the two diffusions. |
-| `All taps must be contacted (licon.16)` | — | **Full rule set only.** A tap with no contact on it isn't connected to anything, so it does nothing. |
+| `All taps must be contacted (licon.16)` | — | **Full rule set only**, and on the pinned image it never fires (see [Full rule set only](#full-rule-set-only) below). A tap with no contact on it isn't connected to anything, so it does nothing. |
 
 ## Local interconnect (`li`)
 
@@ -79,7 +79,7 @@ and how to run them.
 | Message | What to do |
 |---|---|
 | `All nwells must contain metal-connected N+ taps (nwell.4)` | Your n-well is floating. Connect it to VPWR with an `ntap` + `ntapc` + li + mcon, or put a `tapvpwrvgnd` cell in the row. |
-| `All taps must be contacted (licon.16)` | You drew the tap diffusion but put no contact on it. |
+| `All taps must be contacted (licon.16)` | This rule is meant for a tap diffusion with no contact on it, but on the pinned image it never fires, even on exactly that mistake. Lab 02's `drc_05` has an n-tap with no contact, and the full rule set reports `nwell.4` and `LU.3` for it instead. If you see those two, check that every tap has its contact. |
 | `N-diff distance to P-tap must be < 15.0um (LU.2)` | This rule guards against latch-up. Every NMOS needs a substrate tap somewhere within 15 µm of it. |
 | `P-diff distance to N-tap must be < 15.0um (LU.3)` | This is the same latch-up rule for the other polarity. |
 

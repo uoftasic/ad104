@@ -32,6 +32,13 @@ and because on a single cell they usually flag a problem that isn't really there
 leave their taps out on purpose. The foundry's own inverter fails three of them
 (see [Anatomy of a standard cell](../guide/anatomy-of-a-standard-cell.md)).
 
+The fourth, `licon.16`, never fires on the pinned image, not even on a tap with no contact. The
+layer it checks, `tap_missing_licon`, is every tap minus a layer called `tap_with_licon`, and the
+tech file builds `tap_with_licon` by growing outwards from every tap, contacted or not, so the
+subtraction always leaves nothing. A tap with no contact still gets caught, but by the rules it
+leaves unsatisfied: Lab 02's `drc_05` has an n-tap with no contact, and the full rule set reports
+`nwell.4` and `LU.3` for it.
+
 ## Why a missing tap is dangerous
 
 A missing tap is hard to catch because nothing you normally look at shows it:

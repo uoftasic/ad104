@@ -24,10 +24,9 @@ make mine MAG=../lab-03-draw-an-inverter/mag/my_inv.mag
 make
 ```
 
-There is a known bug here: `make mine` currently damages the file as it copies it, so the next
-`make` fails with `results/my_inv.pex.spice is missing - extraction did not run.` You can
-restore the reference cell with `git checkout mag/my_inv.mag`, and the writeup's Part 6
-describes the problem.
+A cell drawn by following Lab 03 lists its ports as `VGND VPWR A Y`, and the reference lists them
+as `A Y VPWR VGND`, so both decks are wired around the order in your extracted netlist rather
+than assuming one. `git checkout mag/my_inv.mag` puts the reference cell back.
 
 ## Targets
 
@@ -47,5 +46,7 @@ describes the problem.
 | `mag/my_inv.mag` | the cell being compared. `make mine` replaces it. |
 | `tcl/pex.tcl` | extracts both cells with `ext2spice cthresh 0` |
 | `spice/fo4.spice` | both cells driving four copies of themselves, in one deck |
+| `src/mkfo4.py` | copies that deck into `results/`, wired for your cell's port order |
 | `src/mkring.py` | writes two 31-stage ring oscillators |
+| `src/ports.py` | reads your cell's port order out of its extracted netlist, for both decks |
 | `src/check.py` | reads everything and prints the comparison |

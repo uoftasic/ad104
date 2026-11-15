@@ -11,7 +11,8 @@
 Vdd VPWR 0 1.8
 Vin IN 0 PULSE(0 1.8 1n 20p 20p 2n 4n)
 
-* yours:   .subckt my_inv A Y VPWR VGND
+* yours, written in the reference's port order A Y VPWR VGND. src/mkfo4.py
+* rewrites these lines in the order your own .subckt my_inv line uses.
 Xm0 IN  MID VPWR 0 my_inv
 Xm1 MID MO1 VPWR 0 my_inv
 Xm2 MID MO2 VPWR 0 my_inv

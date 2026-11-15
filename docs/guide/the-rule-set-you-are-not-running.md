@@ -88,7 +88,7 @@ uses the word "tap". If you extract a block with no taps and look at the netlist
 
 ```spice
 .subckt datapath CLK D A B Y VGND VPWR
-Xbuf0 buf0/A dff0/VGND VSUBS dff0/VPB dff0/VPWR Y sky130_fd_sc_hd__buf_1
+Xbuf0 buf0/A VGND VSUBS dff0/VPB VPWR Y sky130_fd_sc_hd__buf_1
 ```
 
 The bulk terminals came out as **`VSUBS`** and **`dff0/VPB`**. Those are invented node names,

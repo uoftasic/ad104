@@ -11,6 +11,7 @@ lab's `Makefile`. This directory is for repo maintenance only.
 |--------|---------|
 | `init-template.py` | Fill in course id / title / description after creating a repo from the template. Already run for this course. |
 | `check_site.py` | After `quarto render docs`, check that every local link, image and `#anchor` in `docs/_site` resolves: `python3 scripts/check_site.py docs/_site`. CI runs it in `.github/workflows/site.yml`. |
+| `figures/` | The scripts that draw the circuit figures in `docs/assets/img/` with schemdraw. `pip install -r scripts/figures/requirements.txt`, then `python3 scripts/figures/<name>.py` rewrites that figure's SVG |
 
 ## Conventions
 

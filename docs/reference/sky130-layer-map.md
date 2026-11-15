@@ -51,11 +51,7 @@ There is exactly one legal route from the silicon up to the metal. The ladder be
 PDK's layer names (`licon1`, `li1`, `met1`) rather than Magic's, with the GDS numbers in
 parentheses:
 
-```
-poly ───┐
-        ├─ licon1 (66/44) ─ li1 (67/20) ─ mcon (67/44) ─ met1 (68/20) ─ via1 ─ met2 ─ ...
-diff ───┘
-```
+![The contact ladder, with each layer's GDS number in parentheses.](../assets/img/ad104-layer-map-contact-ladder.svg){width=720 fig-alt="A block diagram of the contact ladder. On the left, a box labelled poly and a box labelled diff join into one line labelled licon1 (66/44), which runs to a box labelled li1 (67/20). From there a line labelled mcon (67/44) runs to a box labelled met1 (68/20), a line labelled via1 runs to a box labelled met2, and a last line ends in three dots."}
 
 That means you can't connect poly straight to metal1, or diffusion straight to metal2; you go up
 one step at a time. Every step is a plug of a fixed size, with enclosure rules at both ends.

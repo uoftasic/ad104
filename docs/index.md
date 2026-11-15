@@ -113,4 +113,4 @@ run it again.**
 
 - **AD201** — Analog Signal Processing · **AD202** — Mixed Signal
 - **DD103** — [RTL on FPGAs & ASICs](https://uoftasic.com/dd103/), where a tool does the
-  placing and routing you did by hand, for a whole chip, in 54 seconds
+  placing and routing you did by hand, for a whole chip, in about a minute

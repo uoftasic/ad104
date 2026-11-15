@@ -278,11 +278,11 @@ How fast can you clock what you built?
    $$T_{\text{clk}} \ge t_{\text{clk}\rightarrow Q} + t_{\text{logic}} + t_{\text{setup}}$$
 
    The first two terms are simulated on your own geometry, with every parasitic capacitance
-   Magic could find. The third is looked up in the Liberty file, because setup time is a
-   property of the flip-flop's internals and you can't get it from your layout. That file,
-   `sky130_fd_sc_hd__tt_025C_1v80.lib`, is the same one the digital track synthesises against in
-   [DD103](https://uoftasic.com/dd103/), so at this point the two tracks are reading the same
-   document.
+   Magic could find. The third is looked up in `sky130_fd_sc_hd__tt_025C_1v80.lib`, because setup
+   time is a property of the flip-flop's internals and you can't get it from your layout. As
+   [What sets the clock frequency](../guide/why-the-clock-cannot-go-faster.md#a-real-path)
+   points out, that is the same Liberty file the digital track synthesises against in
+   [DD103](https://uoftasic.com/dd103/).
 
 3. Divide your `CLK rise -> Y rise` by the foundry cell's `one stage` delay from Lab 05 (34.48 ps
    on that page), and write down how many inverter delays it is. Why do four gates add up to
@@ -373,9 +373,9 @@ with a comment on every coordinate; the package's
 discusses five of the decisions in it. They're worth reading once your own block passes.
 
 You have now done by hand, for four cells, what [DD103](https://uoftasic.com/dd103/) does with
-LibreLane for a whole design in 54 seconds: place cells in rows, insert taps, route, check DRC,
-check LVS, and write GDS. The tool repeats the same steps a hundred thousand times, guided by a
-cost function, and it never forgets the taps.
+LibreLane for a whole design in about a minute: place cells in rows, insert taps, route, check
+DRC, check LVS, and write GDS. The tool repeats the same steps a hundred thousand times, guided
+by a cost function, and it never forgets the taps.
 
 Next on the Course path: this is the last lab in AD104. The home page lists the
 [next courses](../index.md#next-courses).

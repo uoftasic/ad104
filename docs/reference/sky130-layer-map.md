@@ -89,6 +89,6 @@ block is to hide everything above `met1`.
 
 ![The capstone block as GDS](../assets/img/ad104-klayout-datapath.png)
 
-*The capstone's GDS in KLayout. The cell tree on the left has `datapath_ref` at the top, with the
-four library cells and the tap cell under it, and the layer list on the right shows the numbers
-from the table above.*
+*The capstone's GDS in KLayout. The cell tree on the left has `datapath_ref` at the top, with
+`and2_0`, `buf_1`, `dfxtp_1` and the tap cell under it, and the layer list on the right shows the
+numbers from the table above.*

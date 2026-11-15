@@ -43,8 +43,8 @@ which makes it about a hundred times worse. Use it only for a wire short enough 
 both ends. Lab 04's blocks route on li for that reason: the wire there is 2.4 µm long, so saving
 the vias is worth more than the extra resistance costs.
 
-**metal1** is where ordinary local routing goes. In this library the cells use metal1 only for
-their rails, with one exception, so the band between the rails is free space above every cell
+**metal1** is where ordinary local routing goes. Of the cells in the capstone, all but one use
+metal1 only for their rails, so the band between the rails is free space above every cell
 **except the flip-flop**, which has internal metal1 straps of its own.
 
 **metal2 and up** aren't used by `sky130_fd_sc_hd` at all, so if you need to cross the row, go up
@@ -105,9 +105,10 @@ flabel locali s 397 425 431 459 0 FreeSans 340 0 0 0 X
 port 7 nsew signal output
 ```
 
-The units are 0.005 µm, the same as everywhere else in a `.mag` file, so that pin covers x = 1.985–2.155 and y = 2.125–2.295, measured
-from the cell's origin. Add the x position you placed the cell at, and you know where to put the
-`mcon`.
+The units are 0.005 µm, as in every foundry cell's `.mag` file
+([Drawing in Magic](drawing-in-magic.md#the-mag-file) shows how your own cells differ), so that
+pin covers x = 1.985–2.155 and y = 2.125–2.295, measured from the cell's origin. Add the x
+position you placed the cell at, and you know where to put the `mcon`.
 
 ## The routing loop
 

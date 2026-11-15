@@ -103,5 +103,5 @@ draw it as one unbroken strip. (Formally, you are asking whether the transistor 
 Euler path.)
 
 You won't need to choose an order yourself in AD104. In the capstone, though, you'll place the
-foundry's `and2_0`, which is a single unbroken diffusion strip with two gates on it, and when you
-do you should recognise that someone chose that order on purpose.
+foundry's `and2_0`, which is a single unbroken diffusion strip with three gates on it, and when
+you do you should recognise that someone chose that order on purpose.

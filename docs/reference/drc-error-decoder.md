@@ -40,7 +40,7 @@ horizontally still passes.
 | `mcon.width < 0.17um (mcon.1)` | 0.17 | An mcon is exactly 0.17 µm square, like every other cut. |
 | `mcon.spacing < 0.19um (mcon.2)` | 0.19 | Two mcons are too close together. |
 | `Metal1 width < 0.14um (met1.1)` | 0.14 | Widen the wire. |
-| `Metal1 spacing < 0.14um (met1.2)` | 0.14 | **This is the most common routing error.** It's usually a signal wire too near a supply rail. In this course's cells the legal band between the rails runs from y = 0.38 to 2.34 µm. |
+| `Metal1 spacing < 0.14um (met1.2)` | 0.14 | **This is the most common routing error.** It's usually a signal wire too near a supply rail. In the capstone's row of foundry cells the legal band between the rails runs from y = 0.38 to 2.34 µm. |
 | `Metal1 overlap of local interconnect contact < 0.03um (met1.4)` | 0.03 | The metal1 pad has to cover the mcon on every side. |
 | `Metal1 overlap of local interconnect contact < 0.06um in one direction (met1.5)` | 0.06 | On top of `met1.4`, the pad has to extend 0.06 µm past the mcon on both sides of one axis. A 0.29 µm pad around a 0.17 µm cut does it. |
 | `Metal1 minimum area < 0.083um^2 (met1.6)` | 0.083 | The pad meets the enclosure rules but is still too small overall. A 0.29 × 0.29 µm pad is 0.0841 µm², which is just enough. |

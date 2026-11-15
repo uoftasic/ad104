@@ -44,7 +44,7 @@ Every field in it comes from something you drew:
 | `pd=3.5` | the perimeter of the drain diffusion, in µm |
 | `sky130_fd_pr__pfet_01v8_hvt` | the device flavour, decided by which implant layer you painted |
 
-Most people don't expect to see `ad` and `pd`, and they matter a great deal. Every square micron
+`ad` and `pd` are easy to skim past, and they matter a great deal. Every square micron
 of drain diffusion is a reverse-biased junction to the well, and a reverse-biased junction is a
 capacitor, so the more drain area you draw, the more capacitance sits on the drain. Your
 inverter's drain area is **4.2 times** the foundry's, and Lab 05 measures what that costs.
@@ -117,8 +117,8 @@ C5 VPWR VGND 1.33952f
 That netlist has six capacitors that nobody drew. They're there because any two conductors near
 each other form a capacitor, and a layout is full of conductors near each other.
 
-**Use the `lvs` netlist for LVS and the `cthresh 0` one for simulation**; every lab in this
-course writes both. If you compare a parasitic netlist against a schematic in netgen, the
+**Use the `lvs` netlist for LVS and the `cthresh 0` one for simulation**; Labs 03 and 04 and the
+capstone write both. If you compare a parasitic netlist against a schematic in netgen, the
 capacitors have nothing in the schematic to match, so the comparison produces only noise.
 
 ## What extraction does not know

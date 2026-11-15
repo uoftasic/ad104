@@ -81,9 +81,9 @@ port makeall           ;# turn every label in the cell into a terminal
 port <name> index <n>  ;# set a port's number, if order matters to you
 ```
 
-A label attaches to geometry **belonging to the current cell**. If you place one over a shape
-that belongs to a subcell, it becomes a label of that subcell rather than of the cell you're
-editing.
+A label names the current cell only if it sits on geometry **belonging to the current cell**. If
+you place one over a shape that belongs to a subcell, it becomes a label of that subcell rather
+than of the cell you're editing.
 
 ## DRC
 

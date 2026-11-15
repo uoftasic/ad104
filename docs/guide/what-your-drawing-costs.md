@@ -112,5 +112,5 @@ a price on that choice. These are the points to take away:
 1. **Identical transistors don't give identical circuits**, because everything that isn't in the
    schematic is decided by the layout.
 2. **The cost of a loose layout is small per gate and very large per chip.**
-3. **You can measure it.** Measuring the gap between your cell and the foundry's takes four
-   commands and ninety seconds, so you don't have to argue about it.
+3. **You can measure it.** Measuring the gap between your cell and the foundry's takes one `make`
+   and two to three minutes, so you don't have to argue about it.

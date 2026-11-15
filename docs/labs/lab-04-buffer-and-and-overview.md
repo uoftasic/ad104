@@ -1,9 +1,9 @@
 # Lab 04: A buffer and an AND gate
 
 In this lab you'll build two more cells without drawing a single new transistor, because both are
-made from cells you already have: a buffer is two of your inverters, and an AND gate is a NAND
-gate followed by one of your inverters. The work is placing the cells, abutting them, wiring them
-together and naming their pins, which is also what the rest of a chip is made of.
+made from cells that are already drawn: a buffer is two copies of the Lab 03 inverter, and an AND
+gate is a NAND gate followed by the same inverter. The work is placing the cells, abutting them,
+wiring them together and naming their pins, which is also what the rest of a chip is made of.
 
 Package: [`labs/lab-04-buffer-and-and/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-04-buffer-and-and)
 
@@ -132,8 +132,9 @@ How do you give the block, rather than the cells inside it, its own pins?
    <details>
    <summary>Answer</summary>
 
-   **A label lands on geometry belonging to the current cell.** The input pin you want to name
-   belongs to `inv1`, so a label placed on it would belong to `inv1` as well, rather than to `my_buf`.
+   **A label names the current cell only if it lands on geometry belonging to the current
+   cell.** The input pin you want to name belongs to `inv1`, so a label placed on it would belong
+   to `inv1` as well, rather than to `my_buf`.
    Painting your own 0.25 µm patch on top of the pin (it's the same net, and electrically it adds
    nothing) gives the top cell a shape of its own to name. The scaffold's metal1 rails are there
    for the same reason: they give the `VGND` and `VPWR` labels top-cell geometry to sit on.

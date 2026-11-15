@@ -40,13 +40,15 @@ looks it. It is also the only open-source layout editor with a live design-rule 
 built-in extractor and a scripting console, which is why the open SKY130 ecosystem is built
 around it.
 
-In every lab you open Magic with `make edit`, run from inside the lab package. That starts Magic
-in the folder that holds the `.mag` file and passes it the cell's name without the `.mag`
-extension; in `labs/lab-03-draw-an-inverter/mag`, for example, it runs `magic -d X11 my_inv`.
+Whenever a lab has you open Magic, you do it with `make edit`, run from inside the lab package.
+From Lab 02 on, that starts Magic in the folder that holds the `.mag` file and passes it the
+cell's name without the `.mag` extension; in `labs/lab-03-draw-an-inverter/mag`, for example, it
+runs `magic -d X11 my_inv`. Lab 01's cell is the foundry's, so there `make edit` hands Magic the
+full path of the file in the PDK instead.
 
 Two windows appear: **`layout1`**, which shows the drawing, and **`tkcon`**, a Tcl console. Most
-of your work in this course happens in the console. Every command in the guide pages and labs can be
-typed there, and the lab scripts drive Magic by feeding it the same commands.
+of your work in this course happens in the console. Every Magic command in the guide pages and
+labs can be typed there, and the lab scripts drive Magic by feeding it the same commands.
 
 ### The `-d X11` option
 

@@ -34,7 +34,7 @@ yourself. Each lab lists the pages to read before you start it.
 | 1 | Read | [Getting started](guide/getting-started.md) · [What a layout is](guide/what-a-layout-actually-is.md) · [SiliWiz](guide/siliwiz.md) · [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) | 1 h |
 | 2 | Do | [Lab 01: Open a cell you did not draw](labs/lab-01-open-the-cell-overview.md). Measure the foundry's inverter from its layout file, then get DRC, extraction and LVS to agree about it. | 1.25 h |
 | 3 | Read | [Drawing in Magic](guide/drawing-in-magic.md) · [Reading DRC errors](guide/drc-is-a-conversation.md) · [The full DRC rule set](guide/the-rule-set-you-are-not-running.md) | 1 h |
-| 4 | Do | [Lab 02: Break it on purpose](labs/lab-02-break-it-on-purpose-overview.md). Fix five broken inverter layouts, each breaking one real SKY130 rule, until DRC and LVS both pass. | 2 h |
+| 4 | Do | [Lab 02: Break it on purpose](labs/lab-02-break-it-on-purpose-overview.md). Fix five inverter layouts, each with one mistake that breaks a real SKY130 rule, until DRC and LVS both pass. | 2 h |
 | 5 | Read | [Stick diagrams](guide/stick-diagrams.md) · [Extraction](guide/extraction-is-reverse-engineering.md) · [Layout versus schematic (LVS)](guide/lvs-asks-a-different-question.md) | 1 h |
 | 6 | Do | [Lab 03: Draw an inverter](labs/lab-03-draw-an-inverter-overview.md). Draw a CMOS inverter in Magic from an empty frame until it is DRC clean and LVS clean. | 3 h |
 | 7 | Read | [Instances and hierarchy](guide/cells-are-lego.md) | 30 min |
@@ -92,8 +92,8 @@ supply rails are purple metal1.*
 
 1. Open a cell you did not draw, the foundry's own inverter, and get four checks to agree about
    it before you draw anything.
-2. Fix five broken layouts, each of which breaks exactly one real SKY130 rule, even though the
-   default rule set calls one of them clean.
+2. Fix five broken layouts, each with one mistake that breaks a real SKY130 rule, even though
+   the default rule set calls one of them clean.
 3. Draw a CMOS inverter from an empty frame until it is DRC clean and LVS clean.
 4. Turn that inverter into a buffer and an AND gate without drawing a single new transistor.
 5. Compare your Lab 03 cell against the foundry's, with parasitics extracted. You'll find that the

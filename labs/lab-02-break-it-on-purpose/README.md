@@ -2,8 +2,8 @@
 
 Writeup: [uoftasic.com/ad104 → Lab 02](https://uoftasic.com/ad104/labs/lab-02-break-it-on-purpose-overview.html)
 
-This package holds five copies of the same inverter. Each one has a single number changed so that
-it breaks one real SKY130 rule, and your job is to fix all five.
+This package holds five copies of the same inverter. Each one has a single mistake in it that
+breaks a real SKY130 rule, and your job is to fix all five.
 
 ## Run it
 

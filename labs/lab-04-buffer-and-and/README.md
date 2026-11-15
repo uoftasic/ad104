@@ -3,7 +3,8 @@
 Writeup: [uoftasic.com/ad104 → Lab 04](https://uoftasic.com/ad104/labs/lab-04-buffer-and-and-overview.html)
 
 Two blocks built from cells you already have: a buffer from two inverters, and an AND gate from a
-NAND and an inverter. You wire and name them; you draw no new transistors.
+NAND and an inverter. Your job is to wire the cells together and label the blocks' ports, and
+you won't draw any new transistors.
 
 ## Run it
 
@@ -15,9 +16,9 @@ make edit CELL=my_buf
 make              # about a minute
 ```
 
-The full `make` took 53, 63 and 74 seconds on three timed clean runs, nearly all of it ngspice
-reading the SKY130 model library for the truth-table simulation. `make layout` does the DRC and
-LVS part alone in 1.9 s; use it while you are wiring.
+The full `make` took 53, 63 and 74 seconds on three timed clean runs, and nearly all of that is
+ngspice reading the SKY130 model library for the truth-table simulation. `make layout` runs only
+the DRC and LVS part, which takes 1.9 s, so use it while you are wiring.
 
 ## Targets
 

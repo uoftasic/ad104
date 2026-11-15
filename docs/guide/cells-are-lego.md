@@ -128,10 +128,10 @@ and setting `addpath` after that, and the order is worth copying in your own wor
 ## What a place-and-route tool does
 
 Placement and routing were the first parts of layout to be automated, and they are the most
-thoroughly automated, because the job is enormous and it's arithmetic. A real flow:
+thoroughly automated, because the job is enormous and it's arithmetic. In a real flow,
 
-1. picks a cell for each gate in the netlist, choosing drive strengths,
-2. finds legal positions in rows for every one of them,
+1. synthesis picks a cell for each gate in the netlist, choosing drive strengths,
+2. the place-and-route tool finds legal positions in rows for every one of them,
 3. inserts tap cells and filler,
 4. routes hundreds of thousands of nets on five metal layers,
 5. and then checks its own work with the same DRC and LVS you are running.

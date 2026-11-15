@@ -45,35 +45,36 @@ The capstone block is a flip-flop, two AND gates and a buffer, placed in a row 1
 you extract it with parasitics, apply a clock edge and watch Y, you get these numbers:
 
 ```
-      CLK rise -> Y rise        601.05 ps    (measured on your extracted layout)
+      CLK rise -> Y rise        536.17 ps    (measured on your extracted layout)
       D setup at the flop       103.32 ps    (sky130_fd_sc_hd__tt_025C_1v80.lib)
-      shortest legal period     704.37 ps
-      f_max                    1419.71 MHz
+      shortest legal period     639.49 ps
+      f_max                    1563.75 MHz
 ```
 
-That works out to **1.42 GHz**, for four levels of logic and almost no wire.
+That works out to **1.56 GHz**, for four levels of logic and almost no wire.
 
 The two delays in it come from two different places:
 
-- **The 601 ps is simulated** on your own geometry, with every parasitic capacitance Magic could
+- **The 536 ps is simulated** on your own geometry, with every parasitic capacitance Magic could
   find.
 - **The 103 ps is looked up** in `sky130_fd_sc_hd__tt_025C_1v80.lib`, the same Liberty file the
   digital track synthesises against in [DD103](https://uoftasic.com/dd103/). Setup time depends
   on the flip-flop's internals, so you can't get it from your own layout. This is the point
   where the analog and digital tracks read the same file.
 
-Six hundred picoseconds is **17 inverter delays** for only four gates, so it isn't the number of
+536 ps is **16 inverter delays** for only four gates, so it isn't the number of
 gates that makes the path slow. Most of it is the flip-flop's clock-to-Q, and the two `and2_0`
 cells you are given are the weakest AND in the library.
 
 ## Why a real chip runs at 200 MHz
 
-The gap between your 1.42 GHz and a real chip's 200 MHz comes out of the same arithmetic, and you
+The gap between your 1.56 GHz and a real chip's 200 MHz comes out of the same arithmetic, and you
 can follow it one term at a time.
 
 **Logic depth.** Four levels of logic is a toy. A real critical path, such as a 32-bit adder carry
 chain, a cache tag comparison, or a decoder feeding a mux tree, is routinely twenty to forty
-levels deep. At the same cost per level, that comes to 2–5 ns before any of the terms below.
+levels deep. At the same cost per level, about 134 ps (536 ps over four levels), that comes to
+2.7–5.4 ns before any of the terms below.
 
 **Wires.** Your capstone's longest net is about 2 µm. A net crossing a modest block is hundreds
 of microns long, and a bus crossing a die is millimetres. Wire delay grows roughly with the
@@ -91,7 +92,7 @@ and every picosecond of disagreement comes straight off the time budget.
 the slow-slow corner, at 125 °C and low supply, where everything is 30–50 % worse, and the chip
 still has to work there.
 
-If you stack all of those on the 1.42 GHz you measured, a few hundred megahertz is what is left.
+If you stack all of those on the 1.56 GHz you measured, a few hundred megahertz is what is left.
 Nobody has to be careless for that to happen; it's what the arithmetic gives.
 
 ## The trade-offs

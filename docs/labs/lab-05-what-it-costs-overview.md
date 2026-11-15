@@ -176,8 +176,9 @@ inverted one lap later. So the loop oscillates, with period $2 N t_p$ for $N$ st
 $t_p$ each. That makes it the cleanest way to measure a single gate delay, because there is no
 source and no external load, only the cell driving one copy of itself.
 
-1. Open `src/mkring.py`, which writes both 31-stage rings. It is under fifty lines, and `N = 31`
-   near the top sets the number of stages.
+1. Open `src/mkring.py`, which writes both 31-stage rings. It is about fifty lines long, and
+   `N = 31` near the top sets the number of stages. Near the end it starts the ring's nodes
+   alternately low and high, so that a single edge runs round each ring.
 
 2. From the `period` row of your table, work out the delay of one stage for each cell,
    $t_p = T / (2 \times 31)$, and write both down. Then compare them with the `one stage` row.

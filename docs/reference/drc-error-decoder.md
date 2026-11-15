@@ -71,7 +71,7 @@ vertically and flush horizontally passes.
 ## Full rule set only
 
 These four are **not checked by default**. See
-[The full DRC rule set](guide/the-rule-set-you-are-not-running.md).
+[The full DRC rule set](../guide/the-rule-set-you-are-not-running.md).
 
 | Message | What to do |
 |---|---|

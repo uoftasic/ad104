@@ -2,7 +2,7 @@
 
 The capstone asks you to route three nets, and three are enough to meet every basic idea in
 interconnect. This page explains those ideas; you route the nets yourself in the
-[capstone](labs/capstone-place-and-route-overview.md).
+[capstone](../labs/capstone-place-and-route-overview.md).
 
 ![Four cells and three wires](../assets/img/ad104-magic-datapath.png)
 

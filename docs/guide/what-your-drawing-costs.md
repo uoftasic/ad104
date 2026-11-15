@@ -6,7 +6,7 @@ Take **the same two transistors**: same width, same length, same device flavours
 model name. Draw them twice, once the way the foundry did, packed to the last 0.005 µm, and once
 the way you do in Lab 03, with room to move. Every difference between the two cells after that
 comes from *the drawing*. You run the comparison in
-[Lab 05](labs/lab-05-what-it-costs-overview.md).
+[Lab 05](../labs/lab-05-what-it-costs-overview.md).
 
 ![Yours on the left, the foundry's on the right, at the same scale](../assets/img/ad104-magic-side-by-side.png)
 

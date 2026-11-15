@@ -9,9 +9,9 @@ Package: [`labs/lab-05-what-it-costs/`](https://github.com/uoftasic/ad104/tree/m
 
 ## Before you start
 
-- Get [Lab 03](labs/lab-03-draw-an-inverter-overview.md) to `PASS`.
-- Read [Area, parasitics and delay](guide/what-your-drawing-costs.md). This lab also uses
-  [Extraction](guide/extraction-is-reverse-engineering.md).
+- Get [Lab 03](../labs/lab-03-draw-an-inverter-overview.md) to `PASS`.
+- Read [Area, parasitics and delay](../guide/what-your-drawing-costs.md). This lab also uses
+  [Extraction](../guide/extraction-is-reverse-engineering.md).
 - Have paper or a text file ready for the numbers you work out in Parts 1 and 5.
 
 **Time:** about 1 hour, not counting the optional Part 6. Each full `make` takes two to three
@@ -119,7 +119,7 @@ Why does the same drawing cost more delay in one test than in the other?
    At fan-out 4 the four downstream gates dominate the load, and their input capacitance is
    identical for both cells. In the ring each stage drives one gate and nothing else, so your
    4.23 × junction area is a large share of the total.
-   [Area, parasitics and delay](guide/what-your-drawing-costs.md#fo4-delay-and-ring-oscillator-delay)
+   [Area, parasitics and delay](../guide/what-your-drawing-costs.md#fo4-delay-and-ring-oscillator-delay)
    has the full explanation.
 
    </details>
@@ -186,7 +186,7 @@ just the cell driving one copy of itself.
    </details>
 
 **34 picoseconds is the floor** for this process at 1.8 V. The capstone's timing numbers are
-multiples of it, and [What sets the clock frequency](guide/why-the-clock-cannot-go-faster.md)
+multiples of it, and [What sets the clock frequency](../guide/why-the-clock-cannot-go-faster.md)
 builds on it.
 
 **You should see** your two stage delays agree with the `one stage` row, to rounding.
@@ -230,6 +230,6 @@ Submit: nothing for this lab.
 `make table` re-prints the comparison from results already on disk, instantly. `make pex` runs
 only the extraction, in about 4 s.
 
-Next on the Course path: read [Routing by hand](guide/routing-by-hand.md) and
-[What sets the clock frequency](guide/why-the-clock-cannot-go-faster.md), then do the
-[Capstone: Place and route](labs/capstone-place-and-route-overview.md).
+Next on the Course path: read [Routing by hand](../guide/routing-by-hand.md) and
+[What sets the clock frequency](../guide/why-the-clock-cannot-go-faster.md), then do the
+[Capstone: Place and route](../labs/capstone-place-and-route-overview.md).

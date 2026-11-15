@@ -10,11 +10,11 @@ Package: [`labs/capstone-place-and-route/`](https://github.com/uoftasic/ad104/tr
 ## Before you start
 
 - Finish Labs 01–05.
-- Read [Routing by hand](guide/routing-by-hand.md) and
-  [What sets the clock frequency](guide/why-the-clock-cannot-go-faster.md).
-  [Instances and hierarchy](guide/cells-are-lego.md) covers placing cells, and why a label on a
+- Read [Routing by hand](../guide/routing-by-hand.md) and
+  [What sets the clock frequency](../guide/why-the-clock-cannot-go-faster.md).
+  [Instances and hierarchy](../guide/cells-are-lego.md) covers placing cells, and why a label on a
   subcell's shape does not name your block.
-- Keep the [DRC error decoder](reference/drc-error-decoder.md) open in another tab.
+- Keep the [DRC error decoder](../reference/drc-error-decoder.md) open in another tab.
 
 **Time:** about 3 hours, about half of it routing. `make layout` (DRC and LVS only) takes about
 1.4 s; use it while you route. The full `make` adds the timing simulation and takes about a
@@ -128,7 +128,7 @@ How do you get from each pin to the next without touching anything else?
 | `n2` | `and2/X` at x 11.645–11.815, y 2.125–2.295 | `buf0/A` at x 12.105–12.275, y 1.105–1.275 |
 
 Those coordinates are the `flabel` lines in each cell's `.mag` file plus the x the cell was placed
-at ([Routing by hand](guide/routing-by-hand.md#pin-shapes) shows how).
+at ([Routing by hand](../guide/routing-by-hand.md#pin-shapes) shows how).
 
 For each net:
 
@@ -336,7 +336,7 @@ Questions:
 
   All 32 break the three well-tap rules (`nwell.4`, `LU.2`, `LU.3`), and the default rule set
   leaves those rules out; only `drc(full)` checks them
-  ([The full DRC rule set](guide/the-rule-set-you-are-not-running.md)). The cells are drawn
+  ([The full DRC rule set](../guide/the-rule-set-you-are-not-running.md)). The cells are drawn
   without taps on purpose, so the row needed tap cells, which you added in Part 5.
 
   </details>
@@ -350,7 +350,7 @@ Questions:
   (delay grows roughly with the square of length, and real nets are hundreds of microns to
   millimetres long), clock skew and jitter, and margin (sign-off is at the slow-slow corner,
   125 °C and low supply, where everything is 30–50 % worse).
-  [What sets the clock frequency](guide/why-the-clock-cannot-go-faster.md#why-a-real-chip-runs-at-200-mhz)
+  [What sets the clock frequency](../guide/why-the-clock-cannot-go-faster.md#why-a-real-chip-runs-at-200-mhz)
   works through each one.
 
   </details>
@@ -370,4 +370,4 @@ check LVS, and write GDS. The tool does the same steps a hundred thousand times,
 function, and it never forgets the taps.
 
 Next on the Course path: this is the last lab in AD104. The home page lists the
-[next courses](README.md#next-courses).
+[next courses](../index.md#next-courses).

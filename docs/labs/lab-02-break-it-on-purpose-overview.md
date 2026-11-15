@@ -8,12 +8,12 @@ Package: [`labs/lab-02-break-it-on-purpose/`](https://github.com/uoftasic/ad104/
 
 ## Before you start
 
-- Finish [Lab 01](labs/lab-01-open-the-cell-overview.md), so the course is loaded and your tools
+- Finish [Lab 01](../labs/lab-01-open-the-cell-overview.md), so the course is loaded and your tools
   check out.
-- Read [Drawing in Magic](guide/drawing-in-magic.md),
-  [Reading DRC errors](guide/drc-is-a-conversation.md) and
-  [The full DRC rule set](guide/the-rule-set-you-are-not-running.md).
-- Keep the [DRC error decoder](reference/drc-error-decoder.md) open in another tab.
+- Read [Drawing in Magic](../guide/drawing-in-magic.md),
+  [Reading DRC errors](../guide/drc-is-a-conversation.md) and
+  [The full DRC rule set](../guide/the-rule-set-you-are-not-running.md).
+- Keep the [DRC error decoder](../reference/drc-error-decoder.md) open in another tab.
 
 **Time:** about 2 hours. Each `make` takes about 4 seconds (3.97 s and 4.40 s on two timed clean
 runs).
@@ -132,7 +132,7 @@ these steps; Parts 3 and 4 repeat them for the other cells.
    *Cell `drc_03`. `DRC=14` in the toolbar, white hatching around the poly contact, and `drc why`
    naming the rule twice, once plainly and once in its "in one direction" form.*
 
-5. Look up `licon.8` in the [DRC error decoder](reference/drc-error-decoder.md) and work out what
+5. Look up `licon.8` in the [DRC error decoder](../reference/drc-error-decoder.md) and work out what
    it protects.
 
 **You should see** `DRC=14` in the toolbar after `drc check`, and `drc why` naming `licon.8` and
@@ -145,7 +145,7 @@ What does each rule protect, and what change satisfies it? For each of `C=1` to 
 1. Run `make why C=<n>` to get the rule names.
 2. Run `make edit C=<n>`, then `drc check` in the console.
 3. Put the box over a hatched area and run `drc why`.
-4. Look the rule up in the [DRC error decoder](reference/drc-error-decoder.md), work out what it
+4. Look the rule up in the [DRC error decoder](../reference/drc-error-decoder.md), work out what it
    protects, and change the geometry to satisfy it with a comfortable margin. Fix by rule; don't
    nudge shapes until the hatching disappears.
 5. Type `save` in the console, then run `make` in the terminal again.
@@ -153,7 +153,7 @@ What does each rule protect, and what change satisfies it? For each of `C=1` to 
 Two of the five use the phrase "in one direction". It means: pick an axis, x or y, and on that
 axis the outer layer must extend past the inner one by at least the rule's amount **on both
 sides**. That is why the fix is often free: you only need one axis to be generous.
-[Reading DRC errors](guide/drc-is-a-conversation.md#in-one-direction) explains it with examples.
+[Reading DRC errors](../guide/drc-is-a-conversation.md#in-one-direction) explains it with examples.
 
 If you get stuck, open the hint for that cell only, and only after you have tried.
 
@@ -299,7 +299,7 @@ make solutions    # write the answer key into solutions/
 `tcl/make_broken.tcl` generates the broken cells and has one `BREAK` comment for each change, so
 it is the answer key too. Read it after you finish, not before.
 
-Next on the Course path: read [Stick diagrams](guide/stick-diagrams.md),
-[Extraction](guide/extraction-is-reverse-engineering.md) and
-[Layout versus schematic (LVS)](guide/lvs-asks-a-different-question.md), then do
-[Lab 03: Draw an inverter](labs/lab-03-draw-an-inverter-overview.md).
+Next on the Course path: read [Stick diagrams](../guide/stick-diagrams.md),
+[Extraction](../guide/extraction-is-reverse-engineering.md) and
+[Layout versus schematic (LVS)](../guide/lvs-asks-a-different-question.md), then do
+[Lab 03: Draw an inverter](../labs/lab-03-draw-an-inverter-overview.md).

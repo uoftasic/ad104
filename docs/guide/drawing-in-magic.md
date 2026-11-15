@@ -5,7 +5,7 @@ you move the box, and you tell a layer to fill the box.** That is painting. Ever
 including contacts, labels, ports and zooming, is done to the box or with it.
 
 This page explains the commands you'll use from Lab 02 onwards. You draw your first cell with
-them in [Lab 03](labs/lab-03-draw-an-inverter-overview.md).
+them in [Lab 03](../labs/lab-03-draw-an-inverter-overview.md).
 
 ## The mouse
 
@@ -137,7 +137,7 @@ reports in 0.005 µm units, whichever file you are in.
 
 When a lab says a shipped cell has a particular dimension, that is where the number comes from,
 and you can check it with `grep`. In
-[Lab 03, Part 9](labs/lab-03-draw-an-inverter-overview.md#part-9-read-what-you-drew) you open
+[Lab 03, Part 9](../labs/lab-03-draw-an-inverter-overview.md#part-9-read-what-you-drew) you open
 your own `.mag` file in a text editor.
 
 ## The commands the labs run
@@ -158,5 +158,5 @@ ext2spice cthresh 0       ;# ...and keep every parasitic capacitance
 gds write my_inv.gds      ;# the file a foundry would take
 ```
 
-The [Magic cheat sheet](reference/magic-cheatsheet.md) lists these with their keyboard
+The [Magic cheat sheet](../reference/magic-cheatsheet.md) lists these with their keyboard
 equivalents, plus about a dozen more.

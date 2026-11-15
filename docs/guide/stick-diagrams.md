@@ -4,7 +4,7 @@ A stick diagram is a layout with all the dimensions thrown away: coloured lines 
 crosses for the contacts, and no measurements. It answers the one question that is expensive to get
 wrong, **what order things go in**, and it takes ninety seconds on paper instead of an hour in
 Magic. You'll sketch one at the start of
-[Lab 03](labs/lab-03-draw-an-inverter-overview.md#part-1-sketch-it-on-paper), before you draw
+[Lab 03](../labs/lab-03-draw-an-inverter-overview.md#part-1-sketch-it-on-paper), before you draw
 anything.
 
 ## The convention

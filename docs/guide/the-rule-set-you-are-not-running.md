@@ -28,7 +28,7 @@ variants (full)
 Every one of them is about **well taps**, the connections that hold the body of your transistors
 at a known voltage. They are left out of the default set because they are expensive to compute,
 and because on a cell by itself they usually mean nothing: the foundry's own inverter fails three
-of them (see [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md)).
+of them (see [Anatomy of a standard cell](../guide/anatomy-of-a-standard-cell.md)).
 
 ## Why a missing tap is dangerous
 

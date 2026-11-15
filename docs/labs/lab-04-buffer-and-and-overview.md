@@ -8,10 +8,10 @@ Package: [`labs/lab-04-buffer-and-and/`](https://github.com/uoftasic/ad104/tree/
 
 ## Before you start
 
-- Get [Lab 03](labs/lab-03-draw-an-inverter-overview.md) to `PASS`.
-- Read [Instances and hierarchy](guide/cells-are-lego.md). This lab also uses
-  [Stick diagrams](guide/stick-diagrams.md) and
-  [Layout versus schematic (LVS)](guide/lvs-asks-a-different-question.md).
+- Get [Lab 03](../labs/lab-03-draw-an-inverter-overview.md) to `PASS`.
+- Read [Instances and hierarchy](../guide/cells-are-lego.md). This lab also uses
+  [Stick diagrams](../guide/stick-diagrams.md) and
+  [Layout versus schematic (LVS)](../guide/lvs-asks-a-different-question.md).
 
 **Time:** about 2 hours, not counting the optional Part 7. The full `make` takes about a minute
 (53, 63 and 74 s on three timed clean runs), nearly all of it ngspice reading the SKY130 model
@@ -75,7 +75,7 @@ Why is there no contact on the shared node between the two NMOS?
 In series, the drain of one transistor is the source of the other, so on silicon they are the
 same piece of diffusion. The region between the two gates *is* the shared node. A contact there
 would cost area, add junction capacitance to an internal node, and gain you nothing
-([Stick diagrams](guide/stick-diagrams.md#the-nand)).
+([Stick diagrams](../guide/stick-diagrams.md#the-nand)).
 
 </details>
 
@@ -340,5 +340,5 @@ Submit: nothing for this lab.
 [`solutions/README.md`](https://github.com/uoftasic/ad104/tree/main/labs/lab-04-buffer-and-and/solutions)
 discusses three decisions in them.
 
-Next on the Course path: read [Area, parasitics and delay](guide/what-your-drawing-costs.md),
-then do [Lab 05: What it costs](labs/lab-05-what-it-costs-overview.md).
+Next on the Course path: read [Area, parasitics and delay](../guide/what-your-drawing-costs.md),
+then do [Lab 05: What it costs](../labs/lab-05-what-it-costs-overview.md).

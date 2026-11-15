@@ -1,6 +1,6 @@
 # Lab 01 — Open a cell you did not draw
 
-Writeup: [uoftasic.com/ad104 → Lab 01](https://uoftasic.com/ad104/#/labs/lab-01-open-the-cell-overview)
+Writeup: [uoftasic.com/ad104 → Lab 01](https://uoftasic.com/ad104/labs/lab-01-open-the-cell-overview.html)
 
 Loads the foundry's own inverter, `sky130_fd_sc_hd__inv_1`, into Magic, checks it under both DRC
 rule sets, extracts it, and runs LVS against the foundry's netlist.

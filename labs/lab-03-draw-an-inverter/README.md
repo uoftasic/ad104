@@ -1,6 +1,6 @@
 # Lab 03 — Draw an inverter
 
-Writeup: [uoftasic.com/ad104 → Lab 03](https://uoftasic.com/ad104/#/labs/lab-03-draw-an-inverter-overview)
+Writeup: [uoftasic.com/ad104 → Lab 03](https://uoftasic.com/ad104/labs/lab-03-draw-an-inverter-overview.html)
 
 You draw a CMOS inverter in Magic, starting from a frame that already has the wells, rails and
 taps, until it is DRC clean under both rule sets and netgen matches it to the schematic.

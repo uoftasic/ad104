@@ -1,6 +1,6 @@
 # Lab 04 — A buffer and an AND gate
 
-Writeup: [uoftasic.com/ad104 → Lab 04](https://uoftasic.com/ad104/#/labs/lab-04-buffer-and-and-overview)
+Writeup: [uoftasic.com/ad104 → Lab 04](https://uoftasic.com/ad104/labs/lab-04-buffer-and-and-overview.html)
 
 Two blocks built from cells you already have: a buffer from two inverters, and an AND gate from a
 NAND and an inverter. You wire and name them; you draw no new transistors.

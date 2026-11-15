@@ -16,9 +16,9 @@ Package: [`labs/capstone-place-and-route/`](https://github.com/uoftasic/ad104/tr
   subcell's shape does not name your block.
 - Keep the [DRC error decoder](../reference/drc-error-decoder.md) open in another tab.
 
-**Time:** about 3 hours, about half of it routing. `make layout` (DRC and LVS only) takes about
-1.4 s; use it while you route. The full `make` adds the timing simulation and takes about a
-minute.
+**Time:** about 3 hours, and about half of that goes on routing. `make layout` runs only DRC and
+LVS and takes about 1.4 s, so it's the one to use while you route. The full `make` adds the
+timing simulation and takes about a minute.
 
 The circuit:
 
@@ -29,9 +29,9 @@ The circuit:
    Y  = BUF(n2)              sky130_fd_sc_hd__buf_1
 ```
 
-A flip-flop, two AND gates and a buffer: a register bit with some logic after it, which is the
-most common four-cell cluster in any synchronous chip. It also has a clock, which makes the timing
-question at the end a real one.
+That's a flip-flop, two AND gates and a buffer. Together they make a register bit with some logic
+after it, which is the most common four-cell cluster in any synchronous chip. Because it has a
+clock, the timing question at the end of the lab is a real one.
 
 ## Part 1: Look at the placement
 
@@ -45,12 +45,14 @@ What does a row of four standard cells look like before you wire anything?
    make edit
    ```
 
-   `make scaffold` **throws away your routing**. Use it now, and later only to start over.
+   Be careful with `make scaffold`, because it **throws away your routing**. Use it now, and
+   after that only when you want to start over.
 
-   It places the four cells at x = 0, 7.36, 9.66 and 11.96: a running total of their widths, which
-   come from each cell's `FIXED_BBOX` property. Every cell in the library is 2.72 µm tall with its
-   rails at the same heights, so the rails abut into two continuous strips and the wells merge.
-   **At this scale, placement is arithmetic.** `tcl/place.tcl` is four `getcell` calls.
+   It places the four cells at x = 0, 7.36, 9.66 and 11.96. Those numbers are a running total of
+   the cells' widths, which come from each cell's `FIXED_BBOX` property. Every cell in the library
+   is 2.72 µm tall with its rails at the same heights, so the rails abut into two continuous
+   strips and the wells merge. At this scale placement is just arithmetic, and `tcl/place.tcl` is
+   nothing more than four `getcell` calls.
 
 2. Before you run the layout checks on the bare placement, predict the DRC count under each
    rule set. The foundry's inverter in Lab 01 is a clue. Then run them:
@@ -76,8 +78,8 @@ What does a row of four standard cells look like before you wire anything?
            N-diff distance to P-tap must be < 15.0um (LU.2)
    ```
 
-   Zero and thirty-two, from the same geometry, before you have drawn a single wire. You'll fix
-   the thirty-two in Part 5.
+   The same geometry gives zero violations under one rule set and thirty-two under the other,
+   before you have drawn a single wire. You'll fix the thirty-two in Part 5.
 
 **You should see** `DRC, default rule set 0` and `DRC, full rule set 32`.
 
@@ -85,7 +87,8 @@ What does a row of four standard cells look like before you wire anything?
 
 Where can your metal1 go without hitting metal1 that is already inside a cell?
 
-`and2_0` and `buf_1` contain metal1 only in their rails. **`dfxtp_1` does not.**
+`and2_0` and `buf_1` contain metal1 only in their rails, but **`dfxtp_1` has metal1 inside the
+cell as well**, and your routing has to keep clear of it.
 
 1. List the flip-flop's metal1:
 
@@ -94,24 +97,24 @@ Where can your metal1 go without hitting metal1 that is already inside a cell?
      $PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/mag/sky130_fd_sc_hd__dfxtp_1.mag
    ```
 
-   Add `| grep -c '^rect'` to count the rectangles: 74 for `dfxtp_1`. Run the same count on
-   `sky130_fd_sc_hd__and2_0.mag` (16) and `sky130_fd_sc_hd__buf_1.mag` (12); all of those are in
-   the rails.
+   If you add `| grep -c '^rect'` to the command, it counts the rectangles instead, and you get
+   74 for `dfxtp_1`. Run the same count on `sky130_fd_sc_hd__and2_0.mag` and
+   `sky130_fd_sc_hd__buf_1.mag` and you get 16 and 12, all of them in the rails.
 
 2. Find the flip-flop's two internal metal1 straps, at y = 1.415–1.645 and y = 1.755–1.985,
-   running most of its width. The file is in units of 0.005 µm, so look for rectangles between
-   y = 283 and 397.
+   which run most of the cell's width. The file is in units of 0.005 µm, so look for rectangles
+   between y = 283 and 397.
 
 3. The obvious place for the `D` input's via is at the D label, around y ≈ 1.19. Work out what
-   a metal1 pad there does next to the straps (`met1.2` is metal1 spacing, 0.14 µm), and where
-   else on the D pin you could land instead.
+   a metal1 pad there would do next to the straps (`met1.2` is metal1 spacing, 0.14 µm), and
+   where else on the D pin you could land instead.
 
    <details>
    <summary>Answer</summary>
 
-   A pad at the label sits 0.07 µm from a strap and breaks `met1.2`. The D pin's li shape runs all
-   the way down to y = 0.715, so take the via down there instead. **Finding somewhere else on the
-   same pin to land** is the routing move you will make most often.
+   A pad at the label would sit 0.07 µm from a strap, which breaks `met1.2`. The D pin's li shape
+   runs all the way down to y = 0.715, so you can take the via down there instead. Finding
+   somewhere else on the same pin to land is the routing move you'll make most often.
 
    </details>
 
@@ -127,8 +130,8 @@ How do you get from each pin to the next without touching anything else?
 | `n1` | `and1/X` at x 9.345–9.515, y 2.125–2.295 | `and2/A` at x 9.805–9.975, y 1.785–1.955 |
 | `n2` | `and2/X` at x 11.645–11.815, y 2.125–2.295 | `buf0/A` at x 12.105–12.275, y 1.105–1.275 |
 
-Those coordinates are the `flabel` lines in each cell's `.mag` file plus the x the cell was placed
-at ([Routing by hand](../guide/routing-by-hand.md#pin-shapes) shows how).
+Those coordinates come from the `flabel` lines in each cell's `.mag` file, with the x the cell was
+placed at added on ([Routing by hand](../guide/routing-by-hand.md#pin-shapes) shows how).
 
 For each net:
 
@@ -139,36 +142,37 @@ For each net:
    box 6.950um 0.425um 7.120um 0.595um ; paint mcon
    ```
 
-2. Paint a metal1 pad around each `mcon`. A pad 0.29 µm wide leaves 0.06 µm on each side and
-   satisfies `met1.5` on the x axis.
+2. Paint a metal1 pad around each `mcon`. A pad 0.29 µm wide leaves 0.06 µm of metal1 on each
+   side of the `mcon`, which satisfies `met1.5` on the x axis.
 3. Join the two pads with metal1. Everything has to stay between **y = 0.38 and y = 2.34**,
    because the rails occupy y ≤ 0.24 and y ≥ 2.48, and metal1 spacing is 0.14 µm.
-4. `save datapath`, then run `make layout`. Fix any DRC violation by its rule name.
+4. `save datapath`, then run `make layout`. If DRC reports a violation, use its rule name to
+   find out what's wrong and fix it.
 
 ![The finished row](../assets/img/ad104-magic-datapath.png)
 
-*Subcells collapsed, so the cells are outlines and your routing is the only real geometry on
-screen. Left to right: `tapL`, `dff0`, `and1`, `and2`, `buf0`, `tapR`. You add the two taps in
-Part 5.*
+*With the subcells collapsed, each cell is drawn as an outline and your routing is the only real
+geometry on the screen. From left to right: `tapL`, `dff0`, `and1`, `and2`, `buf0`, `tapR`. You
+add the two taps in Part 5.*
 
 **You should see** `DRC, default rule set 0` after all three nets are routed. The full rule set
-still reports 32, and LVS still fails, until Parts 4 and 5.
+will still report 32, and LVS will still fail, until you've done Parts 4 and 5.
 
 ## Part 4: Bring out the pins
 
 How does your block get pins of its own?
 
-1. Bring out the block's own pins, `CLK`, `D`, `A`, `B` and `Y`: each one an `mcon` on a cell's li
-   pin, a metal1 pad, and a label on the pad. The circuit at the top tells you which cell each
-   pin belongs to: `CLK` and `D` go to the flip-flop, `A` and `B` to the free input of `and1` and
+1. Bring out the block's own pins, `CLK`, `D`, `A`, `B` and `Y`. Each one is an `mcon` on a
+   cell's li pin, with a metal1 pad over it and a label on the pad. The circuit at the top tells
+   you which cell each pin belongs to: `CLK` and `D` go to the flip-flop, `A` and `B` to the free input of `and1` and
    `and2`, and `Y` comes from the buffer's output. Their coordinates are in each cell's `flabel`
    lines. Use the spot you chose in Part 2 for `D`.
 
 2. Paint metal1 rails across the whole row and label them `VGND` and `VPWR`, so the supply labels
-   sit on geometry that belongs to *this* cell. A label on a cell's own rail would belong to that
-   cell, not to your block.
+   sit on geometry that belongs to *this* cell. If you put the label on one of the standard
+   cells' own rails instead, it would belong to that cell rather than to your block.
 
-3. Turn the labels into ports. This is a separate step, and it is the one everybody skips:
+3. Turn the labels into ports. This is a separate step, and it's the one everybody skips:
 
    ```tcl
    select top cell
@@ -176,8 +180,8 @@ How does your block get pins of its own?
    save datapath
    ```
 
-   A label is a name written on geometry; a **port** is a name the extractor puts on the
-   `.subckt` line. `port makeall` promotes every top-cell label to a port. Without it,
+   A label is a name written on geometry, while a **port** is a name that the extractor puts on
+   the `.subckt` line. `port makeall` promotes every top-cell label to a port. Without it,
    `make layout` reports `ports (none)` and LVS fails with
    `Top level cell failed pin matching`, and the printed advice about putting labels on the top
    cell's own geometry won't help, because yours already are.
@@ -202,12 +206,12 @@ set still at 32.
 
 What are the 32 violations, and what fixes them?
 
-Every one of the 32 violations is about **well taps**. Nothing in your row ties the n-well to
-VPWR or the substrate to VGND, because `sky130_fd_sc_hd` cells are drawn without taps on purpose;
-you saw that in Lab 01 on the foundry's own inverter.
+All 32 violations are about **well taps**. Nothing in your row ties the n-well to VPWR or the
+substrate to VGND, because `sky130_fd_sc_hd` cells are drawn without taps on purpose, as you saw
+in Lab 01 on the foundry's own inverter.
 
-1. A second tool has noticed the same fault without using the word. Look at the extracted
-   netlist:
+1. The extracted netlist shows the same fault, although it never uses the word "tap". Look at
+   it:
 
    ```bash
    grep Xbuf0 results/datapath.lvs.spice
@@ -217,20 +221,22 @@ you saw that in Lab 01 on the foundry's own inverter.
    Xbuf0 buf0/A dff0/VGND VSUBS dff0/VPB dff0/VPWR Y sky130_fd_sc_hd__buf_1
    ```
 
-   `VSUBS` and `dff0/VPB` are invented node names, for bodies that connect to nothing.
+   `VSUBS` and `dff0/VPB` are invented node names, given to bodies that aren't connected to
+   anything.
 
-2. **The fix is a cell, not a shape.** Place a `sky130_fd_sc_hd__tapvpwrvgnd_1`, 0.46 µm wide, at
-   each end of the row. In the console:
+2. You fix this by placing a cell rather than by drawing a shape. Place a
+   `sky130_fd_sc_hd__tapvpwrvgnd_1`, 0.46 µm wide, at each end of the row. In the console:
 
    ```tcl
    box -0.46um 0um -0.46um 0um ; getcell sky130_fd_sc_hd__tapvpwrvgnd_1 ; identify tapL
    box 13.34um 0um 13.34um 0um ; getcell sky130_fd_sc_hd__tapvpwrvgnd_1 ; identify tapR
    ```
 
-   Two taps 14.26 µm apart satisfy `LU.2` and `LU.3`, which only ask for a tap within 15 µm.
+   Two taps 14.26 µm apart are enough to satisfy `LU.2` and `LU.3`, because those rules only ask
+   for a tap within 15 µm.
 
 3. `save datapath` and run `make layout`. Before you run the `grep` from step 1 again, predict
-   what the body terminals on the `Xbuf0` line will be now. Then run it. The same line now reads:
+   what the body terminals on the `Xbuf0` line will be now. Then run it; the same line now reads:
 
    ```spice
    Xbuf0 buf0/A VGND VGND VPWR VPWR Y sky130_fd_sc_hd__buf_1
@@ -271,22 +277,23 @@ How fast can you clock what you built?
 
    $$T_{\text{clk}} \ge t_{\text{clk}\rightarrow Q} + t_{\text{logic}} + t_{\text{setup}}$$
 
-   The first two terms are **simulated on your own geometry**, with every parasitic capacitance
-   Magic could find. The third is **looked up** in the Liberty file, because setup time is a
-   property of the flip-flop's internals and you cannot get it from your layout. That file,
+   The first two terms are simulated on your own geometry, with every parasitic capacitance
+   Magic could find. The third is looked up in the Liberty file, because setup time is a
+   property of the flip-flop's internals and you can't get it from your layout. That file,
    `sky130_fd_sc_hd__tt_025C_1v80.lib`, is the same one the digital track synthesises against in
-   [DD103](https://uoftasic.com/dd103/); here the two tracks read the same document.
+   [DD103](https://uoftasic.com/dd103/), so at this point the two tracks are reading the same
+   document.
 
 3. Divide your `CLK rise -> Y rise` by the foundry cell's `one stage` delay from Lab 05 (34.48 ps
-   on that page), and write down how many inverter delays it is. Why do four gates cost that
-   many?
+   on that page), and write down how many inverter delays it is. Why do four gates add up to
+   that many?
 
    <details>
    <summary>Answer</summary>
 
-   With the numbers on these pages, 601 ps is **17 inverter delays**. Most of it is the
-   flip-flop's clock-to-Q, and the `and2_0` cells you were given are the weakest AND in the
-   library. `and2_2` would buy some of that back, for area.
+   With the numbers on these pages, 601 ps is 17 inverter delays. Most of it is the flip-flop's
+   clock-to-Q, and the `and2_0` cells you were given are the weakest AND in the library.
+   Swapping in `and2_2` would win back some of that time, at the cost of more area.
 
    </details>
 
@@ -303,8 +310,9 @@ What do you hand to a foundry, and what is in it?
    ```
 
    The reference block's GDS is **25,778 bytes**; yours will be within a few hundred bytes of
-   that. Everything before this step (the `.mag` files, DRC, LVS, the extracted netlist) was you
-   convincing yourself. GDSII is what you would hand over.
+   that. Everything before this step (the `.mag` files, DRC, LVS, the extracted netlist) was for
+   convincing yourself that the layout is right, and GDSII is the file you would actually hand
+   over.
 
 2. Look at it in KLayout:
 
@@ -314,8 +322,8 @@ What do you hand to a foundry, and what is in it?
 
    ![The GDS](../assets/img/ad104-klayout-datapath.png)
 
-3. In the cell tree, notice that the library cells are still separate cells. The GDS is
-   hierarchical, and Magic did not regenerate their geometry: it copied the bytes from the
+3. In the cell tree, notice that the library cells are still separate cells, because the GDS is
+   hierarchical. Magic didn't regenerate their geometry, either. It copied the bytes from the
    foundry's own GDS file, which is what the `GDS_START` and `GDS_END` properties in their `.mag`
    files are for.
 
@@ -362,12 +370,12 @@ Submit: nothing for this lab.
 `make ref` and `make refcheck` build and check the reference block. `tcl/route_ref.tcl` routes it
 with a comment on every coordinate; the package's
 [`solutions/README.md`](https://github.com/uoftasic/ad104/tree/main/labs/capstone-place-and-route/solutions)
-discusses five decisions in it. Read them after yours passes.
+discusses five of the decisions in it. They're worth reading once your own block passes.
 
 You have now done by hand, for four cells, what [DD103](https://uoftasic.com/dd103/) does with
 LibreLane for a whole design in 54 seconds: place cells in rows, insert taps, route, check DRC,
-check LVS, and write GDS. The tool does the same steps a hundred thousand times, with a cost
-function, and it never forgets the taps.
+check LVS, and write GDS. The tool repeats the same steps a hundred thousand times, guided by a
+cost function, and it never forgets the taps.
 
 Next on the Course path: this is the last lab in AD104. The home page lists the
 [next courses](../index.md#next-courses).

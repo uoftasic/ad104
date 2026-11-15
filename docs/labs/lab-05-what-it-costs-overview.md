@@ -199,12 +199,6 @@ driving nothing but a copy of itself. The capstone's timing numbers are multiple
 
 ## Part 6: Measure your own cell (optional)
 
-> **Known problem:** `make mine` currently damages the file it copies (it overwrites the
-> `magic` line at the top), so the `make` after it stops with
-> `results/my_inv.pex.spice is missing - extraction did not run.` Skip this part until it is
-> fixed. If you have already run it, put the reference cell back with
-> `git checkout mag/my_inv.mag` and run `make` again.
-
 1. Copy your Lab 03 cell in and run the comparison again:
 
    ```bash
@@ -212,10 +206,19 @@ driving nothing but a copy of itself. The capstone's timing numbers are multiple
    make
    ```
 
+   A cell drawn by following Lab 03 lists its ports as `VGND VPWR A Y`, because the frame you
+   started from already had `VGND` and `VPWR` labelled, while the reference lists them as
+   `A Y VPWR VGND`. So `make` reads the order out of your extracted netlist, wires both decks
+   around it, and prints it on its `wrote results/fo4.spice` line. If your cell is missing a
+   port, `make` stops there instead and names the ports it found.
+
 2. Check the W and L rows. If they don't read `1.00 x`, your transistors aren't the ones Lab 03
    asked for, so the comparison no longer isolates the effect of the drawing.
 
-**You should see** `1.00 x` on the W and L rows.
+To go back to the reference cell afterwards, run `git checkout mag/my_inv.mag` and then `make`.
+
+**You should see** `1.00 x` on the W and L rows. If you used Lab 03's coordinates exactly, the
+whole table is the same as the reference's.
 
 ## Finishing
 

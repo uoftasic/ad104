@@ -28,12 +28,12 @@ results/geom.txt: mag/my_inv.mag tcl/pex.tcl | results
 	@$(MAGIC) -dnull -noconsole tcl/pex.tcl > results/magic.log 2>&1 || true
 	@test -f $@ || { echo "   Magic wrote no report. Read results/magic.log"; exit 1; }
 
-results/fo4.log: results/geom.txt spice/fo4.spice
+results/fo4.log: results/geom.txt spice/fo4.spice src/mkfo4.py src/ports.py
 	@echo "== ngspice: fan-out-of-4 delay, both cells, one deck"
-	@cp spice/fo4.spice results/fo4.spice
+	@$(PYTHON) src/mkfo4.py
 	@cd results && $(NGSPICE) -b fo4.spice </dev/null > fo4.log 2>&1 || true
 
-results/ring.log: results/geom.txt src/mkring.py
+results/ring.log: results/geom.txt src/mkring.py src/ports.py
 	@echo "== ngspice: two 31-stage ring oscillators"
 	@$(PYTHON) src/mkring.py
 	@cd results && $(NGSPICE) -b ring.spice </dev/null > ring.log 2>&1 || true
@@ -54,7 +54,6 @@ mine:
 	@test -n "$(MAG)" || { echo "usage: make mine MAG=../lab-03-draw-an-inverter/mag/my_inv.mag"; exit 2; }
 	@test -f "$(MAG)" || { echo "no such file: $(MAG)"; exit 2; }
 	@cp "$(MAG)" mag/my_inv.mag
-	@sed -i '1,6s/^\([a-zA-Z_][a-zA-Z0-9_]*\)$$/my_inv/' mag/my_inv.mag 2>/dev/null || true
 	@rm -rf results && mkdir -p results && touch results/.gitkeep
 	@echo "copied $(MAG) into mag/my_inv.mag - now run make"
 

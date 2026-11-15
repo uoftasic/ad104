@@ -21,7 +21,6 @@ Vdd VPWR 0 1.8
 """
 
 TAIL = f"""
-.ic v(f01)=0 v(m01)=0
 .tran 2p 20n uic
 .meas tran fper TRIG v(f01) VAL=0.9 RISE=3 TARG v(f01) VAL=0.9 RISE=5
 .meas tran mper TRIG v(m01) VAL=0.9 RISE=3 TARG v(m01) VAL=0.9 RISE=5
@@ -39,6 +38,10 @@ def main() -> None:
     for i in range(1, N + 1):
         a, b = f"m{i:02d}", f"m{(i % N) + 1:02d}"
         lines.append(f"Xm{i:02d} {connect([a, b, 'VPWR', '0'], ports)} my_inv\n")
+    # Start the nodes alternately low and high, so that one edge runs round each
+    # ring. From all-low, several edges can set off at once and lock the ring
+    # into running at three times its real frequency.
+    lines += [f".ic v({c}{i:02d})={1.8 * (i % 2 == 0):g}\n" for c in "fm" for i in range(1, N + 1)]
     lines.append(TAIL)
     (RESULTS / "ring.spice").write_text("".join(lines))
     print(f"   wrote results/ring.spice  ({N} stages each)")

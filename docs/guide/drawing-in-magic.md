@@ -1,11 +1,12 @@
 # Drawing in Magic
 
-Magic is built around one idea, and once you have it the rest is vocabulary: **there is a box,
-you move the box, and you tell a layer to fill the box.** That is painting. Everything else,
-including contacts, labels, ports and zooming, is done to the box or with it.
+Magic is built around one idea, and once you have it the rest is mostly vocabulary: **there is a
+box, you move the box, and you tell a layer to fill the box.** Magic calls that painting, and
+everything else you do, including contacts, labels, ports and zooming, is done either to the box
+or with it.
 
-This page explains the commands you'll use from Lab 02 onwards. You draw your first cell with
-them in [Lab 03](../labs/lab-03-draw-an-inverter-overview.md).
+This page explains the commands you'll use from Lab 02 onwards, and you'll draw your first cell
+with them in [Lab 03](../labs/lab-03-draw-an-inverter-overview.md).
 
 ## The mouse
 
@@ -15,16 +16,18 @@ them in [Lab 03](../labs/lab-03-draw-an-inverter-overview.md).
 | **Right** | move the **upper-right** corner of the box to the cursor |
 | **Middle** | **paint** the box with the layer under the cursor, or **erase** if the cursor is over empty space |
 
-So you draw a rectangle by left-clicking one corner, right-clicking the other, and middle-clicking
-a swatch of the layer you want in the palette down the right side. There is no click-and-drag.
-The first hour is annoying, and after that it is faster than dragging.
+So to draw a rectangle you left-click one corner, right-click the opposite corner, and then
+middle-click a swatch of the layer you want in the palette down the right side of the window.
+There is no click-and-drag. The first hour of working this way is annoying, but after that it's
+faster than dragging would be.
 
-If you have no middle button, or you want exact coordinates, type the command instead. In this
-course you always want exact coordinates.
+If you have no middle button, or you want exact coordinates, you can type the command instead.
+In this course you always want exact coordinates, so typing is how you'll draw most of the time.
 
 ## The console
 
-Magic's second window, `tkcon`, is where you type commands. Everything below is typed there.
+Magic's second window, `tkcon`, is the console where you type commands, and every command on the
+rest of this page is typed there.
 
 ```tcl
 box 0.4um 1.3um 2.6um 1.95um     ;# put the box at these micron coordinates
@@ -32,25 +35,26 @@ paint ndiff                      ;# fill it with n-diffusion
 erase ndiff                      ;# or take it away again
 ```
 
-**Use the `um` suffix.** Without it Magic reads numbers in *lambda* (0.01 µm here), and the
-difference is a factor of a hundred with no error message. Every command in every lab writes
-`um`, and so should you.
+**Use the `um` suffix.** Without it, Magic reads a number in *lambda*, which is 0.01 µm in this
+technology, so a box you meant in microns comes out a hundred times too small, and Magic gives no
+error message about it. Every command in every lab writes `um`, and yours should too.
 
-Two more you'll use constantly:
+Two more commands you'll use constantly:
 
 ```tcl
 box values                       ;# what is the box now? (in internal units, 0.005 um)
 findbox zoom                     ;# zoom the view to the box
 ```
 
-`box values` **reads back in internal units of 0.005 µm**, even though plain numbers *set* the
-box in lambda. That inconsistency has cost people afternoons. Set the box with `um`, and read the
-numbers `box values` returns as 200 per micron.
+`box values` **reads the box back in internal units of 0.005 µm**, even though a plain number
+you give to `box` *sets* it in lambda. That inconsistency has cost people whole afternoons. The
+safe habit is to always set the box with `um`, and to read the numbers `box values` returns as
+200 to the micron.
 
 ## Layer names
 
-The palette on the right shows display names; the console takes short aliases. These are the
-ones this course uses:
+The palette on the right shows each layer's display name, but the console takes short aliases
+instead. These are the ones this course uses:
 
 | Console name | Palette | What it is |
 |---|---|---|
@@ -71,23 +75,24 @@ ones this course uses:
 
 ## Contact layers
 
-This surprises everyone who is new to Magic. You don't place a contact as an object. You
-**paint the contact layer over an area**, and Magic treats that region as the whole stack:
-diffusion, the cut, and the local interconnect on top, all at once. `paint ndc` over a
+Contacts surprise everyone who is new to Magic, because you don't place a contact as an object.
+Instead you **paint the contact layer over an area**, and Magic treats that region as the whole
+stack at once: the diffusion, the cut, and the local interconnect on top. So `paint ndc` over a
 0.17 × 0.17 µm box gives you one properly formed n-diffusion contact.
 
-Some consequences, before they confuse you:
+That has a few consequences, and it's worth knowing them before they confuse you:
 
-- The contact region must be **exactly 0.17 µm** in each direction for a single cut
-  (`licon.1`). Make it bigger and Magic generates an array of cuts.
-- The plain layers around it still have to surround it. Diffusion has to extend past the
-  contact, and so does li; the rules for those are `licon.5c` and `li.5`, two of the five you
-  fix in Lab 02.
-- Erasing `li` from a contact does not remove the contact; it demotes it.
+- For a single cut, the contact region must be **exactly 0.17 µm** in each direction (rule
+  `licon.1`). If you make it bigger, Magic generates an array of cuts instead.
+- The plain layers still have to surround the contact. The diffusion has to extend past the
+  contact, and so does the li. The rules for those are `licon.5c` and `li.5`, which are two of
+  the five rules you fix in Lab 02.
+- Erasing `li` from a contact doesn't remove the contact; Magic demotes it instead.
 
 ## Labels and ports
 
-A shape with no name is invisible to LVS. Two commands name things:
+As far as LVS is concerned, a shape with no name doesn't exist, and there are two commands that
+give things names:
 
 ```tcl
 box 1.30um 2.40um 1.55um 2.65um
@@ -97,14 +102,16 @@ select top cell
 port makeall          ;# promote every label in the cell to a port
 ```
 
-`label` names a piece of geometry. `port makeall` declares those names to be the cell's
-terminals, which is what makes the extracted netlist come out as `.subckt my_inv A Y VPWR VGND`
-instead of a subcircuit with no pins. Every lab step that adds labels ends with `port makeall`. If
-netgen ever says a cell's pin list is empty, a missing `port makeall` is the first thing to check.
+`label` names a piece of geometry, and `port makeall` then declares those names to be the cell's
+terminals. That second step is what makes the extracted netlist come out as
+`.subckt my_inv A Y VPWR VGND` rather than as a subcircuit with no pins, so every lab step that
+adds labels ends with `port makeall`. If netgen ever says a cell's pin list is empty, a missing
+`port makeall` is the first thing to check.
 
 **A label lands on whatever geometry is under the box in the current cell.** If that shape
-belongs to a subcell, the label belongs to the subcell, not to you. That is why the blocks in
-Lab 04 and the capstone paint their own small patch of `li` or `m1` before labelling it.
+belongs to a subcell, the label belongs to the subcell too, rather than to the cell you're
+drawing. That's why the blocks in Lab 04 and the capstone paint their own small patch of `li` or
+`m1` before labelling it.
 
 ## The `.mag` file {#the-mag-file}
 
@@ -112,37 +119,39 @@ Lab 04 and the capstone paint their own small patch of `li` or `m1` before label
 save my_inv           ;# writes my_inv.mag in the current directory
 ```
 
-A `.mag` file is plain text: a list of layer sections, each with its rectangles:
+A `.mag` file is plain text, made up of one section per layer, each listing that layer's
+rectangles:
 
 ```
 << ndiff >>
 rect 80 260 520 390
 ```
 
-**Check the header before you trust those numbers.** A `.mag` file's unit is set by its
-`magscale` line, and the two kinds of cell in this course disagree:
+**Check the header before you trust those numbers.** The unit a `.mag` file uses is set by its
+`magscale` line, and the two kinds of cell in this course use different units:
 
 | Cell | Header | One unit is | `rect 80 260 520 390` means |
 |---|---|---|---|
 | A foundry cell from the PDK | `magscale 1 2` | 0.005 µm | 0.40 → 2.60 µm |
 | Anything this course draws | *no `magscale` line* | 0.01 µm | 0.80 → 5.20 µm |
 
-So the rectangle above is 0.40 → 2.60 µm horizontally **in a foundry cell**. In `mag/my_inv.mag`
-the same 0.40 → 2.60 µm diffusion is stored as tiles spanning `40 130` to `260 195`. Magic splits
-a painted shape into several `rect` lines, so read the extent, not one line. If you apply the
-foundry rule to a cell you drew, you read every dimension as half its real size, with no
-warning: the same kind of factor-of-two trap as `box values`. Magic tells you which kind you have
-on every load (`Scaled magic input cell my_inv geometry by factor of 2`), and `box values` always
-reports in 0.005 µm units, whichever file you are in.
+So the rectangle above spans 0.40 → 2.60 µm horizontally if it's **in a foundry cell**. In your
+own `mag/my_inv.mag`, the same 0.40 → 2.60 µm diffusion is stored as tiles spanning `40 130` to
+`260 195`. Magic splits a painted shape into several `rect` lines, so read the extent of the
+whole shape rather than any one line. If you apply the foundry cell's unit to a cell you drew,
+you'll read every dimension as half its real size, and nothing will warn you; it's the same kind
+of factor-of-two trap as `box values`. Magic does tell you which kind of cell you have every time
+it loads one (`Scaled magic input cell my_inv geometry by factor of 2`), and `box values` always
+reports in 0.005 µm units, whichever kind of file you're in.
 
-When a lab says a shipped cell has a particular dimension, that is where the number comes from,
-and you can check it with `grep`. In
+When a lab says that a shipped cell has a particular dimension, the number comes from the cell's
+`.mag` file, so you can check it yourself with `grep`. In
 [Lab 03, Part 9](../labs/lab-03-draw-an-inverter-overview.md#part-9-read-what-you-drew) you open
 your own `.mag` file in a text editor.
 
 ## The commands the labs run
 
-Later guide pages cover each of these. Together they are the whole flow:
+Later guide pages cover each of these commands, and together they make up the whole flow:
 
 ```tcl
 drc check                 ;# find rule violations

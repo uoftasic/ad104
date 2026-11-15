@@ -1,9 +1,9 @@
 # Lab 05: What it costs
 
-You'll compare the same two transistors, drawn twice, for area and delay. First you work out the
-area price from numbers you already have. Then you extract the Lab 03 inverter and the foundry's
-`inv_1` with every parasitic capacitance kept, simulate both, and check your arithmetic against
-the measurement.
+In this lab you compare two layouts of the same two transistors, your Lab 03 inverter and the
+foundry's `inv_1`, to see what the drawing costs in area and in delay. You start by working out
+the area price from numbers you already have. Then you extract both cells with every parasitic
+capacitance kept, simulate them, and check your arithmetic against the measurement.
 
 Package: [`labs/lab-05-what-it-costs/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-05-what-it-costs)
 
@@ -16,12 +16,13 @@ Package: [`labs/lab-05-what-it-costs/`](https://github.com/uoftasic/ad104/tree/m
 
 **Time:** about 1 hour, not counting the optional Part 6. Each full `make` takes two to three
 minutes (114 s and 182 s on two timed clean runs, depending on what else the machine is doing).
-Nearly all of that is the two ring oscillators: 62 extracted subcircuits, 20 ns of transient, and
-ngspice reading the whole SKY130 model library twice.
+Nearly all of that time goes on the two ring oscillators, which between them have 62 extracted
+subcircuits to simulate for 20 ns of transient, with ngspice reading the whole SKY130 model
+library twice.
 
 ## Part 1: Predict the price
 
-What does the drawing cost in area, from numbers you have already seen?
+How much does the drawing cost in area, judging only from numbers you have already seen?
 
 1. The Lab 03 cell is 3.00 × 6.00 µm, and Lab 01 measured `inv_1` at 1.38 × 2.72 µm. Work out
    how many times bigger the Lab 03 cell is, and write it down.
@@ -31,9 +32,11 @@ What does the drawing cost in area, from numbers you have already seen?
    `inv_1` (Lab 01, Part 5). Work out both ratios and write them down.
 
 3. Guess how much slower the Lab 03 cell will be. Is it closer to the area ratio, the junction
-   ratio, or much less than either? Write down a number; Part 3 compares it with the measurement.
+   ratio, or much less than either? Write down a number, because Part 3 compares it with the
+   measurement.
 
-**You should see** three ratios and a guess in your notes. Part 2 checks the ratios.
+**You should see** three ratios and a guess in your notes. Part 2 checks the ratios against the
+table.
 
 ## Part 2: Run the comparison
 
@@ -48,8 +51,8 @@ Does the measurement agree with your arithmetic?
 
    By default it compares the **reference** Lab 03 inverter, in `mag/my_inv.mag`, with the
    foundry's. The reference uses the same transistor and wiring coordinates as Lab 03's steps, so
-   the `yours` column is the cell you drew if you followed them. Part 6 (optional) swaps in your
-   own file. It prints:
+   if you followed those steps, the `yours` column describes the cell you drew. Part 6 (optional)
+   swaps in your own file instead. The run prints:
 
    ```
      THE SAME TWO TRANSISTORS, DRAWN TWICE
@@ -90,8 +93,9 @@ Does the measurement agree with your arithmetic?
          measurement, and yours is yours.
    ```
 
-2. Find the four `1.00 x` rows for W and L. They are the control: the transistors are identical,
-   down to the model name, so **everything else on the table comes from the drawing.**
+2. Find the four `1.00 x` rows for W and L. They're the control in this experiment: the
+   transistors in the two cells are identical, down to the model name, so every other difference
+   in the table comes from the way they were drawn.
 
 3. Compare the `cell area` row and the two `drain junction area` rows with the ratios you worked
    out in Part 1.
@@ -104,21 +108,21 @@ drain junction area rows, matching your Part 1 ratios to rounding, and `make` en
 Why does the same drawing cost more delay in one test than in the other?
 
 1. Find the two delay ratios in your table: the fan-out 4 `average` row and the ring
-   `one stage` row. On this page they are **1.11 x at fan-out 4 and 1.27 x in the ring**, so the
-   cell is 11 % slower in one test and 27 % slower in the other. Compare yours with your guess
-   from Part 1.
+   `one stage` row. On this page they are 1.11 x at fan-out 4 and 1.27 x in the ring, so the
+   cell is 11 % slower in one test and 27 % slower in the other. Compare yours with the guess you
+   wrote down in Part 1.
 
-2. Explain the difference, before you read the `WHAT TO TAKE FROM THIS` block at the end of your
-   `make` output: that block gives the answer. Hint: a gate's delay is how long it takes to charge
-   whatever hangs off its output, and that load has two parts, what you are driving and what you
-   brought with you.
+2. Work out why the two ratios differ before you read the `WHAT TO TAKE FROM THIS` block at the
+   end of your `make` output, because that block gives the answer. Hint: a gate's delay is how
+   long it takes to charge whatever hangs off its output, and that load has two parts: what you
+   are driving, and what you brought with you.
 
    <details>
    <summary>Answer</summary>
 
-   At fan-out 4 the four downstream gates dominate the load, and their input capacitance is
-   identical for both cells. In the ring each stage drives one gate and nothing else, so your
-   4.23 × junction area is a large share of the total.
+   At fan-out 4 most of the load is the four downstream gates, and their input capacitance is the
+   same whichever cell is driving them. In the ring each stage drives one gate and nothing else,
+   so your 4.23 × junction area makes up a large share of the total load.
    [Area, parasitics and delay](../guide/what-your-drawing-costs.md#fo4-delay-and-ring-oscillator-delay)
    has the full explanation.
 
@@ -143,19 +147,20 @@ Where does the extra capacitance live?
           ... of it on the output        0.3035        0.3889 fF       0.78 x
    ```
 
-   By the second measure the foundry's cell is *worse*. That is real. The extracted `C` elements
-   are **wire-to-wire coupling**, and the foundry cell has more of it on the output because
-   everything in it is packed close together.
+   On the second row the foundry's cell comes out *worse*, and that is a real result. The
+   extracted `C` elements are wire-to-wire coupling capacitance, and the foundry cell has more of
+   it on its output because everything in it is packed close together.
 
-3. Where does the **junction capacitance** of the source and drain diffusions live, and why is it
-   not in the `C` lines?
+3. Where does the junction capacitance of the source and drain diffusions live, and why isn't it
+   in the `C` lines?
 
    <details>
    <summary>Answer</summary>
 
-   It is inside the device model, computed from the `ad`, `as`, `pd` and `ps` parameters on each
-   device line, and yours are 4.23 × theirs. You cannot read it off the parasitic netlist. You
-   have to simulate, which is why this lab does.
+   It's inside the device model, which computes it from the `ad`, `as`, `pd` and `ps` parameters
+   on each device line, and your drain areas are 4.23 × theirs. Because it lives in the model, you
+   can't read it off the parasitic netlist; the only way to see its effect is to simulate, which
+   is why this lab does.
 
    </details>
 
@@ -165,10 +170,10 @@ Where does the extra capacitance live?
 
 How long does one gate take when it drives nothing but a copy of itself?
 
-An odd number of inverters in a loop cannot settle: whatever value it holds, it contradicts
-itself one lap later. So it oscillates, with period $2 N t_p$ for $N$ stages of delay $t_p$ each.
-That makes it the cleanest measurement of a single gate delay: no source and no external load,
-just the cell driving one copy of itself.
+A loop of an odd number of inverters can't settle, because whatever value a node holds comes back
+inverted one lap later. So the loop oscillates, with period $2 N t_p$ for $N$ stages of delay
+$t_p$ each. That makes it the cleanest way to measure a single gate delay, because there is no
+source and no external load, only the cell driving one copy of itself.
 
 1. Open `src/mkring.py`, which writes both 31-stage rings. It is under fifty lines, and `N = 31`
    near the top sets the number of stages.
@@ -180,14 +185,14 @@ just the cell driving one copy of itself.
    <summary>Answer</summary>
 
    For the table on this page: 2720.4 ps / 62 = 43.88 ps for your cell, and
-   2137.8 ps / 62 = 34.48 ps for the foundry's. The table rounds the periods to 2720 and 2138, so
-   dividing those gives 43.87 and 34.48.
+   2137.8 ps / 62 = 34.48 ps for the foundry's. The table rounds the periods to 2720 and 2138,
+   which is why dividing the rounded numbers gives 43.87 and 34.48.
 
    </details>
 
-**34 picoseconds is the floor** for this process at 1.8 V. The capstone's timing numbers are
-multiples of it, and [What sets the clock frequency](../guide/why-the-clock-cannot-go-faster.md)
-builds on it.
+The foundry's 34 picoseconds is the floor for this process at 1.8 V: it's the delay of one gate
+driving nothing but a copy of itself. The capstone's timing numbers are multiples of it, and
+[What sets the clock frequency](../guide/why-the-clock-cannot-go-faster.md) builds on it.
 
 **You should see** your two stage delays agree with the `one stage` row, to rounding.
 
@@ -206,8 +211,8 @@ builds on it.
    make
    ```
 
-2. Check the W and L rows. If they do not read `1.00 x`, your cell is not the one Lab 03 asked
-   for, and the comparison is no longer isolating the drawing.
+2. Check the W and L rows. If they don't read `1.00 x`, your transistors aren't the ones Lab 03
+   asked for, so the comparison no longer isolates the effect of the drawing.
 
 **You should see** `1.00 x` on the W and L rows.
 
@@ -227,8 +232,8 @@ Submit: nothing for this lab.
 
 ## Going further (optional)
 
-`make table` re-prints the comparison from results already on disk, instantly. `make pex` runs
-only the extraction, in about 4 s.
+`make table` prints the comparison again from the results already on disk, so it returns
+instantly. `make pex` runs only the extraction, which takes about 4 s.
 
 Next on the Course path: read [Routing by hand](../guide/routing-by-hand.md) and
 [What sets the clock frequency](../guide/why-the-clock-cannot-go-faster.md), then do the

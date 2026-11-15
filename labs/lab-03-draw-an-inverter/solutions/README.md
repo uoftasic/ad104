@@ -15,10 +15,10 @@ comparison would measure the transistors and not the drawing, and the drawing is
 price.
 
 A separate question you might reasonably ask: should Wp be bigger than 1.00? AD103 found that
-centring the switching threshold wants roughly Wp = 2.5 Wn. The foundry chose
-1.00 / 0.65 = 1.54 instead, because it optimises for equal *delay* in a chain of cells rather than
-for a symmetric VTC, and because the PMOS here is the high-Vt flavour. Both choices are
-defensible, because they answer different questions.
+centring the switching threshold wants roughly Wp = 3.5 Wn, and equal rise and fall delays about
+Wp = 2.5 Wn. The foundry chose 1.00 / 0.65 = 1.54, smaller than either. Its PMOS is the high-Vt
+flavour, which AD103 didn't measure, and a narrower PMOS also makes a smaller cell. Both choices
+are defensible, because they answer different questions.
 
 **2. The cell is deliberately roomy.** It is 3.00 × 6.00 µm against the foundry's 1.38 × 2.72,
 which is 4.8 times the area for identical devices. We made it that big on purpose. A minimum-size

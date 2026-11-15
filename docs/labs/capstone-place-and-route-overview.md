@@ -269,10 +269,10 @@ How fast can you clock what you built?
 
      HOW FAST CAN YOU CLOCK IT
 
-         CLK rise -> Y rise        601.05 ps    (measured on your extracted layout)
+         CLK rise -> Y rise        536.17 ps    (measured on your extracted layout)
          D setup at the flop       103.32 ps    (sky130_fd_sc_hd__tt_025C_1v80.lib)
-         shortest legal period     704.37 ps
-         f_max                    1419.71 MHz
+         shortest legal period     639.49 ps
+         f_max                    1563.75 MHz
    ```
 
 2. Match the lines to the timing rule:
@@ -286,20 +286,20 @@ How fast can you clock what you built?
    points out, that is the same Liberty file the digital track synthesises against in
    [DD103](https://uoftasic.com/dd103/).
 
-3. Divide your `CLK rise -> Y rise` by the foundry cell's `one stage` delay from Lab 05 (34.48 ps
+3. Divide your `CLK rise -> Y rise` by the foundry cell's `one stage` delay from Lab 05 (32.8 ps
    on that page), and write down how many inverter delays it is. Why do four gates add up to
    that many?
 
    <details>
    <summary>Answer</summary>
 
-   With the numbers on these pages, 601 ps is 17 inverter delays. Most of it is the flip-flop's
+   With the numbers on these pages, 536 ps is 16 inverter delays. Most of it is the flip-flop's
    clock-to-Q, and the `and2_0` cells you were given are the weakest AND in the library.
    Swapping in `and2_2` would win back some of that time, at the cost of more area.
 
    </details>
 
-**You should see** an `f_max` printed. The reference block gives 1419.71 MHz.
+**You should see** an `f_max` printed. The reference block gives 1563.75 MHz.
 
 ## Part 7: Write the GDS
 
@@ -351,7 +351,7 @@ Questions:
 
   </details>
 
-- Name three reasons a real chip runs at a fraction of your 1.42 GHz.
+- Name three reasons a real chip runs at a fraction of your 1.56 GHz.
 
   <details>
   <summary>Answer</summary>

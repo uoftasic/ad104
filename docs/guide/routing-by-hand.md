@@ -64,8 +64,10 @@ capstone, but not for a real block, which is why routers alternate directions.
 
 ## Why routers alternate directions
 
-The convention is that each metal layer runs in one direction only: metal1 vertical, metal2
-horizontal, metal3 vertical, and so on.
+The convention is that each metal layer runs in one direction only, and the layers take turns.
+In SKY130 the standard-cell library's technology LEF, `sky130_fd_sc_hd__nom.tlef`, sets metal1
+horizontal, metal2 vertical, metal3 horizontal, and so on up to metal5. Metal1 runs the same way
+as the supply rails in your row.
 
 That can look like bureaucracy, but it's the only thing that makes routing tractable. Two wires
 on the same layer going the same way compete for the same track, while two wires on adjacent

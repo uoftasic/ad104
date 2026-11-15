@@ -1,0 +1,56 @@
+# The whole course as one PDF:
+#   quarto render docs --profile pdf --to typst      # writes docs/_book/*.pdf
+# Chapter order follows the sidebar in _quarto.yml.
+
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "AD104 — Layout"
+  subtitle: "Draw a transistor as geometry in Magic: DRC-clean, LVS-clean, and placed and routed by hand."
+  author: "UofT ASIC Team"
+  output-file: ad104-course
+  chapters:
+    - index.md
+    - part: "Start here"
+      chapters:
+        - guide/getting-started.md
+        - guide/what-a-layout-actually-is.md
+        - guide/siliwiz.md
+        - guide/anatomy-of-a-standard-cell.md
+        - labs/lab-01-open-the-cell-overview.md
+    - part: "Design rules"
+      chapters:
+        - guide/drawing-in-magic.md
+        - guide/drc-is-a-conversation.md
+        - guide/the-rule-set-you-are-not-running.md
+        - labs/lab-02-break-it-on-purpose-overview.md
+    - part: "Your first cell"
+      chapters:
+        - guide/stick-diagrams.md
+        - guide/extraction-is-reverse-engineering.md
+        - guide/lvs-asks-a-different-question.md
+        - labs/lab-03-draw-an-inverter-overview.md
+    - part: "Building with cells"
+      chapters:
+        - guide/cells-are-lego.md
+        - labs/lab-04-buffer-and-and-overview.md
+    - part: "What layout costs"
+      chapters:
+        - guide/what-your-drawing-costs.md
+        - labs/lab-05-what-it-costs-overview.md
+    - part: "Place and route"
+      chapters:
+        - guide/routing-by-hand.md
+        - guide/why-the-clock-cannot-go-faster.md
+        - labs/capstone-place-and-route-overview.md
+  appendices:
+    - reference/magic-cheatsheet.md
+    - reference/drc-error-decoder.md
+    - reference/sky130-layer-map.md
+
+format:
+  typst:
+    toc: true
+    toc-depth: 1

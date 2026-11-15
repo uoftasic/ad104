@@ -1,0 +1,144 @@
+# Quarto build of the AD104 docs (replacing Docsify's index.html,
+# _sidebar.md and _navbar.md).
+#
+#   quarto preview docs          # live site at http://localhost:4200
+#   quarto render docs           # site in docs/_site, with a PDF of every page
+#   quarto render docs --profile pdf --to typst
+#                                # the whole course as one PDF in docs/_book
+#
+# The sidebar follows the Course path order on the home page.
+
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "AD104 — Layout"
+  description: "Draw a transistor as geometry in Magic: DRC-clean, LVS-clean, and placed and routed by hand."
+  site-url: https://uoftasic.com/ad104/
+  repo-url: https://github.com/uoftasic/ad104
+  repo-subdir: docs
+  repo-actions: [issue]
+  search: true
+  page-navigation: true
+  navbar:
+    left:
+      - text: "Guide"
+        href: guide/getting-started.md
+      - text: "Labs"
+        href: labs/lab-01-open-the-cell-overview.md
+    right:
+      - text: Course PDF
+        icon: file-pdf
+        href: ad104-course.pdf
+      - icon: discord
+        href: https://discord.gg/hrJnP5UsGz
+        aria-label: Discord
+      - icon: github
+        href: https://github.com/uoftasic/ad104
+        aria-label: GitHub
+  sidebar:
+    style: docked
+    contents:
+      - text: "Home"
+        href: index.md
+      - section: "Start here"
+        contents:
+          - text: "Getting started"
+            href: guide/getting-started.md
+          - text: "What a layout is"
+            href: guide/what-a-layout-actually-is.md
+          - text: "SiliWiz"
+            href: guide/siliwiz.md
+          - text: "Anatomy of a standard cell"
+            href: guide/anatomy-of-a-standard-cell.md
+          - text: "Lab 01: Open a cell you did not draw"
+            href: labs/lab-01-open-the-cell-overview.md
+      - section: "Design rules"
+        contents:
+          - text: "Drawing in Magic"
+            href: guide/drawing-in-magic.md
+          - text: "Reading DRC errors"
+            href: guide/drc-is-a-conversation.md
+          - text: "The full DRC rule set"
+            href: guide/the-rule-set-you-are-not-running.md
+          - text: "Lab 02: Break it on purpose"
+            href: labs/lab-02-break-it-on-purpose-overview.md
+      - section: "Your first cell"
+        contents:
+          - text: "Stick diagrams"
+            href: guide/stick-diagrams.md
+          - text: "Extraction"
+            href: guide/extraction-is-reverse-engineering.md
+          - text: "Layout versus schematic (LVS)"
+            href: guide/lvs-asks-a-different-question.md
+          - text: "Lab 03: Draw an inverter"
+            href: labs/lab-03-draw-an-inverter-overview.md
+      - section: "Building with cells"
+        contents:
+          - text: "Instances and hierarchy"
+            href: guide/cells-are-lego.md
+          - text: "Lab 04: A buffer and an AND gate"
+            href: labs/lab-04-buffer-and-and-overview.md
+      - section: "What layout costs"
+        contents:
+          - text: "Area, parasitics and delay"
+            href: guide/what-your-drawing-costs.md
+          - text: "Lab 05: What it costs"
+            href: labs/lab-05-what-it-costs-overview.md
+      - section: "Place and route"
+        contents:
+          - text: "Routing by hand"
+            href: guide/routing-by-hand.md
+          - text: "What sets the clock frequency"
+            href: guide/why-the-clock-cannot-go-faster.md
+          - text: "Capstone: Place and route"
+            href: labs/capstone-place-and-route-overview.md
+      - section: "Reference"
+        contents:
+          - text: "Magic cheat sheet"
+            href: reference/magic-cheatsheet.md
+          - text: "DRC error decoder"
+            href: reference/drc-error-decoder.md
+          - text: "SKY130 layer map"
+            href: reference/sky130-layer-map.md
+      - section: "Repo"
+        contents:
+          - text: "Lab packages"
+            href: https://github.com/uoftasic/ad104/tree/main/labs
+
+filters:
+  - _filters/course.lua
+
+# Collapsed answers move to the end of each page in PDFs; set this to
+# "inline" to print them where they sit instead.
+answers-in-pdf: end
+
+format:
+  html:
+    theme:
+      light: [cosmo, _light.scss]
+      dark: [darkly, _dark.scss]
+    css: _styles.css
+    # Keeps old Docsify links (.../ad104/#/labs/...) working.
+    include-in-header: _docsify-redirect.html
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    lightbox: auto
+    html-math-method:
+      method: mathjax
+      url: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml-full.js"
+    # Listing html first stops Quarto adding a second "Typst" link.
+    format-links:
+      - html
+      - format: typst
+        text: PDF
+        icon: file-pdf
+  typst:
+    papersize: us-letter
+    margin:
+      x: 0.9in
+      y: 0.9in
+    fontsize: 10.5pt
+    toc: false

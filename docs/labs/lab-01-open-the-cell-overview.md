@@ -23,7 +23,7 @@ takes about a second and a half.
 ## Part 1: Load the course
 
 If you haven't set up the workbench yet, do
-[IC101 Lab 03](https://uoftasic.com/ic101/#/labs/lab-03-launch-the-workbench-overview) first.
+[IC101 Lab 03](https://uoftasic.com/ic101/labs/lab-03-launch-the-workbench-overview.html) first.
 
 1. Start the noVNC desktop the way IC101 showed you, and open a terminal on it. Type every
    command in this lab in that terminal, not on your laptop.
@@ -67,7 +67,7 @@ If you haven't set up the workbench yet, do
 | `.designinit: No such file or directory` | The workspace isn't set up: do IC101 Lab 03. You can still run `make` in any lab, because every lab package pins its own PDK. |
 | `couldn't read Username for 'https://github.com'` on `mod add ad104` | The repo did not answer anonymously. That is our problem, not yours; say so in [Discord](https://discord.gg/hrJnP5UsGz). |
 
-For anything else, see IC101's [Troubleshooting](https://uoftasic.com/ic101/#/reference/troubleshooting)
+For anything else, see IC101's [Troubleshooting](https://uoftasic.com/ic101/reference/troubleshooting.html)
 page.
 
 **You should see** `sky130A` from step 2 and the three versions from step 4.

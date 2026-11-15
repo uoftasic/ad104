@@ -59,7 +59,7 @@ Every `docs/labs/*-overview.md` follows this order:
 
 The page title is `# Lab NN: Title` (`# Capstone: Title` for the capstone), and the sidebar entry uses the same words.
 
-Lab 01's Part 1 is "Load the course". It links [IC101 Lab 03](https://uoftasic.com/ic101/#/labs/lab-03-launch-the-workbench-overview) for the workbench itself, then loads `.designinit`, runs `mod add`, and checks the tool versions the course's printed outputs depend on. Its troubleshooting lists only the rows IC101 does not cover, and links IC101's [Troubleshooting](https://uoftasic.com/ic101/#/reference/troubleshooting) page for the rest.
+Lab 01's Part 1 is "Load the course". It links [IC101 Lab 03](https://uoftasic.com/ic101/labs/lab-03-launch-the-workbench-overview.html) for the workbench itself, then loads `.designinit`, runs `mod add`, and checks the tool versions the course's printed outputs depend on. Its troubleshooting lists only the rows IC101 does not cover, and links IC101's [Troubleshooting](https://uoftasic.com/ic101/reference/troubleshooting.html) page for the rest.
 
 ## Course path format
 

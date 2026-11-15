@@ -1,6 +1,6 @@
 # Lab 05 — What it costs
 
-Writeup: [uoftasic.com/ad104 → Lab 05](https://uoftasic.com/ad104/#/labs/lab-05-what-it-costs-overview)
+Writeup: [uoftasic.com/ad104 → Lab 05](https://uoftasic.com/ad104/labs/lab-05-what-it-costs-overview.html)
 
 Extracts the Lab 03 inverter and the foundry's `inv_1` with every parasitic capacitance kept,
 simulates both, and prints a table comparing area, junction area, capacitance and delay.

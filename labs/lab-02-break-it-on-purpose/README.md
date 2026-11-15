@@ -1,6 +1,6 @@
 # Lab 02 — Break it on purpose
 
-Writeup: [uoftasic.com/ad104 → Lab 02](https://uoftasic.com/ad104/#/labs/lab-02-break-it-on-purpose-overview)
+Writeup: [uoftasic.com/ad104 → Lab 02](https://uoftasic.com/ad104/labs/lab-02-break-it-on-purpose-overview.html)
 
 Five copies of the same inverter, each with one number changed so that it breaks one real SKY130
 rule. You fix all five.
@@ -23,7 +23,7 @@ make edit C=3     # open it in Magic
 ```
 
 In Magic, run `drc check`, put the cursor box over a white hatched area, type `drc why`, look the
-rule up in the [DRC error decoder](https://uoftasic.com/ad104/#/reference/drc-error-decoder),
+rule up in the [DRC error decoder](https://uoftasic.com/ad104/reference/drc-error-decoder.html),
 change the geometry, `save`, and run `make` again.
 
 ## Targets

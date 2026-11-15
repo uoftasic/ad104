@@ -1,6 +1,6 @@
 # Capstone — Place and route
 
-Writeup: [uoftasic.com/ad104 → Capstone](https://uoftasic.com/ad104/#/labs/capstone-place-and-route-overview)
+Writeup: [uoftasic.com/ad104 → Capstone](https://uoftasic.com/ad104/labs/capstone-place-and-route-overview.html)
 
 Four standard cells in a row, three wires routed by hand, then a timing simulation of the
 extracted layout:

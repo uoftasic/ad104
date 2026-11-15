@@ -8,7 +8,7 @@ If you are stuck on one cell, do this before you look:
 
 1. Run `make why C=3`. The rule name is the answer; read it as a sentence.
 2. Look up that rule in
-   [the DRC decoder](https://uoftasic.com/ad104/#/reference/drc-error-decoder).
+   [the DRC decoder](https://uoftasic.com/ad104/reference/drc-error-decoder.html).
 3. In Magic, run `drc check`, put the cursor box over a white hatched area and type `drc why`.
    Magic names the same rule at that spot.
 

@@ -106,7 +106,7 @@ netgen ever says a cell's pin list is empty, a missing `port makeall` is the fir
 belongs to a subcell, the label belongs to the subcell, not to you. That is why the blocks in
 Lab 04 and the capstone paint their own small patch of `li` or `m1` before labelling it.
 
-## The `.mag` file
+## The `.mag` file {#the-mag-file}
 
 ```tcl
 save my_inv           ;# writes my_inv.mag in the current directory

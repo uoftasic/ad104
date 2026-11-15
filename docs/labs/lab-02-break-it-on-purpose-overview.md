@@ -1,9 +1,9 @@
 # Lab 02: Break it on purpose
 
-In this lab you'll fix five copies of the same inverter. In each copy we changed exactly one
-number, and each change breaks exactly one real SKY130 design rule. We've put this lab before you
-draw anything of your own on purpose, because the best time to read your first DRC errors is on a
-layout you have no attachment to.
+In this lab you'll fix five copies of the same inverter. We put one mistake in each copy, and each
+mistake breaks a real SKY130 design rule (two of them break two rules at once, as Part 1 shows).
+We've put this lab before you draw anything of your own on purpose, because the best time to read
+your first DRC errors is on a layout you have no attachment to.
 
 Package: [`labs/lab-02-break-it-on-purpose/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-02-break-it-on-purpose)
 

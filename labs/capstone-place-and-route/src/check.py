@@ -155,6 +155,17 @@ def main() -> int:
                 "      but with no shape of your block's under it Magic moves it onto empty\n"
                 "      space, and a label on space names no net."
             )
+        elif counts and not any("tapvpwrvgnd" in c for c in rep.get("children", [])):
+            problems.append(
+                f"LVS says {verdict}, and the row has no tap cells yet, which is enough\n"
+                "      on its own to cause it. Without taps the cells' bodies come out on\n"
+                "      invented nodes such as VSUBS and dff0/VPB instead of VGND and VPWR\n"
+                f"      (`grep Xbuf0 results/{cell}.lvs.spice` shows them), and the\n"
+                "      schematic has them on the supplies. Place the taps and run `make\n"
+                "      layout` again. If LVS still fails after that, read results/lvs.report\n"
+                "      from the bottom: an unrouted net shows up as two nets on your side\n"
+                "      and one on the schematic's."
+            )
         elif counts:
             problems.append(
                 f"LVS says {verdict}. Read results/lvs.report from the bottom: the last\n"

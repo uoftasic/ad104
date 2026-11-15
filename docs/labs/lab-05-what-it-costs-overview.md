@@ -74,18 +74,18 @@ Does the measurement agree with your arithmetic?
         drain junction area                 1.1          0.26 um2      4.23 x
         drain junction perim                4.2          2.52 um       1.67 x
 
-     extracted capacitance, total         2.024         1.563 fF       1.29 x
-          ... of it on the output        0.3035        0.3889 fF       0.78 x
+     extracted capacitance, total          1.86         1.424 fF       1.31 x
+          ... of it on the output        0.4268        0.3519 fF       1.21 x
 
      DELAY, fan-out of 4
-     t_pHL                                40.21         35.98 ps       1.12 x
-     t_pLH                                95.44          86.4 ps       1.10 x
-     average                              67.82         61.19 ps       1.11 x
+     t_pHL                                37.32         33.95 ps       1.10 x
+     t_pLH                                88.43         81.51 ps       1.08 x
+     average                              62.88         57.73 ps       1.09 x
 
      RING OSCILLATOR, 31 stages, nothing but the cell driving itself
-     period                                2720          2138 ps       1.27 x
-     frequency                            367.6         467.8 MHz      0.79 x
-     one stage                            43.88         34.48 ps       1.27 x
+     period                                2640          2034 ps       1.30 x
+     frequency                            378.8         491.7 MHz      0.77 x
+     one stage                            42.58          32.8 ps       1.30 x
      ...
 
    PASS  Both cells extracted with parasitics, both simulated, and the
@@ -108,8 +108,8 @@ drain junction area rows, matching your Part 1 ratios to rounding, and `make` en
 Why does the same drawing cost more delay in one test than in the other?
 
 1. Find the two delay ratios in your table: the fan-out 4 `average` row and the ring
-   `one stage` row. On this page they are 1.11 x at fan-out 4 and 1.27 x in the ring, so the
-   cell is 11 % slower in one test and 27 % slower in the other. Compare yours with the guess you
+   `one stage` row. On this page they are 1.09 x at fan-out 4 and 1.30 x in the ring, so the
+   cell is 9 % slower in one test and 30 % slower in the other. Compare yours with the guess you
    wrote down in Part 1.
 
 2. Work out why the two ratios differ before you read the `WHAT TO TAKE FROM THIS` block at the
@@ -140,17 +140,18 @@ Where does the extra capacitance live?
    make caps
    ```
 
-2. Compare the two rows that seem to disagree:
+2. Compare the two capacitance rows with the drain junction areas from Part 1:
 
    ```
-     extracted capacitance, total         2.024         1.563 fF       1.29 x
-          ... of it on the output        0.3035        0.3889 fF       0.78 x
+     extracted capacitance, total          1.86         1.424 fF       1.31 x
+          ... of it on the output        0.4268        0.3519 fF       1.21 x
    ```
 
-   On the second row the foundry's cell comes out *worse*, and that is a real result. As
+   Your cell has more extracted capacitance than the foundry's, but only 1.2 to 1.3 times as
+   much, even though its drain junctions are 4.23 times the size. As
    [Area, parasitics and delay](../guide/what-your-drawing-costs.md#where-the-femtofarads-come-from)
-   explains, the extracted `C` elements are wire-to-wire coupling capacitance, and the foundry
-   cell has more of it on its output because everything in it is packed close together.
+   explains, the extracted `C` elements are the capacitance of the wiring and the well, and the
+   drain junctions aren't among them.
 
 3. Where does the junction capacitance of the source and drain diffusions live, and why isn't it
    in the `C` lines?
@@ -186,13 +187,14 @@ source and no external load, only the cell driving one copy of itself.
    <details>
    <summary>Answer</summary>
 
-   For the table on this page: 2720.4 ps / 62 = 43.88 ps for your cell, and
-   2137.8 ps / 62 = 34.48 ps for the foundry's. The table rounds the periods to 2720 and 2138,
-   which is why dividing the rounded numbers gives 43.87 and 34.48.
+   For the table on this page: 2640.2 ps / 62 = 42.58 ps for your cell, and
+   2033.6 ps / 62 = 32.80 ps for the foundry's, which the table prints as `32.8`. The table
+   rounds the periods to 2640 and 2034, which is why dividing the rounded numbers gives 42.58 and
+   32.81.
 
    </details>
 
-The foundry's 34 picoseconds is the floor for this process at 1.8 V: it's the delay of one gate
+The foundry's 33 picoseconds is the floor for this process at 1.8 V: it's the delay of one gate
 driving nothing but a copy of itself. The capstone's timing numbers are multiples of it, and
 [What sets the clock frequency](../guide/why-the-clock-cannot-go-faster.md) builds on it.
 

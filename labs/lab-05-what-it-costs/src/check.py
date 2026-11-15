@@ -13,12 +13,12 @@ STAGES = 31
 REFERENCE = {
     "area_mine": 18.0,
     "area_theirs": 3.7536,
-    "m_tphl": 40.207,
-    "m_tplh": 95.438,
-    "f_tphl": 35.983,
-    "f_tplh": 86.402,
-    "mper": 2720.395,
-    "fper": 2137.825,
+    "m_tphl": 37.323,
+    "m_tplh": 88.430,
+    "f_tphl": 33.948,
+    "f_tplh": 81.506,
+    "mper": 2640.210,
+    "fper": 2033.620,
 }
 
 

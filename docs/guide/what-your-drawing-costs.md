@@ -26,11 +26,11 @@ Lab 05 runs the extraction and both simulations and prints this table:
 | PMOS W / L | 1 / 0.15 | 1 / 0.15 | 1.00 × |
 | NMOS drain junction area | 0.715 µm² | 0.169 µm² | 4.23 × |
 | PMOS drain junction area | 1.1 µm² | 0.26 µm² | 4.23 × |
-| extracted capacitance, total | 2.024 fF | 1.563 fF | 1.29 × |
-| **FO4 delay, average** | **67.82 ps** | **61.19 ps** | **1.11 ×** |
-| **ring-oscillator stage delay** | **43.88 ps** | **34.48 ps** | **1.27 ×** |
+| extracted capacitance, total | 1.86 fF | 1.424 fF | 1.31 × |
+| **FO4 delay, average** | **62.88 ps** | **57.73 ps** | **1.09 ×** |
+| **ring-oscillator stage delay** | **42.58 ps** | **32.80 ps** | **1.30 ×** |
 
-Look at the two delay rows. Your cell is 11 % slower than the foundry's in one test and 27 %
+Look at the two delay rows. Your cell is 9 % slower than the foundry's in one test and 30 %
 slower in the other, and most of this page is about why the two tests disagree by that much.
 
 ## FO4 delay and ring-oscillator delay
@@ -48,11 +48,11 @@ number of femtofarads.
 In a **fan-out of 4 (FO4)** test, the output drives four copies of the same cell. The gate
 capacitance of those four copies dominates the load, and it's the same for both cells because
 their W and L are the same. Your extra junction area is then only a small share of the total, so
-you come out 11 % behind.
+you come out 9 % behind.
 
 **A ring oscillator** is a loop in which each stage drives exactly one copy of itself and nothing
 else. With only one gate downstream, the self-load is a much bigger fraction of the total, so your
-4.23 × junction area shows up in full and you come out 27 % behind.
+4.23 × junction area shows up in full and you come out 30 % behind.
 
 > **Layout parasitics act roughly like a fixed extra load, so they're lost in the noise when a
 > gate drives something big, and they dominate when it drives something small.**
@@ -65,28 +65,32 @@ last nanometre even though "it is only a few femtofarads".
 Here is part of what `ext2spice cthresh 0` pulls out of each cell:
 
 ```
-yours                         the foundry's
-C0 A Y       0.02936f         C0 VGND VPB  0.01319f
-C1 Y VPWR    0.06727f         C1 Y VPWR    0.12759f
-C2 A VPWR    0.10808f         C2 A VPB     0.04506f
-C3 Y VGND    0.20685f         C3 VGND Y    0.09986f
-C4 A VGND    0.27253f         C4 A Y       0.04760f
-C5 VPWR VGND 1.33952f         ... 15 in total
+yours, all of it              the foundry's, only the lines on Y
+C0 Y A       0.02272f         C1 Y VPWR    0.07413f
+C1 VPWR A    0.10808f         C5 Y VPB     0.01774f
+C2 Y VPWR    0.06413f         C6 VGND Y    0.05975f
+C3 Y VGND    0.33997f         C7 Y A       0.03773f
+C4 VPWR VGND 1.32518f         C11 Y VNB    0.1626f
+                              ... 14 lines in total
 ```
 
-Your total is higher. Now look at the row that Lab 05 prints as *"of it on the output"*: 0.3035 fF
-for yours against 0.3889 fF for theirs, so by that measure the foundry's cell is the worse one.
+(Magic doesn't always write the `C` lines in the same order, so yours may be numbered
+differently, but the values don't change from run to run.)
 
-That's a real result, not an extraction error. The extracted capacitors are all
-**wire-to-wire coupling**, and the foundry cell has more of it on the output because everything in
-it is packed close together. What the extracted capacitor list doesn't contain is the
-**junction capacitance** of the source and drain diffusions. That capacitance lives inside the
-device model, which computes it from the `ad`, `as`, `pd` and `ps` parameters, and your values for
-those are 4.23 × theirs.
+Your total is higher, 1.86 fF against 1.424 fF, and so is the part that Lab 05 prints as
+*"of it on the output"*: 0.4268 fF for yours against 0.3519 fF for theirs. Neither ratio, 1.31 ×
+and 1.21 ×, comes anywhere near the 4.23 × of the drain junction areas.
+
+That's because the extracted capacitors don't include the drain junctions. They are the
+capacitance of the **wiring** and the well: between one wire and another, from the wires down to
+the substrate and the well (the lines ending in `VNB` and `VPB` in the foundry's list), and
+between the well and the substrate. The **junction capacitance** of the source and drain
+diffusions lives inside the device model instead, which computes it from the `ad`, `as`, `pd` and
+`ps` parameters, and your values for those are 4.23 × theirs.
 
 Adding it up:
 
-- Wire coupling is roughly even between the two cells, and slightly against the foundry.
+- The extracted capacitance is against you, but only by 1.2 to 1.3 times.
 - Junction capacitance is strongly against you, by a factor of four.
 - Junction capacitance is also the bigger of the two numbers.
 

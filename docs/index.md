@@ -97,7 +97,7 @@ supply rails are purple metal1.*
 3. Draw a CMOS inverter from an empty frame until it is DRC clean and LVS clean.
 4. Turn that inverter into a buffer and an AND gate without drawing a single new transistor.
 5. Compare your Lab 03 cell against the foundry's, with parasitics extracted. You'll find that the
-   same transistors, drawn differently, take 4.8× the area and run 27 % slower in a ring
+   same transistors, drawn differently, take 4.8× the area and run 30 % slower in a ring
    oscillator.
 6. Place and route four standard cells by hand, get the row clean, and measure the highest clock
    frequency your layout can run at.

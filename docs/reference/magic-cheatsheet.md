@@ -1,7 +1,8 @@
 # Magic cheat sheet
 
-Every Magic command this course uses. You can type all of them into the `tkcon` console; the
-keyboard column is what works in the layout window.
+This page lists every Magic command the course uses. You can type any of them into the `tkcon`
+console, and where a table has a keyboard column, that column gives the key or mouse action that
+does the same thing in the layout window.
 
 ## Starting
 
@@ -11,12 +12,13 @@ magic -d X11 <cellname>          # opens layout1 + tkcon
 magic -dnull -noconsole script.tcl   # batch, which is what the labs do
 ```
 
-`-d X11` is the driver that works in this container. `-d XR` can fail with `BadAlloc` and give
-you a black window.
+`-d X11` selects the X11 display driver, which is the one that works in this container. The
+`-d XR` driver can fail with a `BadAlloc` error and leave you looking at a black window, so stick
+with X11.
 
-The image's `~/.magicrc` loads whichever PDK `$PDK` names. Each lab package also has a
-`.magicrc`, read from the directory you start Magic in, that loads SKY130 only if nothing has
-loaded it yet:
+The image's `~/.magicrc` loads whichever PDK `$PDK` names. Magic also reads a `.magicrc` from the
+directory you start it in, which is why you `cd` first. Each lab package has one of these, and it
+loads SKY130 only if nothing has loaded it yet:
 
 ```tcl
 if {[tech name] eq "sky130A"} {
@@ -33,14 +35,14 @@ if {[tech name] eq "sky130A"} {
 | Console | Keyboard / mouse | |
 |---|---|---|
 | `box <x1>um <y1>um <x2>um <y2>um` | left-click, then right-click | set the box |
-| `box values` | | read it back — **in units of 0.005 µm** |
-| `box width`, `box height` | | dimensions |
+| `box values` | | read it back, **in units of 0.005 µm** |
+| `box width`, `box height` | | read the box's width or height |
 | `findbox zoom` | | zoom the view to the box |
 | | `z` / `Z` | zoom in / out |
 | | `v` | view everything |
 
-**Always write `um`.** Numbers without a unit are lambda (0.01 µm here), and there is no
-warning.
+**Always write `um`.** Magic reads a number with no unit as lambda, which is 0.01 µm here, and
+it doesn't warn you when it does.
 
 ## Painting
 
@@ -49,7 +51,7 @@ warning.
 | `paint <layer>` | middle-click on a layer swatch | fill the box |
 | `erase <layer>` | middle-click on empty space | clear the box |
 | `erase` | | clear every layer in the box |
-| `copy` / `move` | | on the current selection |
+| `copy` / `move` | | copy or move the current selection |
 | `select` | `s` | select what is under the cursor |
 | `select area` | `a` | select everything in the box |
 | `select top cell` | | select the whole cell |
@@ -65,9 +67,9 @@ poly                   li                     mcon
 m1 m2                  via1                   pfethvt
 ```
 
-`ndc`, `pdc`, `pc`, `ntapc`, `ptapc` and `mcon` are **contact types**: painting one fills the
-whole stack (lower layer + cut + upper layer) at once. For a single contact, the cut must be
-exactly 0.17 µm square.
+`ndc`, `pdc`, `pc`, `ntapc`, `ptapc` and `mcon` are **contact types**, which means that painting one
+fills the whole stack (the lower layer, the cut and the upper layer) in one step. For a single
+contact, the cut has to be exactly 0.17 µm square.
 
 ## Labels and ports
 
@@ -79,8 +81,9 @@ port makeall           ;# turn every label in the cell into a terminal
 port <name> index <n>  ;# set a port's number, if order matters to you
 ```
 
-A label lands on geometry **belonging to the current cell**. Placed over a subcell's shape, it
-becomes the subcell's label, not yours.
+A label attaches to geometry **belonging to the current cell**. If you place one over a shape
+that belongs to a subcell, it becomes a label of that subcell rather than of the cell you're
+editing.
 
 ## DRC
 
@@ -103,15 +106,15 @@ The `Drc` menu on the layout window does the same things with the mouse:
 
 | Menu | Same as |
 |---|---|
-| **Drc → DRC update** | `drc check`. Use it when a freshly opened cell shows a green `☑ DRC` and no hatching. |
-| **Drc → DRC report** | `drc listall why`, and it needs no cursor box |
-| **Drc → DRC Find next error** | boxes *and zooms to* the next violating tile; the fastest way to find a hatched area you cannot see. It has no console equivalent worth typing. |
+| **Drc → DRC update** | `drc check`. Use it when a cell you've just opened shows a green `☑ DRC` and no hatching. |
+| **Drc → DRC report** | `drc listall why`. It doesn't need a cursor box. |
+| **Drc → DRC Find next error** | Puts the box on the next violating tile *and zooms to it*, which makes it the fastest way to find a hatched area you can't see at the current zoom. It has no console equivalent worth typing. |
 | **Drc → DRC Complete** / **DRC Fast** | `drc style drc(full)` / `drc style drc(fast)` |
 
-**Magic does not check a cell you have only opened.** Its background checker re-checks tiles
-you *edit*, and loading a `.mag` from disk edits nothing, so a cell with real violations opens
-showing a green `☑ DRC` and no white hatching. Run `drc check` (or `Drc → DRC update`) first,
-every time.
+**Magic doesn't check a cell you have only opened.** Its background checker re-checks the tiles
+you *edit*, and loading a `.mag` from disk doesn't edit anything, so a cell with real violations
+opens showing a green `☑ DRC` and no white hatching. Run `drc check` (or `Drc → DRC update`)
+every time you open a cell, before you believe what the DRC indicator says.
 
 ## Extraction
 
@@ -163,8 +166,10 @@ ext2spice -o my_inv.spice
 quit -noprompt
 ```
 
-This is the shape the lab scripts use. Run it with `magic -dnull -noconsole thatfile.tcl`. Put
-`cd` **before** `addpath`, because `addpath` stores what you typed and does not re-resolve it.
+The lab scripts follow this pattern, and you run one with `magic -dnull -noconsole thatfile.tcl`.
+Put `cd` **before** `addpath`, because `addpath` stores the path exactly as you typed it and
+doesn't re-resolve it, so a relative path like `../mag` given before a `cd` points at the wrong
+place afterwards.
 
 ## netgen (LVS)
 
@@ -176,7 +181,8 @@ netgen -batch lvs \
   report.txt
 ```
 
-Look for `Circuits match uniquely.` For anything else, read the report from the bottom.
+Look for `Circuits match uniquely.`, which means the layout and the schematic agree. If you get
+anything else, read the report from the bottom up.
 
 ## KLayout (viewing)
 

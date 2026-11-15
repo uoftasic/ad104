@@ -33,10 +33,10 @@ the foundry's inverter and one from yours, and measures them:
 
 | | period | frequency | one stage |
 |---|---|---|---|
-| the foundry's `inv_1` | 2137.8 ps | 467.8 MHz | **34.48 ps** |
-| your Lab 03 inverter | 2720.4 ps | 367.6 MHz | **43.88 ps** |
+| the foundry's `inv_1` | 2033.6 ps | 491.7 MHz | **32.80 ps** |
+| your Lab 03 inverter | 2640.2 ps | 378.8 MHz | **42.58 ps** |
 
-So **34 picoseconds** is the floor: the delay of one gate in SKY130 at 1.8 V driving nothing but a
+So **33 picoseconds** is the floor: the delay of one gate in SKY130 at 1.8 V driving nothing but a
 copy of itself. Every other delay on this page can be counted in multiples of it.
 
 ## A real path
@@ -106,7 +106,7 @@ You can attack every one of those terms, and every attack costs something you al
 | less self-load | pack the layout tighter | an afternoon of your time (Lab 05 measures what it buys) |
 | more headroom | pipeline it: cut the path with another flip-flop | latency, and a flip-flop's worth of area and power |
 
-Lab 05 measures the fourth row directly: in a ring, your loose inverter is 27 % slower than the
+Lab 05 measures the fourth row directly: in a ring, your loose inverter is 30 % slower than the
 foundry's, even though the transistors are identical.
 
 Because none of these moves is free, a synthesis and place-and-route tool has to choose among

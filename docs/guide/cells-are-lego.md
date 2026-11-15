@@ -19,14 +19,24 @@ getcell my_inv                    ;# drop a copy with its origin there
 identify inv2                     ;# give this copy a name
 ```
 
-`getcell` places an **instance**, which refers to `my_inv` rather than copying its geometry. The
-`.mag` file records the whole instance in three lines:
+`getcell` places an **instance**, which refers to `my_inv` rather than copying its geometry. If
+you run those four commands in a new cell, from a folder next to `mag/`, and save it, the `.mag`
+file records the whole instance in four lines:
 
 ```
 use my_inv  inv2 ../mag
+timestamp 1787733743
 transform 1 0 300 0 1 0
 box 0 0 300 600
 ```
+
+The `use` line names the cell, the instance and the folder to look for the cell in. The
+`timestamp` is a copy of the one at the top of `my_inv.mag`, `transform` puts the cell's origin at
+x = 300, which is 3 µm in this file's 0.01 µm units, and `box` is the outline of `my_inv` in its
+own coordinates. Magic writes the folder only on the first `use` of each cell in a file, so in
+Lab 04's `solutions/buf_ref.mag` the line for `inv1` ends in `../mag` and the line for `inv2`
+doesn't. When the cell is in the same folder as the file that uses it, as in Lab 04's
+`mag/my_buf.mag`, none of the `use` lines has a path.
 
 Because every instance refers back to `my_inv.mag`, editing that one file changes all of them.
 That's the reason to use instances, and it's also why Lab 04's blocks are only a few lines long.
@@ -106,9 +116,12 @@ section of its `.mag` file; the capstone has you do this.
 
 **3. The path recorded in the `.mag` file is relative to where you saved it.**
 
-`use my_inv inv2 ../mag` means "look in `../mag` from wherever you are". If you move the file, or
-run Magic from a different directory, Magic can't find the cell, and the instance shows up as an
-empty box with a name in it. The labs avoid this by always changing to a known directory first
+`use my_inv  inv2 ../mag` means "look in `../mag`, starting from the folder this `.mag` file is
+in", rather than from the folder you started Magic in. That's why you can load Lab 04's
+`solutions/buf_ref` from the lab folder and Magic still finds `my_inv` in the lab's `mag/`. If you
+move the file to a folder with no `../mag` next to it, though, Magic can't find the cell: it
+prints a `couldn't be read` error for `my_inv.mag`, and the instance shows up as an empty box with
+a name in it. The labs avoid this by always changing to a known directory first
 and setting `addpath` after that, and the order is worth copying in your own work: **`cd` first,
 `addpath` second.**
 

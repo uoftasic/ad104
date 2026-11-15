@@ -170,7 +170,8 @@ How does your block get pins of its own?
 
 2. Paint metal1 rails across the whole row and label them `VGND` and `VPWR`, so the supply labels
    sit on geometry that belongs to *this* cell. If you put the label on one of the standard
-   cells' own rails instead, it would belong to that cell rather than to your block.
+   cells' own rails instead, it would stay in your block but land on empty space, because the
+   rail under it is the standard cell's, and a label on space doesn't name any net.
 
 3. Turn the labels into ports. This is a separate step, and it's the one everybody skips:
 

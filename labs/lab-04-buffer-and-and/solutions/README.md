@@ -19,8 +19,10 @@ capstone does exactly that, and the reason is clear once you see how far its sig
 **2. The blocks paint their own rails over the row.** Each cell already has its own VGND and VPWR
 strip, and abutting the cells makes one continuous rail, so the extra `m1` rectangles at the top
 level are electrically redundant. They are there so that the *block* has a shape to hang a
-`VGND` label on. A label on a subcell's geometry belongs to the subcell, so without
-these rectangles the block would come out of extraction with no supply ports at all. If you want
+`VGND` label on. A label over a subcell's geometry stays in the block but lands on empty space
+(Magic moves it there, because the block has no shape of its own under it), and a label on space
+names no net, so without these rectangles the block would come out of extraction with no supply
+ports at all. If you want
 to see that failure, delete the buffer's two `p m1` rail lines in `tcl/compose.tcl`, then run
 `make ref` and `make refcheck`. The `buf_ref` row fails with
 `buf_ref has no port called VGND, VPWR. Its ports are: A X.`, and it's a good one to have met.

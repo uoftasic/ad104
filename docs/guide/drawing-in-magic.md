@@ -108,10 +108,12 @@ terminals. That second step is what makes the extracted netlist come out as
 adds labels ends with `port makeall`. If netgen ever says a cell's pin list is empty, a missing
 `port makeall` is the first thing to check.
 
-**A label lands on whatever geometry is under the box in the current cell.** If that shape
-belongs to a subcell, the label belongs to the subcell too, rather than to the cell you're
-drawing. That's why the blocks in Lab 04 and the capstone paint their own small patch of `li` or
-`m1` before labelling it.
+**A label always goes into the cell you're editing, on that cell's own geometry under the
+box.** If the only shape under the box belongs to a subcell, the label still lands in your cell,
+but on empty space: Magic prints `Moving label "A" from locali to space`, and a label on space
+isn't attached to any net, so it never becomes a pin on the extracted `.subckt` line. That's why
+the blocks in Lab 04 and the capstone paint their own small patch of `li` or `m1` before
+labelling it.
 
 ## The `.mag` file {#the-mag-file}
 

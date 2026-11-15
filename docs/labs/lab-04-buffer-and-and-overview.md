@@ -132,9 +132,11 @@ How do you give the block, rather than the cells inside it, its own pins?
    <details>
    <summary>Answer</summary>
 
-   **A label names the current cell only if it lands on geometry belonging to the current
-   cell.** The input pin you want to name belongs to `inv1`, so a label placed on it would belong
-   to `inv1` as well, rather than to `my_buf`.
+   **A label names a net only if it sits on a shape in the cell you're editing.** The input pin
+   you want to name is a shape inside `inv1`, so a label placed straight on it would stay in
+   `my_buf` with nothing of `my_buf`'s under it. Magic moves a label like that onto empty space
+   (`Moving label "A" from locali to space`), where it isn't attached to any net, and `my_buf`
+   would come out with no `A` port.
    Painting your own 0.25 µm patch on top of the pin (it's the same net, and electrically it adds
    nothing) gives the top cell a shape of its own to name. The scaffold's metal1 rails are there
    for the same reason: they give the `VGND` and `VPWR` labels top-cell geometry to sit on.
@@ -306,9 +308,10 @@ What happens to the block's supply ports if it has no rails of its own?
    <details>
    <summary>Answer</summary>
 
-   A label on a subcell's geometry belongs to the subcell. The only rail metal left belongs to
-   `inv1` and `inv2`, so the block has no shape of its own to hang `VGND` and `VPWR` on, and it
-   comes out of extraction with no supply ports at all.
+   The labels went with the rectangles, and the only rail metal left is inside `inv1` and
+   `inv2`. A label over that metal would stay in `my_buf` but land on empty space, as in Part 3,
+   so the block has no shape of its own to carry `VGND` and `VPWR`, and it comes out of
+   extraction with no supply ports at all.
 
    </details>
 

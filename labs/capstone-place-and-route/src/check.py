@@ -150,8 +150,10 @@ def main() -> int:
         if "pin matching" in verdict:
             problems.append(
                 "netgen matched the circuit and could not match the pins. Every one of\n"
-                "      CLK D A B Y VGND VPWR has to be a label on geometry that belongs to\n"
-                "      the top cell - a label on a subcell's rail belongs to the subcell."
+                "      CLK D A B Y VGND VPWR has to be a label on a shape painted in the top\n"
+                "      cell. A label over a standard cell's rail or pin stays in your block,\n"
+                "      but with no shape of your block's under it Magic moves it onto empty\n"
+                "      space, and a label on space names no net."
             )
         elif counts:
             problems.append(

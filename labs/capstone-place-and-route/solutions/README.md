@@ -26,8 +26,10 @@ cell.
 
 **4. The block paints its own metal1 rails over the whole row.** They are electrically redundant:
 the cells' own rails already abut into two continuous strips. They exist so that the *block* has
-geometry of its own to hang a `VGND` label on. A label on a subcell's rail belongs to the subcell,
-so without the block's own rails it would come out of extraction with no supply ports at all. To
+geometry of its own to hang a `VGND` label on. A label over a subcell's rail stays in the block
+but lands on empty space (Magic moves it there, because the block has no shape of its own under
+it), and a label on space names no net, so without the block's own rails it would come out of
+extraction with no supply ports at all. To
 see it, delete the two `p m1 -0.46 ...` rail lines in `tcl/route_ref.tcl`, then run `make ref`
 and `make refcheck`: the `ports` line drops to `CLK D A B Y`, and netgen reports
 `Top level cell failed pin matching` on a block that is otherwise perfect.

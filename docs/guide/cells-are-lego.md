@@ -91,11 +91,14 @@ AND gate has six transistors, and you don't draw any of them.
 
 ## Three common mistakes
 
-**1. A label on a subcell's geometry belongs to the subcell.**
+**1. A label over a subcell's geometry names nothing.**
 
 Say you place two cells and abut them, and the rails connect. Then you put the box over a rail
-and type `label VGND`. The rail is geometry inside `inv1`, so the label is attached to `inv1`
-too, and *your* cell comes out of extraction with no supply ports at all. Netgen then reports a
+and type `label VGND`. A label always goes into the cell you're editing, so it lands in your
+cell, but the rail under it is geometry inside `inv1` and your cell has nothing of its own
+there. So Magic puts the label on empty space (if you type `label VGND c m1`, it says so:
+`Moving label "VGND" from metal1 to space`), and a label on space isn't attached to any net.
+*Your* cell then comes out of extraction with no supply ports at all, and netgen reports a
 pin-matching failure on a block that is otherwise perfect.
 
 The fix is to give the top cell some geometry of its own to put the name on. Paint a metal1

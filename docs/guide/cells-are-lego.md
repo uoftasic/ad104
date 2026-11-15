@@ -5,7 +5,7 @@ After Lab 03 you have drawn an inverter. You are not going to draw a million of 
 From here on the work is **instancing**: placing copies of finished cells next to each other and
 wiring between them. The rest of a chip is built this way, and it is possible because the hard
 part, the transistors, is drawn once. You compose your first two blocks this way in
-[Lab 04](labs/lab-04-buffer-and-and-overview.md).
+[Lab 04](../labs/lab-04-buffer-and-and-overview.md).
 
 ## Placing an instance
 

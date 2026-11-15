@@ -9,12 +9,12 @@ Package: [`labs/lab-01-open-the-cell/`](https://github.com/uoftasic/ad104/tree/m
 
 ## Before you start
 
-- Read [Getting started](guide/getting-started.md),
-  [What a layout is](guide/what-a-layout-actually-is.md), [SiliWiz](guide/siliwiz.md) and
-  [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md).
+- Read [Getting started](../guide/getting-started.md),
+  [What a layout is](../guide/what-a-layout-actually-is.md), [SiliWiz](../guide/siliwiz.md) and
+  [Anatomy of a standard cell](../guide/anatomy-of-a-standard-cell.md).
 - Finish [IC101](https://uoftasic.com/ic101/): you need the `workspace` clone and the noVNC
   desktop.
-- Keep the [Magic cheat sheet](reference/magic-cheatsheet.md) open in another tab.
+- Keep the [Magic cheat sheet](../reference/magic-cheatsheet.md) open in another tab.
 - Have paper or a text file ready for the numbers you work out in Part 3.
 
 **Time:** about 1 hour 15 minutes, plus 20 minutes for the optional SiliWiz part. `make` itself
@@ -87,9 +87,9 @@ What is in the foundry's inverter, and what is missing from it?
    the cell loaded: `layout1`, which shows the drawing, and `tkcon`, a Tcl console where you type
    Magic commands. The terminal comes back to you while Magic stays open.
 
-2. Using [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) as a map, find the
+2. Using [Anatomy of a standard cell](../guide/anatomy-of-a-standard-cell.md) as a map, find the
    items below. The figure in
-   [What a layout is](guide/what-a-layout-actually-is.md#the-layers-bottom-to-top) shows which
+   [What a layout is](../guide/what-a-layout-actually-is.md#the-layers-bottom-to-top) shows which
    colour is which layer. To check a position or a size, put the cursor box on it (left-click its
    lower-left corner, right-click its upper-right) and type `box` in the console: it prints the
    box's width, height and corners in microns.
@@ -104,7 +104,7 @@ What is in the foundry's inverter, and what is missing from it?
 3. Now look for something that is *not* there: a well tap. A tap is a contacted strip of `ptap`
    or `ntap`, silicon doped the *same* type as the well under it and tied to a rail. Source and
    drain contacts don't count: their diffusion is the opposite type to the well.
-   ([What a layout is](guide/what-a-layout-actually-is.md#diffusion-as-a-wire-and-tying-the-wells)
+   ([What a layout is](../guide/what-a-layout-actually-is.md#diffusion-as-a-wire-and-tying-the-wells)
    explains what a tap is for.)
 
 **You should see** every item in step 2, and no tap anywhere in the cell. Leave Magic open for
@@ -136,10 +136,10 @@ any tool extracts it.
 
    `scnmos` is the NMOS and `scpmoshvt` the high-threshold PMOS. Each `rect` line is one rectangle,
    `x1 y1 x2 y2`, and it covers the patch of diffusion under the poly stripe: the channel
-   ([What a layout is](guide/what-a-layout-actually-is.md#where-the-transistor-is)).
+   ([What a layout is](../guide/what-a-layout-actually-is.md#where-the-transistor-is)).
 
 2. The header says `magscale 1 2`, so one unit is 0.005 µm
-   ([Drawing in Magic](guide/drawing-in-magic.md#the-mag-file)). For each rectangle, work out its
+   ([Drawing in Magic](../guide/drawing-in-magic.md#the-mag-file)). For each rectangle, work out its
    height and its width in µm, and write them down. The height is W and the width is L.
 
 **You should see** two `rect` lines, and four numbers in your notes: W and L for each transistor.
@@ -212,7 +212,7 @@ Do the tools measure the cell the way you did?
 
    All three come from one omission: the cell has no well tap, because the library puts taps in
    a separate cell.
-   [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md#why-the-cell-has-no-well-tap)
+   [Anatomy of a standard cell](../guide/anatomy-of-a-standard-cell.md#why-the-cell-has-no-well-tap)
    explains why. `make` prints the same explanation under the three rule names, where the output
    above shows `...`.
 
@@ -346,7 +346,7 @@ How does the library offer more drive strength for the same logic?
 
    Wider only. Every cell in the library is 2.72 µm tall, and each step up in drive strength is
    the same logic with wider transistors
-   ([Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md#drive-strength)), so the
+   ([Anatomy of a standard cell](../guide/anatomy-of-a-standard-cell.md#drive-strength)), so the
    extra area has to go sideways.
 
    </details>
@@ -357,7 +357,7 @@ How does the library offer more drive strength for the same logic?
 
 This part runs in your browser and needs no setup. It takes about twenty minutes.
 
-1. Open **<https://app.siliwiz.com/>**. [SiliWiz](guide/siliwiz.md) describes the interface.
+1. Open **<https://app.siliwiz.com/>**. [SiliWiz](../guide/siliwiz.md) describes the interface.
    Load the inverter from the **Preset** dropdown above the drawing area to see a finished
    example.
 2. Open **LESSONS** (top right) and do the *nmos* lesson. Drag the cross-section cut line with the
@@ -389,7 +389,7 @@ Questions:
 
 Submit: nothing for this lab.
 
-Next on the Course path: read [Drawing in Magic](guide/drawing-in-magic.md),
-[Reading DRC errors](guide/drc-is-a-conversation.md) and
-[The full DRC rule set](guide/the-rule-set-you-are-not-running.md), then do
-[Lab 02: Break it on purpose](labs/lab-02-break-it-on-purpose-overview.md).
+Next on the Course path: read [Drawing in Magic](../guide/drawing-in-magic.md),
+[Reading DRC errors](../guide/drc-is-a-conversation.md) and
+[The full DRC rule set](../guide/the-rule-set-you-are-not-running.md), then do
+[Lab 02: Break it on purpose](../labs/lab-02-break-it-on-purpose-overview.md).

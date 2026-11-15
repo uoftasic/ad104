@@ -117,7 +117,7 @@ writes both. Comparing a parasitic netlist against a schematic in netgen only pr
 ## What extraction does not know
 
 - **It does not know what you meant.** Checking that is LVS's job, on the
-  [next page](guide/lvs-asks-a-different-question.md).
+  [next page](../guide/lvs-asks-a-different-question.md).
 - **It does not model resistance by default.** `ext2spice` can extract resistors too, but the
   flow gets much slower and this course does not need it. Keep in mind that li is about
   12.8 Ω per square while metal1 is 0.125, so a long li wire is a real resistor that this

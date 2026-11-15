@@ -43,7 +43,7 @@ can have several, and netgen says so when it does.
 ### "Netlists match uniquely" with "failed pin matching"
 
 This is the confusing one, and
-[Lab 04](labs/lab-04-buffer-and-and-overview.md#part-6-meet-the-pin-swap-message) has you
+[Lab 04](../labs/lab-04-buffer-and-and-overview.md#part-6-meet-the-pin-swap-message) has you
 produce it on purpose with `make swapped`:
 
 ```
@@ -84,7 +84,7 @@ Something is missing. In this course it is almost always one of these:
   meant to touch. The layout then has one more net than the schematic, and one input floats.
 - **A missing label.** No label, no port, nothing to compare.
 - **A missing tap**, which turns the bulk terminals into invented nodes; see
-  [The full DRC rule set](guide/the-rule-set-you-are-not-running.md).
+  [The full DRC rule set](../guide/the-rule-set-you-are-not-running.md).
 - **The wrong device flavour**: `pfet_01v8` where the schematic says `pfet_01v8_hvt`. Netgen
   reports this as a device class with no partner.
 

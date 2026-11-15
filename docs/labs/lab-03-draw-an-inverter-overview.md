@@ -8,17 +8,17 @@ Package: [`labs/lab-03-draw-an-inverter/`](https://github.com/uoftasic/ad104/tre
 
 ## Before you start
 
-- Finish [Lab 02](labs/lab-02-break-it-on-purpose-overview.md).
-- Read [Stick diagrams](guide/stick-diagrams.md), [Extraction](guide/extraction-is-reverse-engineering.md)
-  and [Layout versus schematic (LVS)](guide/lvs-asks-a-different-question.md). You'll use
-  [Drawing in Magic](guide/drawing-in-magic.md) constantly.
+- Finish [Lab 02](../labs/lab-02-break-it-on-purpose-overview.md).
+- Read [Stick diagrams](../guide/stick-diagrams.md), [Extraction](../guide/extraction-is-reverse-engineering.md)
+  and [Layout versus schematic (LVS)](../guide/lvs-asks-a-different-question.md). You'll use
+  [Drawing in Magic](../guide/drawing-in-magic.md) constantly.
 - Have paper and a pen for Part 1.
 
 **Time:** about 3 hours. Each `make` takes about 1.1 s.
 
 **The sizes:** Wn = 0.65 µm, Wp = 1.00 µm, L = 0.15 µm. These are exactly
 `sky130_fd_sc_hd__inv_1`'s numbers, which you read in Lab 01. In
-[Lab 05](labs/lab-05-what-it-costs-overview.md) you put your cell next to the foundry's and
+[Lab 05](../labs/lab-05-what-it-costs-overview.md) you put your cell next to the foundry's and
 measure the difference, and keeping the transistors identical means **the only thing left to
 compare is the drawing**. L = 0.15 µm is the SKY130 minimum (`poly.1a`). Your cell will still be
 nearly five times the foundry's area, because area depends on packing, not on $L$.
@@ -27,7 +27,7 @@ nearly five times the foundry's area, because area depends on packing, not on $L
 
 What goes where, before any dimensions?
 
-1. Draw the inverter stick diagram from [Stick diagrams](guide/stick-diagrams.md) **from memory**,
+1. Draw the inverter stick diagram from [Stick diagrams](../guide/stick-diagrams.md) **from memory**,
    not copied: PMOS above, NMOS below, one vertical poly stripe crossing both.
 2. Mark **where the two well taps go** and which rail each one connects to. They are not in the
    guide page's sketch. Leaving them out is the most common bug in a first layout, and drawing
@@ -334,14 +334,14 @@ Where in your geometry do `w=0.65` and `w=1` come from?
    .ends
    ```
 
-   [Extraction](guide/extraction-is-reverse-engineering.md#reading-the-netlist) explains every
+   [Extraction](../guide/extraction-is-reverse-engineering.md#reading-the-netlist) explains every
    field. Your port order depends on the order you created the labels, so it may differ from the
    reference's.
 
 2. Open `mag/my_inv.mag` in a text editor and find the `<< ndiff >>` section. The file has no
    `magscale` line, so one unit is 0.01 µm, and the section's `rect` lines together span `40 130`
    to `260 195`: your 0.40 → 2.60 by 1.30 → 1.95 µm n-diffusion, split into tiles.
-   [Drawing in Magic](guide/drawing-in-magic.md#the-mag-file) explains the units.
+   [Drawing in Magic](../guide/drawing-in-magic.md#the-mag-file) explains the units.
 
 **You should see** `w=0.65` and `w=1`, both at `l=0.15`, and you should be able to point at the
 rectangle whose height is `w=0.65`.
@@ -369,5 +369,5 @@ After yours passes, compare it with the reference:
   [`solutions/README.md`](https://github.com/uoftasic/ad104/tree/main/labs/lab-03-draw-an-inverter/solutions)
   shows the 62 violations its first version had.
 
-Next on the Course path: read [Instances and hierarchy](guide/cells-are-lego.md), then do
-[Lab 04: A buffer and an AND gate](labs/lab-04-buffer-and-and-overview.md).
+Next on the Course path: read [Instances and hierarchy](../guide/cells-are-lego.md), then do
+[Lab 04: A buffer and an AND gate](../labs/lab-04-buffer-and-and-overview.md).

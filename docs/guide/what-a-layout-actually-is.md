@@ -88,4 +88,4 @@ a supply they float and the threshold voltages wander. At worst, the parasitic b
 structures present in every CMOS process latch up and short the supply to ground until you
 remove power. The `ptap` and `ntap` strips in the picture prevent that. They are the most
 commonly forgotten thing in a first layout, and the default design-rule check does not mention
-them; see [The full DRC rule set](guide/the-rule-set-you-are-not-running.md).
+them; see [The full DRC rule set](../guide/the-rule-set-you-are-not-running.md).

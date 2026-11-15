@@ -6,7 +6,7 @@ SiliWiz lets you paint layout layers and then shows you the **cross-section** of
 described, and simulates it. It is not the SKY130 process and it is not a production tool. It is
 the quickest way to turn "poly over diffusion makes a transistor" from a sentence you have read
 into something you have seen. You can spend twenty minutes in it in the optional last part of
-Lab 01, [Part 8](labs/lab-01-open-the-cell-overview.md#part-8-explore-siliwiz-optional).
+Lab 01, [Part 8](../labs/lab-01-open-the-cell-overview.md#part-8-explore-siliwiz-optional).
 
 ![SiliWiz with the inverter preset loaded](../assets/img/ad104-siliwiz.png)
 
@@ -33,7 +33,7 @@ It is a teaching model, and it helps to know where it is simplified:
   `polysilicon`, `metal1`, `metal2`, `p tap`, `n tap`), but the dimensions, the rules and the
   device models do not. Do not carry a number from SiliWiz into Magic.
 - **It has no LVS.** Nothing checks that what you drew is what you meant, and that turns out to
-  be the harder half; see [Layout versus schematic (LVS)](guide/lvs-asks-a-different-question.md).
+  be the harder half; see [Layout versus schematic (LVS)](../guide/lvs-asks-a-different-question.md).
 - **The cross-section is schematic.** Real doping profiles are gradients, not the flat-topped
   blocks in the picture.
 

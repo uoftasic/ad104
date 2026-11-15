@@ -28,7 +28,7 @@ can measure that directly with a **ring oscillator**, an odd number of inverters
 loop cannot settle: whatever value it holds, it contradicts itself one lap later, so it
 oscillates, with a period of $2 N t_p$.
 
-[Lab 05](labs/lab-05-what-it-costs-overview.md) builds two 31-stage rings out of extracted
+[Lab 05](../labs/lab-05-what-it-costs-overview.md) builds two 31-stage rings out of extracted
 layouts:
 
 | | period | frequency | one stage |

@@ -1,9 +1,10 @@
-# Lab 03 — Draw an inverter
+# Lab 03: Draw an inverter
 
 Writeup: [uoftasic.com/ad104 → Lab 03](https://uoftasic.com/ad104/labs/lab-03-draw-an-inverter-overview.html)
 
 You draw a CMOS inverter in Magic, starting from a frame that already has the wells, rails and
-taps, until it is DRC clean under both rule sets and netgen matches it to the schematic.
+taps, and keep going until the cell is DRC clean under both rule sets and netgen matches it to the
+schematic.
 
 ## Run it
 
@@ -14,8 +15,8 @@ make edit         # open it in Magic
 make              # check what you have, about 1.1 s
 ```
 
-`make` reports in words what it found and what to fix next. Save in Magic before every `make`:
-the checker reads `mag/my_inv.mag` from disk.
+`make` tells you in words what it found and what to fix next. Save in Magic before every `make`,
+because the checker reads `mag/my_inv.mag` from disk and never sees edits you haven't saved.
 
 ## Targets
 
@@ -37,5 +38,7 @@ the checker reads `mag/my_inv.mag` from disk.
 | `tcl/frame.tcl` | the frame: wells, rails, taps. What `make scaffold` runs. |
 | `tcl/inverter.tcl` | the reference cell, drawn command by command with the reason for every number. Read it after yours passes. |
 | `tcl/verify.tcl` | DRC, extract and PEX-extract whatever is in `mag/` |
+| `tcl/verify_ref.tcl` | the same checks on `solutions/inv_ref.mag`, for `make refcheck` |
+| `src/check.py` | reads the Magic and netgen reports and prints the verdict |
 | `spice/my_inv_sch.spice` | the schematic side of LVS |
 | `solutions/inv_ref.mag` | the finished reference. Open it after yours works. |

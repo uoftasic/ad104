@@ -21,8 +21,12 @@ strip, and abutting the cells makes one continuous rail, so the extra `m1` recta
 level are electrically redundant. They are there so that the *block* has a shape to hang a
 `VGND` label on. A label on a subcell's geometry belongs to the subcell, so without
 these rectangles the block would come out of extraction with no supply ports at all. If you want
-to see that failure, delete those two lines and re-run `make`; it's a good
-one to have met.
+to see that failure, delete the buffer's two `p m1` rail lines in `tcl/compose.tcl`, then run
+`make ref` and `make refcheck`. The `buf_ref` row fails with
+`buf_ref has no port called VGND, VPWR. Its ports are: A X.`, and it's a good one to have met.
+`git checkout tcl/compose.tcl solutions/` puts everything back. (Plain `make` checks only your
+own `mag/my_buf.mag` and `mag/my_and2.mag`, so it wouldn't show the change; Part 7 of the lab
+does the same thing to your own buffer.)
 
 **3. The label patches on A, B and X exist for the same reason.** They are 0.25 µm squares of `li`
 painted on top of pins that are already there. They add nothing electrically and are there only

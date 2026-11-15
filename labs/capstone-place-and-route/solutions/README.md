@@ -27,8 +27,11 @@ cell.
 **4. The block paints its own metal1 rails over the whole row.** They are electrically redundant:
 the cells' own rails already abut into two continuous strips. They exist so that the *block* has
 geometry of its own to hang a `VGND` label on. A label on a subcell's rail belongs to the subcell,
-so without the block's own rails it would come out of extraction with no supply ports at all. Delete those two lines
-and re-run: netgen reports a pin-matching failure on a block that is otherwise perfect.
+so without the block's own rails it would come out of extraction with no supply ports at all. To
+see it, delete the two `p m1 -0.46 ...` rail lines in `tcl/route_ref.tcl`, then run `make ref`
+and `make refcheck`: the `ports` line drops to `CLK D A B Y`, and netgen reports
+`Top level cell failed pin matching` on a block that is otherwise perfect.
+`git checkout tcl/route_ref.tcl solutions/` puts everything back.
 
 **5. Two tap cells, one at each end, and none in the middle.** `LU.2` and `LU.3` ask for a tap
 within 15 µm of every diffusion. The row is 14.26 µm wide, so two at the ends is comfortable, and

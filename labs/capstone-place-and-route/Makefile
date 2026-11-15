@@ -1,6 +1,6 @@
 # AD104 Capstone - place and route it yourself
 #
-#   make           DRC both ways, LVS, then time the path            (~1 min)
+#   make           DRC both ways, LVS, then time the path            (~15 s)
 #   make layout    just the DRC and LVS part                          (~1.4 s)
 #   make edit      open mag/datapath.mag in Magic
 #   make scaffold  throw your routing away, back to four placed cells

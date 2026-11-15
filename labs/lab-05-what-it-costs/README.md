@@ -13,8 +13,8 @@ cd labs/lab-05-what-it-costs
 make
 ```
 
-A clean run takes two to three minutes (114 s and 182 s on the two we timed), and nearly all of
-that time goes into simulating the two 31-stage ring oscillators.
+A clean run takes about half a minute (27 to 39 s on the seven we timed), and nearly all of that
+time goes into the two ngspice runs: the fan-out deck and the two 31-stage ring oscillators.
 
 By default it compares the reference Lab 03 inverter, in `mag/my_inv.mag`, with the foundry's.
 To compare your own cell instead, copy it in with `make mine` and then run `make`:
@@ -34,7 +34,7 @@ than assuming one. `git checkout mag/my_inv.mag` puts the reference cell back.
 |---|---|
 | `make` | extract both cells with parasitics, simulate both, print the table |
 | `make mine MAG=...` | copy your own Lab 03 cell in and compare that |
-| `make pex` | just the extraction, about 4 s |
+| `make pex` | just the extraction, well under a second |
 | `make caps` | both parasitic netlists, side by side |
 | `make table` | re-print from results already on disk, instantly |
 | `make clean` | delete `results/` |

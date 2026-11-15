@@ -1,6 +1,6 @@
 # AD104 Lab 05 - what your drawing costs
 #
-#   make          extract both cells with parasitics and compare them  (~2 min)
+#   make          extract both cells with parasitics and compare them  (~30 s)
 #   make mine MAG=../lab-03-draw-an-inverter/mag/my_inv.mag
 #                 copy YOUR Lab 03 cell in and compare that instead
 #   make pex      just the extraction

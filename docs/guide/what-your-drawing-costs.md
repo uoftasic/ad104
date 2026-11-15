@@ -117,4 +117,4 @@ a price on that choice. These are the points to take away:
    schematic is decided by the layout.
 2. **The cost of a loose layout is small per gate and very large per chip.**
 3. **You can measure it.** Measuring the gap between your cell and the foundry's takes one `make`
-   and two to three minutes, so you don't have to argue about it.
+   and about half a minute, so you don't have to argue about it.

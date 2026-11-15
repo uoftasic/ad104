@@ -21,7 +21,7 @@ cd labs/capstone-place-and-route
 make scaffold     # four cells placed, nothing wired
 make edit
 make layout       # DRC + LVS only, about 1.4 s
-make              # ...and the timing, about a minute
+make              # ...and the timing, about 15 s
 ```
 
 `spice/datapath_sch.spice` includes the cell library's own SPICE by absolute path

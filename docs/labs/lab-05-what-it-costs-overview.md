@@ -14,11 +14,11 @@ Package: [`labs/lab-05-what-it-costs/`](https://github.com/uoftasic/ad104/tree/m
   [Extraction](../guide/extraction-is-reverse-engineering.md).
 - Have paper or a text file ready for the numbers you work out in Parts 1 and 5.
 
-**Time:** about 1 hour, not counting the optional Part 6. Each full `make` takes two to three
-minutes (114 s and 182 s on two timed clean runs, depending on what else the machine is doing).
-Nearly all of that time goes on the two ring oscillators, which between them have 62 extracted
-subcircuits to simulate for 20 ns of transient, with ngspice reading the whole SKY130 model
-library twice.
+**Time:** about 1 hour, not counting the optional Part 6. Each full `make` takes about half a
+minute (27 to 39 s on seven timed clean runs, depending on what else the machine is doing).
+Nearly all of that time goes on the two ngspice runs, about 13 s for the fan-out deck and 15 s
+for the two ring oscillators, which between them have 62 extracted subcircuits to simulate for
+20 ns of transient. Each run starts by reading the whole SKY130 model library.
 
 ## Part 1: Predict the price
 
@@ -240,7 +240,7 @@ Submit: nothing for this lab.
 ## Going further (optional)
 
 `make table` prints the comparison again from the results already on disk, so it returns
-instantly. `make pex` runs only the extraction, which takes about 4 s.
+instantly. `make pex` runs only the extraction, which takes well under a second.
 
 Next on the Course path: read [Routing by hand](../guide/routing-by-hand.md) and
 [What sets the clock frequency](../guide/why-the-clock-cannot-go-faster.md), then do the

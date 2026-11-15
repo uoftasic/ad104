@@ -189,9 +189,10 @@ How does your block get pins of its own?
 4. Run `make layout`:
 
    ```
+         ports                  CLK D A B Y VGND VPWR
          DRC, default rule set  0
          DRC, full rule set     32
-         LVS                    Top level cell failed pin matching
+         LVS                    Netlists do not match
 
          rules broken:
            All nwells must contain metal-connected N+ taps (nwell.4)
@@ -200,7 +201,8 @@ How does your block get pins of its own?
    ```
 
 **You should see** `ports` listing `CLK D A B Y VGND VPWR`, default DRC at 0, and the full rule
-set still at 32.
+set still at 32. LVS has moved on from `failed pin matching` to `Netlists do not match`: the
+block's pins are all there now, and the taps you add in Part 5 fix the rest.
 
 ## Part 5: Add the tap cells
 
@@ -218,7 +220,7 @@ in Lab 01 on the foundry's own inverter.
    ```
 
    ```spice
-   Xbuf0 buf0/A dff0/VGND VSUBS dff0/VPB dff0/VPWR Y sky130_fd_sc_hd__buf_1
+   Xbuf0 buf0/A VGND VSUBS dff0/VPB VPWR Y sky130_fd_sc_hd__buf_1
    ```
 
    `VSUBS` and `dff0/VPB` are invented node names, given to bodies that aren't connected to

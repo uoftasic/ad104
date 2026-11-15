@@ -1,6 +1,6 @@
 # Area, parasitics and delay
 
-This page explains the experiment that the whole course is built around.
+This page explains the experiment that Lab 03's transistor sizes were chosen for.
 
 Take **the same two transistors**, with the same width, the same length and the same device
 flavours, right down to the model name, and draw them twice: once the way the foundry did, packed

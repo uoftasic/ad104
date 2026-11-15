@@ -111,9 +111,11 @@ def main() -> int:
             problems.append(
                 f"{c} has no port called {', '.join(missing)}. Its ports are: "
                 f"{' '.join(ports(c)) or '(none)'}.\n"
-                "      A label lands on geometry belonging to the CURRENT cell, so a label\n"
-                "      dropped on a subcell's pin belongs to the subcell. Paint your own\n"
-                "      small patch of li over the pin - same net, electrically nothing -\n"
+                "      A label goes into the cell you are editing, so one put over a\n"
+                "      subcell's pin stays in this block - but this block has no shape of\n"
+                "      its own under it, so Magic moves the label onto empty space (\"Moving\n"
+                "      label ... to space\"), and a label on space names no net. Paint your\n"
+                "      own small patch of li over the pin - same net, electrically nothing -\n"
                 "      and label that."
             )
         if fast.get(c, 1) or full.get(c, 1):

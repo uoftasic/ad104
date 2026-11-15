@@ -18,7 +18,7 @@ Package: [`labs/capstone-place-and-route/`](https://github.com/uoftasic/ad104/tr
 
 **Time:** about 3 hours, and about half of that goes on routing. `make layout` runs only DRC and
 LVS and takes about 1.4 s, so it's the one to use while you route. The full `make` adds the
-timing simulation and takes about a minute.
+timing simulation and takes about 15 seconds (12.6 to 15.6 s on four timed clean runs).
 
 The circuit:
 

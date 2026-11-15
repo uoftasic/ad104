@@ -1,6 +1,6 @@
 # AD104 Lab 04 - a buffer and an AND gate, out of cells you drew
 #
-#   make           DRC + LVS both blocks, then simulate the AND    (~1 min)
+#   make           DRC + LVS both blocks, then simulate the AND    (~15 s)
 #   make layout    just the DRC and LVS part
 #   make edit CELL=my_buf     open a block in Magic
 #   make cells     rebuild mag/my_inv.mag and mag/my_nand2.mag

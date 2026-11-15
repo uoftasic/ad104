@@ -44,9 +44,10 @@ Every field in it comes from something you drew:
 | `pd=3.5` | the perimeter of the drain diffusion, in µm |
 | `sky130_fd_pr__pfet_01v8_hvt` | the device flavour, decided by which implant layer you painted |
 
-`ad` and `pd` are easy to skim past, and they matter a great deal. Every square micron
-of drain diffusion is a reverse-biased junction to the well, and a reverse-biased junction is a
-capacitor, so the more drain area you draw, the more capacitance sits on the drain. Your
+`ad` and `pd` are easy to skim past, and they matter a great deal. Every square micron of drain
+diffusion is a reverse-biased junction to the body (the p-substrate under the NMOS, the n-well
+under the PMOS), and a reverse-biased junction is a capacitor, so the more drain area you draw,
+the more capacitance sits on the drain. Your
 inverter's drain area is **4.2 times** the foundry's, and Lab 05 measures what that costs.
 
 ## Node names you did not choose

@@ -2,8 +2,9 @@
 
 You'll load this course into the workbench, open the foundry's own inverter,
 `sky130_fd_sc_hd__inv_1`, in Magic, and measure its two transistors from the layout file. Then
-you get four checks to agree about it: DRC under two rule sets, extraction, and LVS. If they
-agree, your toolchain works, and every problem after this lab is a drawing problem.
+you'll run four checks on the same cell (DRC under two rule sets, extraction, and LVS) and get
+them to agree about it. If they do, you know your toolchain works, so any problem you run into
+after this lab is a problem in your drawing.
 
 Package: [`labs/lab-01-open-the-cell/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-01-open-the-cell)
 
@@ -28,18 +29,18 @@ If you haven't set up the workbench yet, do
 1. Start the noVNC desktop the way IC101 showed you, and open a terminal on it. Type every
    command in this lab in that terminal, not on your laptop.
 
-2. Load the course environment and check the PDK. Load it in every new terminal; it does not
-   carry over.
+2. Load the course environment and check the PDK. The setting lasts only as long as the
+   terminal you load it in, so you'll need to load it again in every new terminal you open.
 
    ```bash
    . /foss/designs/common/.designinit
    echo $PDK
    ```
 
-   `echo $PDK` must print `sky130A`. If it prints `ihp-sg13g2`, the image's default, the first
-   line did not run in this terminal.
+   `echo $PDK` must print `sky130A`. If it prints `ihp-sg13g2`, which is the image's default,
+   the first line didn't run in this terminal.
 
-3. Get the course files. `mod` is a command that `.designinit` defines.
+3. Get the course files with `mod`, a command that `.designinit` defines.
 
    ```bash
    mod add ad104     # first time only
@@ -60,12 +61,12 @@ If you haven't set up the workbench yet, do
    ** ngspice-47 : Circuit level simulation program
    ```
 
-   With a different version, your outputs may not match the ones printed in these labs.
+   If you have a different version, your outputs may not match the ones printed in these labs.
 
 | What you see | What it means |
 |---|---|
-| `.designinit: No such file or directory` | The workspace isn't set up: do IC101 Lab 03. You can still run `make` in any lab, because every lab package pins its own PDK. |
-| `couldn't read Username for 'https://github.com'` on `mod add ad104` | The repo did not answer anonymously. That is our problem, not yours; say so in [Discord](https://discord.gg/hrJnP5UsGz). |
+| `.designinit: No such file or directory` | The workspace isn't set up, so do IC101 Lab 03. Until then you can still run `make` in any lab, because every lab package pins its own PDK. |
+| `couldn't read Username for 'https://github.com'` on `mod add ad104` | The repo didn't answer an anonymous request. That's a problem on our side rather than anything you did, so please tell us in [Discord](https://discord.gg/hrJnP5UsGz). |
 
 For anything else, see IC101's [Troubleshooting](https://uoftasic.com/ic101/reference/troubleshooting.html)
 page.
@@ -83,37 +84,39 @@ What is in the foundry's inverter, and what is missing from it?
    make gui
    ```
 
-   (`make edit` does the same, and is the name every other lab uses.) Magic opens two windows with
-   the cell loaded: `layout1`, which shows the drawing, and `tkcon`, a Tcl console where you type
-   Magic commands. The terminal comes back to you while Magic stays open.
+   (`make edit` does the same thing, and it's the name every other lab uses.) Magic opens two
+   windows with the cell loaded: `layout1`, which shows the drawing, and `tkcon`, a Tcl console
+   where you type Magic commands. You get the terminal back while Magic stays open, so you can
+   keep using both.
 
 2. Using [Anatomy of a standard cell](../guide/anatomy-of-a-standard-cell.md) as a map, find the
    items below. The figure in
    [What a layout is](../guide/what-a-layout-actually-is.md#the-layers-bottom-to-top) shows which
    colour is which layer. To check a position or a size, put the cursor box on it (left-click its
-   lower-left corner, right-click its upper-right) and type `box` in the console: it prints the
-   box's width, height and corners in microns.
+   lower-left corner, right-click its upper-right) and type `box` in the console, which prints
+   the box's width, height and corners in microns.
 
    - the n-well across the top, and the p-diffusion inside it
    - the n-diffusion in the bottom half
-   - the **single** poly stripe crossing both, which is why the two gates are connected without a
-     wire
+   - the one poly stripe that crosses both diffusions, which is why the two gates are connected
+     without a wire
    - the two metal1 rails, straddling y = 0 and y = 2.72
-   - the contacts, every one of them 0.17 µm square
+   - the contacts, each of which is 0.17 µm square
 
-3. Now look for something that is *not* there: a well tap. A tap is a contacted strip of `ptap`
-   or `ntap`, silicon doped the *same* type as the well under it and tied to a rail. Source and
-   drain contacts don't count: their diffusion is the opposite type to the well.
+3. Now look for something the cell doesn't have, a well tap. A tap is a contacted strip of
+   `ptap` or `ntap`, which is silicon doped the *same* type as the well under it and tied to a
+   rail. Source and drain contacts don't count as taps, because their diffusion is the opposite
+   type to the well.
    ([What a layout is](../guide/what-a-layout-actually-is.md#diffusion-as-a-wire-and-tying-the-wells)
    explains what a tap is for.)
 
-**You should see** every item in step 2, and no tap anywhere in the cell. Leave Magic open for
-Part 6.
+**You should see** every item in step 2, and no tap anywhere in the cell. Leave Magic open,
+because you'll use it again in Part 6.
 
 ## Part 3: Measure the transistors
 
-How wide and how long are the two transistors? You can work it out from the layout file before
-any tool extracts it.
+How wide and how long are the two transistors? You can work this out yourself from the layout
+file, before any tool extracts it for you.
 
 1. In the terminal, print the file's header and its two transistor layers:
 
@@ -134,16 +137,18 @@ any tool extracts it.
    rect 120 297 150 497
    ```
 
-   `scnmos` is the NMOS and `scpmoshvt` the high-threshold PMOS. Each `rect` line is one rectangle,
-   `x1 y1 x2 y2`, and it covers the patch of diffusion under the poly stripe: the channel
+   `scnmos` is the NMOS and `scpmoshvt` the high-threshold PMOS. Each `rect` line is one
+   rectangle, given as `x1 y1 x2 y2`, and it covers the patch of diffusion under the poly stripe,
+   which is the transistor's channel
    ([What a layout is](../guide/what-a-layout-actually-is.md#where-the-transistor-is)).
 
-2. The header says `magscale 1 2`, so one unit is 0.005 µm
+2. The header says `magscale 1 2`, so one unit in the file is 0.005 µm
    ([Drawing in Magic](../guide/drawing-in-magic.md#the-mag-file)). For each rectangle, work out its
-   height and its width in µm, and write them down. The height is W and the width is L.
+   height and its width in µm, and write them down. The height is the transistor's W and the
+   width is its L.
 
 **You should see** two `rect` lines, and four numbers in your notes: W and L for each transistor.
-Part 4 checks them.
+Part 4 checks them against what the tools measure.
 
 ## Part 4: Run the check
 
@@ -196,25 +201,25 @@ Do the tools measure the cell the way you did?
    | What you see | What it means |
    |---|---|
    | `DRC violations, default style` is not 0 | The technology did not load. Check that `$PDK_ROOT` points at the PDKs (`/foss/pdks` in the workbench image) and that `.magicrc` is in the folder you ran `make` from. |
-   | `results/report.txt is missing` | Magic did not finish. Read `results/magic.log`. |
+   | `results/report.txt is missing` | Magic didn't finish, so read `results/magic.log`. |
    | `LVS: netgen wrote no report` | Read `results/netgen.log`. The cause is usually `$PDK_ROOT` again. |
-   | `magic: command not found` | You are not in the workbench container. |
+   | `magic: command not found` | You're not in the workbench container. |
 
 2. Compare the two transistor lines with the W and L you wrote down in Part 3.
 
-3. Look at the full-rule-set count. The foundry's own cell fails the full rule set, and that is
-   the expected answer. (Magic calls a rule set a DRC *style*, which is why the output says
-   `default style` and `full style`.) Why does the full rule set find three violations in a cell
-   that has been taped out hundreds of times?
+3. Look at the count under the full rule set. The foundry's own cell fails the full rule set,
+   and that's the answer we expect. (Magic calls a rule set a DRC *style*, which is why the
+   output says `default style` and `full style`.) Why does the full rule set find three
+   violations in a cell that has been taped out hundreds of times?
 
    <details>
    <summary>Answer</summary>
 
-   All three come from one omission: the cell has no well tap, because the library puts taps in
-   a separate cell.
+   All three come from the same omission. The cell has no well tap, because the library puts
+   its taps in a separate cell, and
    [Anatomy of a standard cell](../guide/anatomy-of-a-standard-cell.md#why-the-cell-has-no-well-tap)
-   explains why. `make` prints the same explanation under the three rule names, where the output
-   above shows `...`.
+   explains why it's done that way. `make` prints the same explanation under the three rule
+   names, where the output above shows `...`.
 
    </details>
 
@@ -240,23 +245,23 @@ What circuit did Magic pull out of the geometry?
    .ends
    ```
 
-2. Count the ports: there are six. `A` and `Y` are the input and output, and `VPWR` and `VGND`
-   the supplies. What are `VNB` and `VPB`, and why are they pins?
+2. Count the ports; there are six. `A` and `Y` are the input and output, and `VPWR` and `VGND`
+   are the supplies. What are `VNB` and `VPB`, and why are they pins?
 
    <details>
    <summary>Answer</summary>
 
-   They are the bulk terminals: the fourth terminal on each device line. `VNB` is the NMOS body
+   They're the bulk terminals, the fourth terminal on each device line. `VNB` is the NMOS body
    (the p-substrate) and `VPB` the PMOS body (the n-well). The cell exposes them as pins because
-   it does not tie them to anything itself: it has no well tap, as you found in Part 2.
+   it doesn't tie them to anything itself, since it has no well tap, as you found in Part 2.
 
    </details>
 
-3. Find `w=0.65` and `w=1`. Nobody typed those numbers: Magic measured the same two rectangles
-   you measured in Part 3.
+3. Find `w=0.65` and `w=1`. Nobody typed those numbers in; Magic got them by measuring the same
+   two rectangles you measured in Part 3.
 
-4. Find `pfet_01v8_hvt`. The PMOS is the high-threshold flavour, and you'll need to remember that
-   in Lab 03.
+4. Find `pfet_01v8_hvt`. It tells you the PMOS is the high-threshold flavour, which you'll need
+   to remember in Lab 03.
 
 **You should see** two devices, six ports, and `w=0.65 l=0.15` on the NMOS.
 
@@ -264,9 +269,9 @@ What circuit did Magic pull out of the geometry?
 
 Which commands does Magic run for `make`, and which of them are easy to get wrong?
 
-Everything Magic did for `make` in Part 4 is a short list of commands you can type yourself.
-This is the flow for every remaining lab in the course, and it is worth running once with your
-own fingers.
+Everything Magic did for `make` in Part 4 comes down to a short list of commands that you can
+type yourself. Every remaining lab in the course uses this same flow, so it's worth running it
+once with your own fingers.
 
 1. In the `tkcon` console (the Tcl console window that opened with Magic in Part 2), type these
    one at a time:
@@ -288,9 +293,9 @@ own fingers.
    ext2spice -o /tmp/inv.spice
    ```
 
-2. Watch the count change when the rule set does: the first `drc count total` prints
-   `Total DRC errors found: 0`, and the second prints `Total DRC errors found: 3`. `drc why` then
-   names the three rules.
+2. Watch the count change when you switch rule sets. The first `drc count total` prints
+   `Total DRC errors found: 0`, the second prints `Total DRC errors found: 3`, and `drc why`
+   then names the three rules.
 
 3. The last line wrote the extracted netlist to `/tmp/inv.spice`. In the terminal, compare it with
    the one `make` wrote:
@@ -301,21 +306,22 @@ own fingers.
 
    `diff` prints nothing when the files are the same.
 
-Three of those lines are easy to leave out:
+Three of those lines are easy to leave out or get wrong:
 
-- **`select top cell`**: `drc why` only reports on what is inside the cursor box, and a freshly
-  opened cell has no box worth speaking of. Without it you get `No errors found.` on a cell with
-  three violations.
-- **`drc catchup`**: `drc check` queues the re-check, and `drc catchup` waits for it to finish.
-  Count too early and you count nothing.
+- **`select top cell`**: `drc why` reports only on what's inside the cursor box, and a freshly
+  opened cell has no box worth speaking of. If you skip this line, `drc why` tells you
+  `No errors found.` on a cell that has three violations.
+- **`drc catchup`**: `drc check` only queues the re-check, and `drc catchup` waits for it to
+  finish. If you count before it finishes, the check hasn't found anything yet, so there's
+  nothing to count.
 - **`drc count total`**, not `drc count`. Plain `drc count` prints two lines,
   `Cell sky130_fd_sc_hd__inv_1 has 3 error tiles.` and then `Total DRC errors found: 0`. That
-  second line has the same label as `drc count total`'s output but counts something else: the
-  *hierarchical* total across subcells, which is always 0 on a flat cell. So if you read the last
-  line of `drc count`, the number never seems to change.
+  second line has the same label as the output of `drc count total`, but it counts something
+  else: the *hierarchical* total across subcells, which is always 0 on a flat cell. So if you
+  read the last line of `drc count`, the number never seems to change.
 
 **You should see** `0`, then `3`, then the same three rule names as in Part 4, and no output from
-`diff`: typed by hand, the flow gives the same netlist as `make`.
+`diff`, which means the flow you typed by hand gave the same netlist as `make`.
 
 ## Part 7: Browse the library
 
@@ -329,23 +335,24 @@ How does the library offer more drive strength for the same logic?
    ```
 
    The first prints `446`. The second lists seven inverters: `inv_1`, `inv_2`, `inv_4`, `inv_6`,
-   `inv_8`, `inv_12` and `inv_16`. They are the same logic with increasing drive strength.
+   `inv_8`, `inv_12` and `inv_16`. They all have the same logic, and the drive strength goes up
+   from each one to the next.
 
-2. Open the whole library GDS in KLayout, a much better viewer than Magic. `make klayout` starts
-   it in viewer mode, where it cannot edit anything, so it is safe to browse:
+2. Open the whole library GDS in KLayout, which is a much better viewer than Magic. `make klayout`
+   starts it in viewer mode, where it can't edit anything, so you can browse safely:
 
    ```bash
    make klayout
    ```
 
-3. Before you look, predict: is `inv_8` taller than `inv_1`, wider, or both? Then open `inv_8`
-   next to `inv_1` and see where the factor of eight went.
+3. Before you look, write down a prediction: is `inv_8` taller than `inv_1`, wider, or both?
+   Then open `inv_8` next to `inv_1` and see where the factor of eight went.
 
    <details>
    <summary>Answer</summary>
 
-   Wider only. Every cell in the library is 2.72 µm tall, and each step up in drive strength is
-   the same logic with wider transistors
+   It's only wider. Every cell in the library is 2.72 µm tall, and each step up in drive
+   strength is the same logic with wider transistors
    ([Anatomy of a standard cell](../guide/anatomy-of-a-standard-cell.md#drive-strength)), so the
    extra area has to go sideways.
 
@@ -363,14 +370,14 @@ This part runs in your browser and needs no setup. It takes about twenty minutes
 2. Open **LESSONS** (top right) and do the *nmos* lesson. Drag the cross-section cut line with the
    blue slider so that it passes through the middle of the poly stripe, and look at the
    cross-section: substrate, a thin oxide, poly on top, and doped regions on either side.
-3. Drag the cut so that it misses the poly. The cross-section becomes two doped regions with
-   nothing joining them. **The transistor exists only where the poly crosses.**
+3. Now drag the cut so that it misses the poly. The cross-section becomes two doped regions with
+   nothing joining them, because the transistor exists only where the poly crosses.
 4. Move a contact until it hangs off the edge of the diffusion it sits on, and open the
-   **CROSS SECTION & DRC** tab. SiliWiz's rules are not SKY130's, but the shape of the
-   complaint, "this thing does not surround that thing by enough", is the shape of half the
-   errors you'll fix in Lab 02.
+   **CROSS SECTION & DRC** tab. SiliWiz's rules aren't SKY130's, but its complaint, "this thing
+   does not surround that thing by enough", has the same shape as half the errors you'll fix in
+   Lab 02.
 5. Do the *parasitics* lesson. Stretch a metal wire longer and watch what happens to the
-   simulated waveform. That is the argument of Lab 05, in two minutes.
+   simulated waveform. That's the argument of Lab 05, made in two minutes.
 
 **You should see** the transistor appear and disappear in the cross-section as the cut moves on
 and off the poly, and a DRC complaint as soon as the contact leaves its diffusion.

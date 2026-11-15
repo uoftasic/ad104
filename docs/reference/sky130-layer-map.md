@@ -1,17 +1,18 @@
 # SKY130 layer map
 
-The layers this course uses, bottom to top, with the three names each one has: what you type in
-Magic, what the GDS calls it, and what it is physically.
+This page lists the layers this course uses, from the bottom of the stack to the top. For each
+one it gives the name you type in Magic, the number the GDS file uses, and what the layer
+physically is.
 
-The GDS numbers are `layer/datatype`. They come from the `calma` lines in
-`$PDK_ROOT/sky130A/libs.tech/magic/sky130A.tech`, and they are what you see in KLayout's layer
-panel. The sheet resistances are the `resist` lines in the same file, converted from milliohms to
+The GDS numbers are written as `layer/datatype`. They come from the `calma` lines in
+`$PDK_ROOT/sky130A/libs.tech/magic/sky130A.tech`, and they're the numbers you see in KLayout's
+layer panel. The sheet resistances are the `resist` lines in the same file, converted from milliohms to
 ohms per square.
 
 | Magic | GDS | Physically | Sheet R |
 |---|---|---|---|
 | `nwell` | 64/20 | an n-type tub in the p-substrate | 950 Ω/□ |
-| `pwell` | 64/44 (marker) | the p-substrate. SKY130 has no p-well mask; Magic draws one as a marker so it can reason about the body, and it does not become a real layer. | 4400 Ω/□ |
+| `pwell` | 64/44 (marker) | the p-substrate itself. SKY130 has no p-well mask, so Magic draws a p-well only as a marker that lets it reason about the body, and the marker doesn't become a real layer. | 4400 Ω/□ |
 | `ndiff` | 65/20 + 93/44 | n+ silicon at the surface | 120 Ω/□ |
 | `pdiff` | 65/20 + 94/20 | p+ silicon at the surface | 197 Ω/□ |
 | `ntap` | 65/44 + 93/44 | n+ silicon **inside the n-well**: a handle on the well | 120 Ω/□ |
@@ -29,23 +30,26 @@ ohms per square.
 
 ## Reading the table
 
-**Diffusion and tap are the same GDS layer.** `diff` is 65/20 and `tap` is 65/44: the same mask
-with a different datatype. What makes one of them n-type and the other p-type is which implant
-mask (`nsdm` 93/44 or `psdm` 94/20) is over it. A `ptap` and a `pdiff` are physically identical; the only difference is
-that one sits in the substrate and the other in an n-well. That is why the tap
-rules and the diffusion rules look so similar.
+**Diffusion and tap are the same GDS layer.** `diff` is 65/20 and `tap` is 65/44, so they
+share one mask and differ only in datatype. Whether a piece of either one is n-type or p-type
+depends on which implant mask (`nsdm` 93/44 or `psdm` 94/20) covers it. Physically, a `ptap` and
+a `pdiff` are identical, and they differ only in where they sit: the tap in the substrate, the
+diffusion in an n-well. That's why the tap rules and the diffusion rules look so similar.
 
-**li is a hundred times more resistive than metal1.** 12.8 Ω/□ against 0.125. A 10 µm li wire
-0.17 µm wide is 59 squares, so about **750 Ω**. The same wire in metal1 is 7 Ω. That is why li
-is called *local* interconnect: it gets you from a transistor to the wire, and it is not meant to
-be the wire.
+**li is a hundred times more resistive than metal1.** Its sheet resistance is 12.8 Ω/□, against
+0.125 Ω/□ for metal1. A 10 µm li wire 0.17 µm wide is 59 squares long, so it has about
+**750 Ω** of resistance, while the same wire in metal1 has 7 Ω. That's why li is called *local*
+interconnect: it gets you from a transistor to the wire, and it isn't meant to be used as the
+wire itself.
 
-**Poly is a poor conductor.** 48.2 Ω/□. It is the gate, and it can be used as a short wire inside a
-cell, but it is never used for routing.
+**Poly is a poor conductor.** Its sheet resistance is 48.2 Ω/□. Poly is the gate, and you can use
+it as a short wire inside a cell, but it is never used for routing.
 
 ## The contact ladder
 
-There is exactly one legal route up:
+There is exactly one legal route from the silicon up to the metal. The ladder below uses the
+PDK's layer names (`licon1`, `li1`, `met1`) rather than Magic's, with the GDS numbers in
+parentheses:
 
 ```
 poly ───┐
@@ -53,25 +57,25 @@ poly ───┐
 diff ───┘
 ```
 
-You cannot connect poly to metal1. You cannot connect diffusion to metal2.
-Every jump is a plug of a fixed size with enclosure rules on both ends.
+That means you can't connect poly straight to metal1, or diffusion straight to metal2; you go up
+one step at a time. Every step is a plug of a fixed size, with enclosure rules at both ends.
 
 ## Implant masks
 
 `nsdm` (93/44) and `psdm` (94/20) decide whether a piece of active silicon is n+ or p+. In Magic
-you never paint them directly: you paint `ndiff` or `ptap`, and Magic generates the right implant
-when it writes GDS. You will still see them named in DRC messages:
+you never paint them directly. You paint `ndiff` or `ptap`, and Magic generates the right
+implant when it writes the GDS. You'll still see them named in DRC messages, though:
 
 ```
 NSDM width < 0.40um (diff/tap.5)
 ```
 
-You also see them in the `MASKHINTS_NSDM` properties of the foundry's cells, which is where the
+They also appear in the `MASKHINTS_NSDM` properties of the foundry's cells, which is where the
 library records hand-tuned implant shapes that Magic's automatic generation would not have
 produced.
 
-`hvtp` (78/44) is the exception you *do* paint, as `pfethvt`, because which
-threshold flavour your PMOS is cannot be derived from anything else.
+The one implant you *do* paint is `hvtp` (78/44), as `pfethvt`, because nothing else in the
+layout says which threshold flavour you want for a PMOS.
 
 ## Viewing layers in KLayout
 
@@ -79,12 +83,12 @@ threshold flavour your PMOS is cannot be derived from anything else.
 klayout -nn $PDK_ROOT/sky130A/libs.tech/klayout/tech/sky130A.lyt yourfile.gds
 ```
 
-The layer panel on the right lists every layer present with its numbers, and clicking the eye
-icon hides a layer. Hiding everything above `met1` is the fastest way to see the standard-cell
-rows underneath a routed block.
+The layer panel on the right lists every layer in the file with its numbers, and clicking a
+layer's eye icon hides it. The fastest way to see the standard-cell rows underneath a routed
+block is to hide everything above `met1`.
 
 ![The capstone block as GDS](../assets/img/ad104-klayout-datapath.png)
 
-*The capstone's GDS in KLayout. The cell tree is on the left, with `datapath_ref` and the four
-library cells and the tap cell under it, and the layer list on the right has the numbers from
-the table above.*
+*The capstone's GDS in KLayout. The cell tree on the left has `datapath_ref` at the top, with the
+four library cells and the tap cell under it, and the layer list on the right shows the numbers
+from the table above.*

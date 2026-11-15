@@ -16,7 +16,7 @@ you do by hand.*
 You can't connect just any layer to any other. The layers form a single ladder, and a
 connection can only step from one rung to the next through the contact or via between them:
 
-![The ladder, with the contact or via that joins each pair of rungs.](../assets/img/ad104-routing-layer-ladder.svg){width=720 fig-alt="A block diagram of the layer ladder. On the left, a box labelled poly and a box labelled diffusion each connect through a line labelled licon1, and the two lines join and run to a box labelled li1. From li1 a chain runs to the right: a line labelled mcon to a box labelled met1, a line labelled via1 to met2, a line labelled via2 to met3, and then a line that ends in three dots."}
+![The ladder, with the contact or via that joins each pair of rungs.](../assets/img/ad104-routing-layer-ladder.svg){width=296 fig-alt="A block diagram of the layer ladder, drawn upright with the silicon at the bottom. At the bottom, a box labelled poly and a box labelled diffusion each connect upwards through a line labelled licon1, and the two lines join and run up to a box labelled li1. From li1 a chain runs upwards: a line labelled mcon to a box labelled met1, a line labelled via1 to met2, a line labelled via2 to met3, and then a line that ends in three dots."}
 
 Each of those contacts and vias is a plug of a fixed size, and each plug has enclosure rules for
 the layers on both sides of it. So a connection from a cell pin to a wire two microns away is

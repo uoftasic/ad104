@@ -10,6 +10,7 @@ lab's `Makefile`. This directory is for repo maintenance only.
 | Script | Purpose |
 |--------|---------|
 | `init-template.py` | Fill in course id / title / description after creating a repo from the template. Already run for this course. |
+| `check_site.py` | After `quarto render docs`, check that every local link, image and `#anchor` in `docs/_site` resolves: `python3 scripts/check_site.py docs/_site`. CI runs it in `.github/workflows/site.yml`. |
 
 ## Conventions
 

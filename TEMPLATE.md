@@ -13,7 +13,7 @@ Create a course or lab-notes repo from this template under **`uoftasic`**, fill 
 |-------|---------|---------|
 | `ad104` | Repo slug / course id | `dd103`, `ic101`, `serdes-lab` |
 | `AD104 — Layout` | Display name | `DD103 — RTL on FPGAs & ASICs` |
-| `Draw a transistor as geometry in Magic: DRC-clean, LVS-clean, and placed and routed by hand.` | One-line blurb | `RTL synthesis intro with Yosys` |
+| `Draw a CMOS inverter as a chip layout in Magic and get it through DRC and LVS, then place and route four standard cells by hand.` | One-line blurb | `RTL synthesis intro with Yosys` |
 
 ## Init script
 

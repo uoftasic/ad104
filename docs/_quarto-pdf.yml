@@ -8,7 +8,7 @@ project:
 
 book:
   title: "AD104 — Layout"
-  subtitle: "Draw a transistor as geometry in Magic: DRC-clean, LVS-clean, and placed and routed by hand."
+  subtitle: "Draw a CMOS inverter as a chip layout in Magic and get it through DRC and LVS, then place and route four standard cells by hand."
   author: "UofT ASIC Team"
   output-file: ad104-course
   chapters:

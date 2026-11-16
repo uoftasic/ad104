@@ -18,7 +18,7 @@ Only these three are fillable:
 |-------|---------|
 | `ad104` | `dd103` |
 | `AD104 — Layout` | `DD103 — RTL on FPGAs & ASICs` |
-| `Draw a transistor as geometry in Magic: DRC-clean, LVS-clean, and placed and routed by hand.` | `RTL synthesis intro with Yosys` |
+| `Draw a CMOS inverter as a chip layout in Magic and get it through DRC and LVS, then place and route four standard cells by hand.` | `RTL synthesis intro with Yosys` |
 
 ## Conventions
 

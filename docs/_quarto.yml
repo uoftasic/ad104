@@ -18,7 +18,7 @@ project:
 
 website:
   title: "AD104 — Layout"
-  description: "Draw a transistor as geometry in Magic: DRC-clean, LVS-clean, and placed and routed by hand."
+  description: "Draw a CMOS inverter as a chip layout in Magic and get it through DRC and LVS, then place and route four standard cells by hand."
   site-url: https://uoftasic.com/ad104/
   repo-url: https://github.com/uoftasic/ad104
   repo-subdir: docs

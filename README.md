@@ -1,7 +1,7 @@
 # AD104 — Layout
 
-Draw a transistor as geometry in Magic: DRC-clean, LVS-clean, and placed and
-routed by hand.
+Draw a CMOS inverter as a chip layout in Magic and get it through DRC and LVS,
+then place and route four standard cells by hand.
 
 **Published at <https://uoftasic.com/ad104/>.** Part of the
 [UofT ASIC Team](https://uoftasic.com) education materials. Students start at the

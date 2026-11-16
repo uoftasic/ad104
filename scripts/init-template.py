@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Replace course placeholders after creating a repo from the UofT ASIC template.
 
-Fills ad104, AD104 — Layout, and Draw a transistor as geometry in Magic: DRC-clean, LVS-clean, and placed and routed by hand. only.
+Fills ad104, AD104 — Layout, and Draw a CMOS inverter as a chip layout in Magic and get it through DRC and LVS, then place and route four standard cells by hand. only.
 Does not scaffold or remove docs pages — keep the published site barebones.
 """
 

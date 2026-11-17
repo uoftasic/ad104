@@ -1,11 +1,11 @@
 # AD104 — Layout
 
-AD103 ended with a CMOS inverter you could simulate: two symbols and a wire. In AD104 you draw
-that inverter as a layout, the coloured rectangles a foundry turns into masks. You check it the
-way a real tapeout does, with a design rule check (DRC, can it be manufactured?) and a
-layout-versus-schematic check (LVS, is it the circuit you meant?). Then you measure what your
-drawing costs compared with the foundry's own cell, and you finish by placing and routing a small
-block of standard cells by hand.
+In this course you draw the CMOS inverter from AD103's capstone as a layout in Magic. A layout is
+the set of coloured rectangles that a foundry turns into masks. Yours has to pass a design rule
+check (DRC, can it be manufactured?) and a layout-versus-schematic check (LVS, is it the circuit
+you meant?). You run both checks on the foundry's own inverter in Lab 01 before you draw
+yours in Lab 03, and in Lab 05 you compare the two in area and delay. In the capstone you place
+four standard cells and route them by hand.
 
 This course is part of the **UofT ASIC Team** education materials, and it's published at
 **https://uoftasic.com/ad104/**. The labs run inside the shared **workspace** you set up in
@@ -18,9 +18,9 @@ This course is part of the **UofT ASIC Team** education materials, and it's publ
 | **Who it's for** | Analog-track students who have finished AD103 |
 | **Track** | Analog |
 | **Prerequisites** | [IC101](https://uoftasic.com/ic101/) → [AD101](https://uoftasic.com/ad101/) → [AD102](https://uoftasic.com/ad102/) → [AD103](https://uoftasic.com/ad103/), in that order |
-| **Main tool** | **Magic** 8.3.681, the layout editor. We assume you haven't used it before, and [Getting started](guide/getting-started.md) starts from there. |
-| **Also** | netgen for LVS, KLayout 0.30.11 for looking at GDS, ngspice 47 for timing what the geometry costs you |
-| **Math level** | Arithmetic and a ruler, because every dimension in this course is a number of microns. |
+| **Main tool** | **Magic** 8.3.681, the layout editor. We assume you haven't used it before. [Getting started](guide/getting-started.md) explains how to open it, and [Drawing in Magic](guide/drawing-in-magic.md) teaches the commands. |
+| **Also** | netgen for LVS, KLayout 0.30.11 for looking at GDS, ngspice 47 for measuring delay |
+| **Math level** | Arithmetic. Every dimension in this course is a number of microns. |
 | **Time** | About 17 hours, self-paced |
 
 ## Course path

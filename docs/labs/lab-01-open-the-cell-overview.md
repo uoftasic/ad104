@@ -29,8 +29,8 @@ If you haven't set up the workbench yet, do
 1. Start the noVNC desktop the way IC101 showed you, and open a terminal on it. Type every
    command in this lab in that terminal, not on your laptop.
 
-2. Load the course environment and check the PDK. The setting lasts only as long as the
-   terminal you load it in, so you'll need to load it again in every new terminal you open.
+2. Check the PDK. A new terminal on the desktop has already loaded the course environment, and
+   running the first line again does no harm.
 
    ```bash
    . /foss/designs/common/.designinit

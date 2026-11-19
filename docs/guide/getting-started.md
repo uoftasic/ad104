@@ -30,8 +30,8 @@ of the layers this course names are there.
 
 The course environment script, `/foss/designs/common/.designinit`, switches the whole shell to
 SKY130, and it also defines `mod`, the command that copies a course's files into your workspace.
-The change lasts only as long as that shell, so you load the script once in every new terminal
-you open.
+The change lasts only as long as that shell, but each new terminal on the workbench desktop loads
+the script by itself, and running it again does no harm.
 
 ## Magic
 

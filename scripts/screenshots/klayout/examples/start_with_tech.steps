@@ -1,0 +1,10 @@
+# Start check: klayout -e -n sky130A /w/work/rig/my_inv.gds
+wait '^KLayout 0\.30.*my_inv\.gds' 120
+since main-window-with-layout
+sleep 3
+ifwin '^Tip$' key Return
+maximize '^KLayout 0\.30'
+move 1320 995
+shot start-n-sky130A
+crop start-n-sky130A 1680x24+0+1000 start-n-sky130A-statusbar
+crop start-n-sky130A 260x60+840+44 start-n-sky130A-techbutton

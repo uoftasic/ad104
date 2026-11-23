@@ -12,6 +12,8 @@ lab's `Makefile`. This directory is for repo maintenance only.
 | `init-template.py` | Fill in course id / title / description after creating a repo from the template. Already run for this course. |
 | `check_site.py` | After `quarto render docs`, check that every local link, image and `#anchor` in `docs/_site` resolves: `python3 scripts/check_site.py docs/_site`. CI runs it in `.github/workflows/site.yml`. |
 | `figures/` | The scripts that draw the circuit figures in `docs/assets/img/` with schemdraw. `pip install -r scripts/figures/requirements.txt`, then `python3 scripts/figures/<name>.py` rewrites that figure's SVG |
+| `screenshots/magic/` | The rig that takes the Magic screenshots on the lab pages. It runs a step file of mouse clicks and key presses against Magic in a container and writes PNGs: `scripts/screenshots/magic/shot.sh -o OUT scripts/screenshots/magic/steps/l03.sh`. Step files go in its `steps/`; functions and pitfalls are in its `README.md` |
+| `screenshots/klayout/` | The same for KLayout, with a scratch workspace folder in `RIG_WS`: `RIG_WS=WS scripts/screenshots/klayout/run_rig.sh STEPS OUT -e -n sky130A /w/work/FILE.gds`. Its `README.md` says how to make the folder and lists the step language |
 
 ## Conventions
 

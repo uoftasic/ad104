@@ -1,0 +1,69 @@
+# End-to-end demo for the KLayout rig (fresh container, 1680x1050, 96 dpi).
+# Start KLayout with:  -e -nn /foss/pdks/sky130A/libs.tech/klayout/tech/sky130A.lyt /w/work/rig/my_inv.gds
+# Coordinates assume the main window maximised by the "maximize" step below
+# (menu bar at y=30, toolbar at y=70) and the dialogs at their default sizes.
+
+# 1. Start-up: the window, then the first-start "Tip" (Yes = show the full hierarchy)
+wait '^KLayout 0\.30.*my_inv\.gds' 120
+since main-window-with-layout
+sleep 3
+ifwin '^Tip$' shotwin '^Tip$' e2e-00-first-start-tip
+ifwin '^Tip$' key Return
+maximize '^KLayout 0\.30'
+move 1320 995
+shot e2e-01-opened-with-sky130A
+
+# 2. DRC from the menu: Efabless sky130 > Run DRC (Full); the marker browser opens
+activate '^KLayout 0\.30'
+click 457 30
+sleep 0.6
+shot e2e-02-efabless-menu
+click 470 118
+wait '^Marker Database Browser' 60
+waitfile /w/work/rig/sky130_drc.txt 120
+since drc-report-written
+sleep 1
+shot e2e-03-drc-browser
+click 1047 747
+gone '^Marker Database Browser' 10
+
+# 3. A PCell from sky130_magic: widen the left dock, Instance tool (I), library, cell, form
+activate '^KLayout 0\.30'
+drag 187 600 640 600
+move 1000 600
+key i
+click 139 322
+click 340 349
+sleep 0.6
+key Down Down Down Return
+sleep 0.5
+click 66 373
+wait '^Select Cell' 10
+click 842 285
+type '*nfet_01v8*'
+sleep 0.5
+shotwin '^Select Cell' e2e-04-select-cell
+click 928 717
+gone '^Select Cell' 10
+click 204 322
+sleep 2
+click 455 349
+key ctrl+a
+type 0.65
+key Tab
+sleep 2
+move 1250 300
+sleep 1.5
+shot e2e-05-pcell-form-and-ghost
+click 1250 300
+since pcell-placed
+sleep 2
+key Escape
+click 150 70
+move 1000 900
+key shift+f
+key f
+sleep 1
+move 1320 995
+shot e2e-06-pcell-placed
+since done

@@ -61,6 +61,40 @@ The page title is `# Lab NN: Title` (`# Capstone: Title` for the capstone), and 
 
 Lab 01's Part 1 is "Load the course". It links [IC101 Lab 03](https://uoftasic.com/ic101/labs/lab-03-launch-the-workbench-overview.html) for the workbench itself, then loads `.designinit`, runs `mod add`, and checks the tool versions the course's printed outputs depend on. Its troubleshooting lists only the rows IC101 does not cover, and links IC101's [Troubleshooting](https://uoftasic.com/ic101/reference/troubleshooting.html) page for the rest.
 
+## GUI-first labs
+
+AD104's labs teach Magic the way layout engineers use it: with the mouse, keys, menus and dialogs. The student draws, checks and fixes in the tool; `make` only grades the work and resets the starting files. Check every lab step against these rules.
+
+- **No finished geometry.** No step gives a rectangle's coordinates, a `box` position, a script, or a list of commands to paste. Absolute positions belong in `tcl/` and `solutions/` only.
+- **Targets, not coordinates.** A drawing step says what the shape must achieve: its size where the size is the lesson (W = 0.65 µm, L = 0.15 µm, a 0.17 × 0.17 µm contact), the rule values it must meet (`li.5`, an overhang ≥ 0.08 µm on both sides of one axis), and where it sits relative to shapes already on screen. The student picks the coordinates.
+- **Name the tool action.** Every step that changes, checks or saves the layout names the menu path with its exact label (`Drc → DRC update`), the key (`z`), the mouse action (a middle click on a palette swatch) or the dialog and its fields.
+- **Show it once.** The first time the course uses an action, its step has a screenshot: the menu open, the dialog filled in, or the result on screen. Later uses get none.
+- **Type only what engineers type.** The student types these, each as a numbered step that says what it does, and nothing else:
+  - `magic -d X11 <cell> &`, from the cell's folder;
+  - in tkcon, the operations Magic has no menu for: `extract all`, `extract do local`, `ext2spice lvs`, `ext2spice`, `ext2spice -o FILE`, `ext2spice cthresh 0`; `box size W H` (a size, never a position, typed after clicking the lower-left corner); and in the capstone, `select top cell` and `port makeall`, once;
+  - netgen's `lvs` in a terminal;
+  - `cat`, `grep`, `head`, `ls`, `diff` or a text editor, to read files;
+  - the `make` targets below.
+
+  The first page that uses an extraction or netgen command shows it in full and explains each argument; later labs name the command and the arguments the student supplies. Console forms that have a GUI path (`drc why`, `drc check`, `drc style`, `paint`, `erase`, `label`, `save`, `load`, `getcell`, `box` with coordinates) appear only on the reference page.
+- **`make` checks and starts over.** Pages use `make`, `make layout`, `make gen`, `make scaffold`, `make reset`, `make cells`, `make mine`, `make table` and `make clean`, and mention `make ref`, `make refcheck` and `make solutions` only under Going further. No page uses `make gui`, `make edit`, `make why`, `make netlist`, `make klayout`, `make swapped`, `make pex`, `make caps`, `make sim` or `make gds`. The student does that work in the tool, or types the command.
+- **A full loop in the tool.** In each lab the student changes the layout, runs DRC in Magic, fixes what it reports, extracts, runs LVS and reads the result, and only then runs `make`. Labs 01 and 05 have no drawing step.
+- **"You should see" can't depend on the student's coordinates.** Give counts only for fixed cells: Lab 01's foundry cell, Lab 02's cells before any fix, the capstone's bare placement and Lab 05's reference cell. Elsewhere give verdict lines, device lines, port lists and rule names.
+- **Save before every check.** Magic's caption doesn't show unsaved changes. Put a save step just before each `make`: `File → Save...`, then `write` in the dialog, or `autowrite` when more than one cell changed. Never `Cell → Save as...` for a file `make` checks.
+- **Keep the goals, numbers, checkers and solutions.** The widths and lengths (W = 0.65 and 1.00 µm, L = 0.15 µm), the rule names and values, the reference cells, `solutions/` and the PASS/FAIL logic of each `src/check.py` stay. `labs/lab-03-draw-an-inverter/solutions/inv_ref.mag`, `tcl/inverter.tcl` and `spice/my_inv_sch.spice` are frozen: IC102-A vendors `inv_ref.mag` (at commit `0a05caf`) and copies `my_inv_sch.spice`.
+- **Every output on a page comes from a run.** Counts, messages and screenshots come from doing the step in the workbench image, never from memory or a design note.
+
+Magic habits every lab shares:
+
+- Keys act only while the pointer is over the drawing. The first lab that uses a key says so.
+- Two recipes for an exact small shape, which later labs refer to by name:
+  - **Click recipe** (Lab 01 Part 3 for measuring, Lab 02 Part 3 for drawing): keep the default snap (never `Snap-to-grid off`), box the area roughly and press `ctrl+z`, left-click the lower-left corner, right-click the upper-right, then read the size in the title bar, or press `b` and read the `microns:` line in tkcon.
+  - **Typed size** (contacts and vias from Lab 02 Part 5 on): zoom in, left-click the lower-left corner, click in tkcon and type `box size 0.17um 0.17um`, click the layout window's title bar, and press `b` over the drawing to check. The desktop is click-to-focus, so without the title-bar click the `b` goes into tkcon; a click in the drawing would move the box.
+- The workbench desktop is 1280 × 800 by default. There the device dialog (opened from `Devices 1`, and its `Edit device:` form) opens with its buttons below the screen. Lab 04 Part 7, the first page that opens it, tells the student to double-click the window's title bar, which fills the screen and brings the buttons up. Getting-started repeats this in its problems table and mentions `VNC_RESOLUTION=1680x1050 ./scripts/start_vnc.sh` for a larger desktop.
+- Lab 01's troubleshooting table has `PDK=sky130A magic -d X11 <cell> &` for a student whose `.designinit` failed. Other labs don't repeat it.
+
+Screenshots are PNG crops named `docs/assets/img/ad104-<lab>-<nn>-<slug>.png` (`<lab>` is `l01` to `l05` or `cap`; guide images are `ad104-g-<slug>.png`), each with alt text and a caption that says what to look at. Each one comes from a committed step file in `scripts/screenshots/magic/steps/` or `scripts/screenshots/klayout/steps/`, run with the rigs described in `scripts/README.md`. Lab times on the pages and in the Course path are estimates, and the pages say so.
+
 ## Course path format
 
 ```
@@ -101,7 +135,7 @@ Writeups explain and packages run, so don't paste long HDL into site pages; refe
 - State **learning objectives** in student language (“You will synthesize a counter and inspect the netlist”).
 - Assume a clone of this repo and the course’s documented workbench; do not bundle Docker in every lab unless the course already does.
 - For EDA-heavy work (LibreLane / SKY130 / IIC-OSIC-TOOLS), use the **team workbench** that IC101 sets up. Link IC101 Lab 03 rather than repeating its setup, and don't invent a one-off container story.
-- Keep procedures copy-pasteable (`cd`, install, simulate/synth, check artifact).
+- Keep procedures copy-pasteable (`cd`, install, simulate/synth, check artifact), except drawing and checking in a layout tool, which follow [GUI-first labs](#gui-first-labs).
 - Define **expected results** (printout, waveform check, area/timing ballpark, golden hash) so students know they succeeded.
 - Progress difficulty across labs; reuse naming and directory conventions so later labs feel familiar.
 - Prefer small, inspectable designs over opaque blobs; when using IP or PDK artifacts, keep secrets and huge binaries out of git.

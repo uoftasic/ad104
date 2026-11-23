@@ -7,3 +7,10 @@ __pycache__/
 *.ext
 *.sim
 *.spice.raw
+
+# What students write with Magic and netgen while they work through a lab
+labs/*/mag/*.spice
+labs/*/mag/comp.out
+labs/*/mag/*.gds
+labs/lab-01-open-the-cell/*.spice
+labs/lab-01-open-the-cell/comp.out

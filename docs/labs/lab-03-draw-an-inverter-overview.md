@@ -338,7 +338,7 @@ How does netgen know which shape is `A` and which is `Y`?
    - `Attach to layer:` untick `default`, and type `locali` in the field that appears.
    - `Port:` tick `enable`. The number next to it is the port's number.
 
-   Click `Okay`. A small `A` appears on the patch.
+   Click `Okay`.
 
    ![The `texthelper` window filled in for A: Size 0.1, `default` unticked with `locali` in the layer field, and Port `enable` ticked with port number 3. The box sits on the A patch.](../assets/img/ad104-l03-08-text-dialog.png){fig-alt="Magic zoomed on the gate's poly pad with the li patch and a white box on it, and beside it the texthelper window headed New label, with Text string A, Size 0.1, Attach to layer with default unticked and locali typed in a field, and Port enable ticked with the number 3."}
 
@@ -346,8 +346,8 @@ How does netgen know which shape is `A` and which is `Y`?
    to a layer that covers the whole box. On the A patch the gate contact takes the li's place
    in the middle, so a box that touches the contact isn't all li, and the layer left that
    covers it is the p-well, which is the VGND net. The console then prints
-   `Moving label "A" from space to pwell`, the VGND net takes the name A, and `make` shows
-   `ports Y VPWR A` and `mismatched pins: A <-> VGND`.
+   `Moving label "A" from space to pwell` and the VGND net takes the name A, so `make` lists no
+   VGND port and reports `mismatched pins: A <-> VGND`.
 
 2. Do the same for `Y`, with the box on the Y run. The window remembers the size, `locali`
    and the ticked `enable`, and moves the port number on to 4, so this time you only change

@@ -7,12 +7,14 @@ of that.
 
 If you are stuck on one cell, do this before you look:
 
-1. Run `make why C=3`, with your cell's number in place of 3. The rule name it prints is the
+1. Open the cell in Magic (`cd mag`, then `magic -d X11 drc_03 &` with your cell's name), choose
+   `Drc → DRC update`, and read the rule names in `Options → DRC Manager`. If the `DRC` button
+   shows no count, choose `Drc → DRC Complete` and `Drc → DRC update` again. The rule name is the
    answer, so read it as a sentence.
 2. Look up that rule in
-   [the DRC decoder](https://uoftasic.com/ad104/reference/drc-error-decoder.html).
-3. In Magic, run `drc check`, put the cursor box over a white hatched area and type `drc why`.
-   Magic names the same rule at that spot.
+   [the DRC decoder](https://uoftasic.com/ad104-m/reference/drc-error-decoder.html).
+3. With the pointer over the drawing, press `=` to put the box on an error, then choose
+   `Drc → DRC report`. Magic names the rule broken at that spot.
 
 When you do look, look at only the one cell you are stuck on, make the fix yourself, and then go
 back to the others.

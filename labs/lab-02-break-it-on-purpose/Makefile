@@ -1,10 +1,12 @@
 # AD104 Lab 02 - read a DRC error and fix it
 #
 #   make          DRC and LVS all five cells and print a verdict   (~4 s)
-#   make edit C=1 open mag/drc_01.mag in Magic  (C=1..5)
-#   make why  C=1 print every violation in cell C, with its rule name
 #   make reset    throw your fixes away and rebuild the five broken cells
+#   make solutions  write the answer key into solutions/
 #   make clean    delete results/
+#
+# You open, check and fix the cells in Magic yourself (cd mag; magic -d X11 drc_03 &).
+# This Makefile only checks them and prints a verdict.
 
 export PDK      := sky130A
 export PDK_ROOT ?= /foss/pdks
@@ -14,9 +16,8 @@ NETGEN ?= netgen
 PYTHON ?= python3
 SETUP  := $(PDK_ROOT)/sky130A/libs.tech/netgen/sky130A_setup.tcl
 CELLS  := drc_01 drc_02 drc_03 drc_04 drc_05
-C      ?= 1
 
-.PHONY: all check edit why reset solutions clean
+.PHONY: all check reset solutions clean
 
 all: check
 
@@ -39,12 +40,6 @@ results/lvs.done: results/report.txt spice/inv_sch.spice
 
 check: results/lvs.done
 	@$(PYTHON) src/check.py
-
-why: results/report.txt
-	@grep "^drc_0$(C) " results/report.txt || echo "no such cell - use C=1..5"
-
-edit:
-	@cd mag && $(MAGIC) -d X11 drc_0$(C) &
 
 reset:
 	@mkdir -p results

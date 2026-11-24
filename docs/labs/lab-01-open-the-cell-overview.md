@@ -269,13 +269,15 @@ Does the foundry's cell pass DRC, and does the answer depend on the rule set?
    All nwells must contain metal-connected N+ taps (nwell.4)
    ```
 
+   ![`Drc → DRC report` with the box round the whole cell: the three rules in the console.](../assets/img/ad104-l01-06-drc-report.png){fig-alt="Magic's layout window with the white box drawn round the whole inverter and the DRC button reading DRC=3. The console under it ends with three lines: N-diff distance to P-tap must be less than 15.0um (LU.2), P-diff distance to N-tap must be less than 15.0um (LU.3), and All nwells must contain metal-connected N+ taps (nwell.4)."}
+
 5. Choose `Options → DRC Manager`, whose window lists one row per rule broken. Click the triangle
    at the start of a row to list that rule's errors (their corners are in Magic's internal
    units), click one, and press `Zoom` to move the view to it. While you use the manager, Magic
    selects the whole cell and writes its name across the drawing; press `,` over the drawing to
    clear the selection, and `v` to see the whole cell again.
 
-   ![The DRC Manager beside the layout: one row each for `nwell.4`, `LU.3` and `LU.2`.](../assets/img/ad104-l01-06-drc-manager.png){fig-alt="Magic's layout window on the left and the drcmgr window on the right. The drcmgr window has buttons Update, Last, Next, Save and Zoom, and a list headed DRC Rule with three rows: All nwells must contain metal-connected N+ taps, P-diff distance to N-tap must be less than 15.0um (LU.3), and N-diff distance to P-tap must be less than 15.0um (LU.2). In the layout, the cell's name and the words Topmost cell in the window are drawn across the inverter."}
+   ![The DRC Manager beside the layout: one row each for `nwell.4`, `LU.3` and `LU.2`.](../assets/img/ad104-l01-07-drc-manager.png){fig-alt="Magic's layout window on the left and the drcmgr window on the right. The drcmgr window has buttons Update, Last, Next, Save and Zoom, and a list headed DRC Rule with three rows: All nwells must contain metal-connected N+ taps, P-diff distance to N-tap must be less than 15.0um (LU.3), and N-diff distance to P-tap must be less than 15.0um (LU.2). In the layout, the cell's name and the words Topmost cell in the window are drawn across the inverter."}
 
 6. The foundry's own cell fails the full rule set, and that's the answer we expect. (Magic calls a
    rule set a DRC *style*, which is why `make` later prints `default style` and `full style`.)
@@ -317,7 +319,7 @@ What circuit does Magic pull out of the geometry?
    - `ext2spice lvs` sets up the next command to write a netlist for LVS. It prints nothing.
    - `ext2spice -o inv_1.spice` turns the `.ext` file into a SPICE netlist called `inv_1.spice`.
 
-   ![The console after the three commands: `Extracting sky130_fd_sc_hd__inv_1 into sky130_fd_sc_hd__inv_1.ext:` and `exttospice finished.`](../assets/img/ad104-l01-07-extract-console.png){fig-alt="Magic's tkcon console. Lines: % extract all, Extracting sky130_fd_sc_hd__inv_1 into sky130_fd_sc_hd__inv_1.ext:, Processing sky130_fd_sc_hd__inv_1, % ext2spice lvs, % ext2spice -o inv_1.spice, exttospice finished."}
+   ![The console after the three commands: `Extracting sky130_fd_sc_hd__inv_1 into sky130_fd_sc_hd__inv_1.ext:` and `exttospice finished.`](../assets/img/ad104-l01-08-extract-console.png){fig-alt="Magic's tkcon console. Lines: % extract all, Extracting sky130_fd_sc_hd__inv_1 into sky130_fd_sc_hd__inv_1.ext:, Processing sky130_fd_sc_hd__inv_1, % ext2spice lvs, % ext2spice -o inv_1.spice, exttospice finished."}
 
 2. Print the netlist in the terminal:
 
@@ -380,7 +382,7 @@ Is the circuit Magic extracted the circuit the foundry says this cell is?
    tail -3 comp.out
    ```
 
-   ![The terminal after netgen and `tail -3 comp.out`: `Final result: Circuits match uniquely.`](../assets/img/ad104-l01-08-netgen-terminal.png){fig-alt="A terminal window. netgen's output ends with Circuit 1 contains 2 devices, Circuit 2 contains 2 devices, both with 6 nets, then Final result: Circuits match uniquely, and LVS Done. Below it, the command tail -3 comp.out prints Final result: Circuits match uniquely."}
+   ![The terminal after netgen and `tail -3 comp.out`: `Final result: Circuits match uniquely.`](../assets/img/ad104-l01-09-netgen-terminal.png){fig-alt="A terminal window. netgen's output ends with Circuit 1 contains 2 devices, Circuit 2 contains 2 devices, both with 6 nets, then Final result: Circuits match uniquely, and LVS Done. Below it, the command tail -3 comp.out prints Final result: Circuits match uniquely."}
 
 **You should see** `Final result: Circuits match uniquely.`
 
@@ -479,6 +481,8 @@ How does the library offer more drive strength for the same logic?
    above the list, and the list jumps to the cell. Press Return, right-click the highlighted row
    and choose `Show As New Top`. KLayout draws the cell to fill the window.
 
+   ![The Cells panel with `sky130_fd_sc_hd__inv_1` highlighted and its right-click menu open at `Show As New Top`.](../assets/img/ad104-l01-10-klayout-menu.png){fig-alt="The left part of KLayout. The Cells panel fills the left column with a long list of sky130_fd_sc_hd cell names; sky130_fd_sc_hd__inv_1 is highlighted near the bottom, and a menu beside it lists Flat Cell List, Split Mode, Sorting, User Properties, Show As New Top, Hide, Show, Show All, Where am I? and Save Selected Cells As."}
+
 5. Point at the top-right corner of the magenta outline, which is the cell's boundary, and read
    the `xy` numbers at the bottom right of the window. They're the pointer's position in µm,
    and the cell's lower-left corner is at 0, 0.
@@ -487,7 +491,7 @@ How does the library offer more drive strength for the same logic?
    both? Then show `sky130_fd_sc_hd__inv_8` the same way and read its corner. KLayout fits each
    cell to the window, so compare the numbers rather than the size on screen.
 
-   ![`inv_8` in KLayout, with the pointer on its top-right corner: `xy` reads about 4.14 and 2.72.](../assets/img/ad104-l01-09-klayout-inv8.png){fig-alt="KLayout, maximised. On the left, the Cells panel lists the library's cells with sky130_fd_sc_hd__inv_8 highlighted in bold. In the middle, the inv_8 layout: a wide cell with many poly fingers between two blue rails, inside a magenta outline. On the right, the Layers panel. In the status bar at the bottom, xy reads 4.13840 and 2.72068."}
+   ![`inv_8` in KLayout, with the pointer on its top-right corner: `xy` reads about 4.14 and 2.72.](../assets/img/ad104-l01-11-klayout-inv8.png){fig-alt="KLayout, maximised. On the left, the Cells panel lists the library's cells with sky130_fd_sc_hd__inv_8 highlighted in bold. In the middle, the inv_8 layout: a wide cell with many poly fingers between two blue rails, inside a magenta outline. On the right, the Layers panel. In the status bar at the bottom, xy reads 4.13840 and 2.72068."}
 
    <details>
    <summary>Answer</summary>

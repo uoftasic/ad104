@@ -38,6 +38,7 @@ sleep 1
 key Menu
 sleep 1
 shot k01-menu-inv1
+crop k01-menu-inv1 640x772+0+0 l01-10-klayout-menu
 click 288 650
 wait '^KLayout 0\.30.*sky130_fd_sc_hd__inv_1\]' 30
 sleep 2
@@ -63,5 +64,5 @@ sleep 2
 move 1081 237
 sleep 1.5
 shot k01-inv8
-crop k01-inv8 1280x772+0+0 l01-09-klayout-inv8
+crop k01-inv8 1280x772+0+0 l01-11-klayout-inv8
 crop k01-inv8 1280x24+0+750 k01-inv8-status

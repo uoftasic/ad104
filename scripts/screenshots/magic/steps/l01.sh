@@ -81,11 +81,11 @@ capture l01-05-drc-complete-3 layout console
 # The box over the whole cell, then DRC report.
 box_um -0.20 -0.30 1.60 3.00
 menu Drc 'DRC report'; pause 1
-capture ev-l01-drc-report layout console
+capture l01-06-drc-report layout console
 # The DRC Manager opens at the layout window's right edge in this rig; move it on screen.
 menu Options 'DRC Manager'; pause 2
 move_window '^drcmgr$' 1000 23
-capture l01-06-drc-manager layout tk:.drcmgr
+capture l01-07-drc-manager layout tk:.drcmgr
 probe '::rigprobe::treerows .drcmgr.box.view' > "$OUT/ev-l01-drc-manager-rows.txt"
 rows="$(cat "$OUT/ev-l01-drc-manager-rows.txt")"
 row="$(printf '%s\n' "$rows" | awk '/^  / && !d {sub(/^  +/, ""); sub(/ +$/, ""); print; d = 1}')"
@@ -104,7 +104,7 @@ capture ev-l01-drc-fast-again layout console
 console 'extract all'; pause 2
 console 'ext2spice lvs'
 console 'ext2spice -o inv_1.spice'; pause 2
-capture l01-07-extract-console console
+capture l01-08-extract-console console
 keep $L01/inv_1.spice $L01/sky130_fd_sc_hd__inv_1.ext
 focus_layout
 
@@ -114,7 +114,7 @@ type_text "cd /tmp/work/$L01 && clear"; key Return; pause 1
 type_text 'netgen -batch lvs "inv_1.spice sky130_fd_sc_hd__inv_1" "$PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_fd_sc_hd.spice sky130_fd_sc_hd__inv_1" $PDK_ROOT/sky130A/libs.tech/netgen/sky130A_setup.tcl'
 key Return; pause 10
 type_text 'tail -3 comp.out'; key Return; pause 1
-capture l01-08-netgen-terminal win:'^lvs-terminal$'
+capture l01-09-netgen-terminal win:'^lvs-terminal$'
 keep $L01/comp.out
 pkill -x xterm || true
 magic_quit

@@ -198,7 +198,7 @@ capture ev-l02-drc04-erased layout console
 save_write
 lab_make l02-make-erased
 hover_center; key u; pause 1
-capture ev-l02-drc04-undone layout
+capture l02-14-undo layout
 save_write
 lab_make l02-make-final
 magic_quit

@@ -441,6 +441,8 @@ could take every one of these cells to zero violations that way, so try it once,
 4. Put the pad back: press `u` with the pointer over the drawing to undo the erase. Save again,
    and run `make` again.
 
+   ![After `u`: the `A` pad's li and its contact are back on the poly pad.](../assets/img/ad104-l02-14-undo.png){fig-alt="Magic's layout window with the whole drc_04 cell. At the gate, the red poly pad again has the blue li square and the contact cross on it, inside the white box. The DRC button reads DRC=0."}
+
 **You should see** the note in step 3, and then `drc_04` back to `match` and `make` ending in
 `PASS`.
 

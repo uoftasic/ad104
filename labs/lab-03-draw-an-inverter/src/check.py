@@ -153,9 +153,11 @@ def main() -> int:
     missing = [p for p in PORTS if p not in ports]
     if missing:
         problems.append(
-            f"No port called {', '.join(missing)}. Put the box over the shape you want to "
-            "name,\n      then type `label <name>` in the console and re-run - a cell with no\n"
-            "      ports cannot be compared against a schematic."
+            f"No port called {', '.join(missing)}. Set the box on the wire you want to "
+            "name,\n      open Edit -> Text ..., type the name, untick `default` under Attach to\n"
+            "      layer and type the wire's layer (`locali` for li), tick Port `enable`,\n"
+            "      click Okay, save, and re-run - a cell with no ports cannot be compared\n"
+            "      against a schematic."
         )
 
     # ---- DRC -------------------------------------------------------------

@@ -10,22 +10,24 @@ schematic.
 
 ```bash
 cd labs/lab-03-draw-an-inverter
-make scaffold     # lay down the frame (also: start over)
-make edit         # open it in Magic
-make              # check what you have, about 1.1 s
+make scaffold            # lay down the frame (also: start over)
+cd mag
+magic -d X11 my_inv &    # open it in Magic, and draw there
+cd ..
+make                     # check what you have, about a second
 ```
 
-`make` tells you in words what it found and what to fix next. Save in Magic before every `make`,
-because the checker reads `mag/my_inv.mag` from disk and never sees edits you haven't saved.
+You draw, check and extract in Magic, and run netgen yourself from `mag/`; the writeup takes you
+through it. `make` tells you in words what it found and what to fix next. Save in Magic
+(`File → Save...`, then `write`) before every `make`, because the checker reads `mag/my_inv.mag`
+from disk and never sees edits you haven't saved.
 
 ## Targets
 
 | Command | What it does |
 |---|---|
 | `make` | DRC both ways, extract, LVS, verdict |
-| `make edit` | open your cell in Magic |
 | `make scaffold` | **throw your cell away**, back to the empty frame |
-| `make netlist` | print what Magic extracted from your geometry |
 | `make ref` | rebuild `solutions/inv_ref.mag` from `tcl/inverter.tcl` |
 | `make refcheck` | run every check against the reference instead of yours |
 | `make clean` | delete `results/` |

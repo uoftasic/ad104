@@ -1,7 +1,7 @@
 # AD104 Capstone - place and route it yourself
 #
 #   make           DRC both ways, LVS, then time the path            (~15 s)
-#   make layout    just the DRC and LVS part                          (~1.4 s)
+#   make layout    just the DRC and LVS part                          (~1.1 s)
 #   make scaffold  throw your routing away, back to four placed cells
 #   make ref       build solutions/datapath_ref.mag
 #   make refcheck  run every check against the reference block

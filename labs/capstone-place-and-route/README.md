@@ -30,7 +30,7 @@ block in Magic before each check, because the checker reads `mag/datapath.mag` f
 and `skip` for the library cells. Then, from `labs/capstone-place-and-route`:
 
 ```bash
-make layout       # DRC + LVS only, about 1.4 s
+make layout       # DRC + LVS only, about 1.1 s
 make              # ...and the timing, about 15 s
 ```
 
@@ -43,7 +43,7 @@ make              # ...and the timing, about 15 s
 | Command | What it does |
 |---|---|
 | `make` | DRC both ways, LVS, then the timing |
-| `make layout` | just DRC and LVS, about 1.4 s; the loop to use while routing |
+| `make layout` | just DRC and LVS, about 1.1 s; the loop to use while routing |
 | `make scaffold` | **throw your routing away**, back to four placed cells |
 | `make ref` / `make refcheck` | build and check the reference block |
 | `make clean` | delete `results/` |

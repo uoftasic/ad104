@@ -42,7 +42,8 @@ guide pages (`g.sh`). Every screenshot on a page comes from a committed step fil
 can be taken again after a change. Run all of a lab's shots in one call. In the spike, ten
 step files ran in one container in 26 minutes, most of it in the pauses after each click
 and menu item. The capstone's `cap.sh` takes 15 to 16 minutes on its own, more than the
-default timeout, so run it with `RIG_TIMEOUT=2400`.
+default timeout, so run it with `RIG_TIMEOUT=2400`, and so do `l04.sh` and `l05.sh` run together,
+which took about 23 minutes.
 
 ## Files
 

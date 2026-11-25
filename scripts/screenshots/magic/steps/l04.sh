@@ -2,8 +2,9 @@
 # while the rig does the lab the way the page tells a student to, and `make` run on the
 # cells it built. Run with shot.sh at the default SCREEN=1600x1000, with
 # CONSOLE_GEOM="0 800 1200 170" so the console's last line is on the screen; every capture is
-# a crop. l05.sh can run after it in the same call and reuses the my_inv_gen it builds:
-#   CONSOLE_GEOM="0 800 1200 170" scripts/screenshots/magic/shot.sh -o OUT \
+# a crop. l05.sh can run after it in the same call and reuses the my_inv_gen it builds. The
+# two together took about 23 minutes, past shot.sh's default timeout:
+#   RIG_TIMEOUT=2400 CONSOLE_GEOM="0 800 1200 170" scripts/screenshots/magic/shot.sh -o OUT \
 #       scripts/screenshots/magic/steps/l04.sh scripts/screenshots/magic/steps/l05.sh
 #
 # Coordinates in microns are the reference's (tcl/compose.tcl) or this file's own choice for

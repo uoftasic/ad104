@@ -54,11 +54,11 @@ box_um 0.00 0.00 1.38 2.72
 hover_center; key b
 say "b rail centre to rail centre:"; console_tail 6 >&2
 capture l05-02-inv1-width layout console
-console 'extract do local'
 console 'extract all'
 console 'ext2spice lvs'
 console 'ext2spice cthresh 0'
 console 'ext2spice -o inv_1_pex.spice'
+say "console after the extraction:"; console_tail 8 >&2
 focus_layout
 say "inv_1_pex.spice:"; cat "$W/mag/inv_1_pex.spice" >&2 || true
 say "C lines: $(grep -c '^C' "$W/mag/inv_1_pex.spice")"

@@ -129,13 +129,11 @@ What does Magic extract from the foundry's `inv_1`?
 
    *The box from rail centre to rail centre, and the `microns:` line: 1.380 × 2.720.*
 
-3. Extract it the same way, with one more command first. `extract do local` tells Magic to write
-   every `.ext` file into the folder you started it in, here `mag/`, wherever the cell came from.
-   In Lab 01, Part 6, `inv_1`'s file went there without it, because Magic can't write into the
-   PDK's read-only folder:
+3. Extract it the same way, with `inv_1_pex.spice` as the output name. Magic can't write into the
+   PDK's read-only folder, so, as in Lab 01, Part 6, `extract all` writes
+   `sky130_fd_sc_hd__inv_1.ext` into the folder you started Magic in, here `mag/`:
 
    ```tcl
-   extract do local
    extract all
    ext2spice lvs
    ext2spice cthresh 0

@@ -1,0 +1,8 @@
+* Lab 04 - the schematic side of LVS for the generated inverter.
+*
+* The same inverter as my_inv (Wn 0.65, Wp 1.00 high-Vt, L 0.15) under the
+* name of the cell you build from Magic's device generator in Part 7.
+.subckt my_inv_gen A Y VPWR VGND
+XM1 Y A VGND VGND sky130_fd_pr__nfet_01v8     w=0.65 l=0.15
+XM2 Y A VPWR VPWR sky130_fd_pr__pfet_01v8_hvt w=1    l=0.15
+.ends

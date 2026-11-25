@@ -113,10 +113,10 @@ def main() -> int:
                 f"{' '.join(ports(c)) or '(none)'}.\n"
                 "      A label goes into the cell you are editing, so one put over a\n"
                 "      subcell's pin stays in this block - but this block has no shape of\n"
-                "      its own under it, so Magic moves the label onto empty space (\"Moving\n"
-                "      label ... to space\"), and a label on space names no net. Paint your\n"
-                "      own small patch of li over the pin - same net, electrically nothing -\n"
-                "      and label that."
+                "      its own under it, so the label sits on empty space, and a label on\n"
+                "      space names no net. Paint your own small patch of li over the pin\n"
+                "      (same net, electrically nothing) and Magic moves the label onto it\n"
+                "      (\"Moving label ... from space to locali\")."
             )
         if fast.get(c, 1) or full.get(c, 1):
             problems.append(f"{c} has DRC violations: " + "; ".join(why[c]))
@@ -124,8 +124,8 @@ def main() -> int:
             if "pin matching" in v:
                 problems.append(
                     f"{c}: netgen matched the circuit and could not match the pin names.\n"
-                    "      Two labels are on the wrong shapes, or one is missing. `make swapped`\n"
-                    "      shows this failure on purpose so you can recognise it."
+                    "      Two labels are on the wrong shapes, or one is missing. Part 6 of the\n"
+                    "      lab shows this failure on purpose so you can recognise it."
                 )
             elif kids:
                 problems.append(

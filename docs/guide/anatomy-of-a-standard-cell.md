@@ -31,7 +31,7 @@ rails this way is the reason chips built from standard cells are laid out in row
 ## What is inside `inv_1`
 
 When you open it in
-[Lab 01, Part 2](../labs/lab-01-open-the-cell-overview.md#part-2-look-at-the-cell-in-magic), you
+[Lab 01, Part 2](../labs/lab-01-open-the-cell-overview.md#part-2-open-the-cell-in-magic), you
 will find:
 
 - **an n-well** across the top half, with p-diffusion inside it, which forms the PMOS

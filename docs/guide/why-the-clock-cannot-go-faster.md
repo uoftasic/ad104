@@ -26,15 +26,15 @@ three terms.
 The fastest thing this process can do is one inverter driving one inverter and nothing else, and
 you measured exactly that in Lab 05 with a **ring oscillator**, an odd number of inverters
 connected in a loop.
-[Lab 05, Part 5](../labs/lab-05-what-it-costs-overview.md#part-5-read-the-ring-oscillator)
+[Lab 05, Part 7](../labs/lab-05-what-it-costs-overview.md#part-7-read-the-ring-oscillator)
 explains why such a loop can't settle and oscillates instead, with a period of $2 N t_p$ for $N$
 stages that each take $t_p$. The lab builds two 31-stage rings out of extracted layouts, one from
-the foundry's inverter and one from yours, and measures them:
+the foundry's inverter and one from the Lab 03 reference inverter, and measures them:
 
 | | period | frequency | one stage |
 |---|---|---|---|
 | the foundry's `inv_1` | 2033.6 ps | 491.7 MHz | **32.80 ps** |
-| your Lab 03 inverter | 2640.2 ps | 378.8 MHz | **42.58 ps** |
+| the Lab 03 reference inverter | 2640.2 ps | 378.8 MHz | **42.58 ps** |
 
 So **33 picoseconds** is the floor: the delay of one gate in SKY130 at 1.8 V driving nothing but a
 copy of itself. Every other delay on this page can be counted in multiples of it.
@@ -107,8 +107,8 @@ You can attack every one of those terms, and every attack costs something you al
 | less self-load | pack the layout tighter | an afternoon of your time (Lab 05 measures what it buys) |
 | more headroom | pipeline it: cut the path with another flip-flop | latency, and a flip-flop's worth of area and power |
 
-Lab 05 measures the fourth row directly: in a ring, your loose inverter is 30 % slower than the
-foundry's, even though the transistors are identical.
+Lab 05 measures the fourth row directly: in a ring, the loosely drawn Lab 03 inverter is 30 %
+slower than the foundry's, even though the transistors are identical.
 
 Because none of these moves is free, a synthesis and place-and-route tool has to choose among
 them, a few million times over, guided by an objective function. This course has been about

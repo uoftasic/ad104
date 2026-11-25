@@ -10,33 +10,37 @@ this way in [Lab 04](../labs/lab-04-buffer-and-and-overview.md).
 
 ## Placing an instance
 
-In Magic, you place an instance by typing these commands in the console:
+In Magic you place an instance with the box and a menu. Left-click where the new instance should
+go, which moves the box there, then choose `Cell → Place Instance` and pick the cell's `.mag` file
+in the `Open` window. For a cell from the foundry's library, open `Options → Library Manager`
+instead, select the cell and press `Place`. Either way the instance goes in at the box.
 
-```tcl
-addpath ../mag                    ;# where to look for cells
-box 3um 0um 3um 0um               ;# a zero-size box at the spot you want
-getcell my_inv                    ;# drop a copy with its origin there
-identify inv2                     ;# give this copy a name
+Magic names each new instance after its cell: `my_inv_0`, `my_inv_1`, and so on. LVS ignores
+instance names, so you can leave them as they are. If you want a name of your own, select the
+instance with `i` and type `identify` and the new name in the console.
+
+An instance refers to `my_inv` rather than copying its geometry. Here is a new cell with two
+instances of `my_inv` placed that way, at x = 0 and x = 3 µm, saved in `mag/` next to
+`my_inv.mag`. The `.mag` file records each instance in four lines:
+
 ```
-
-`getcell` places an **instance**, which refers to `my_inv` rather than copying its geometry. If
-you run those four commands in a new cell, from a folder next to `mag/`, and save it, the `.mag`
-file records the whole instance in four lines:
-
-```
-use my_inv  inv2 ../mag
+use my_inv  my_inv_0
+timestamp 1787733743
+transform 1 0 0 0 1 0
+box 0 0 300 600
+use my_inv  my_inv_1
 timestamp 1787733743
 transform 1 0 300 0 1 0
 box 0 0 300 600
 ```
 
-The `use` line names the cell, the instance and the folder to look for the cell in. The
-`timestamp` is a copy of the one at the top of `my_inv.mag`, `transform` puts the cell's origin at
-x = 300, which is 3 µm in this file's 0.01 µm units, and `box` is the outline of `my_inv` in its
-own coordinates. Magic writes the folder only on the first `use` of each cell in a file, so in
-Lab 04's `solutions/buf_ref.mag` the line for `inv1` ends in `../mag` and the line for `inv2`
-doesn't. When the cell is in the same folder as the file that uses it, as in Lab 04's
-`mag/my_buf.mag`, none of the `use` lines has a path.
+The `use` line names the cell and the instance. The `timestamp` is a copy of the one at the top
+of `my_inv.mag`, `transform` puts the second cell's origin at x = 300, which is 3 µm in this
+file's 0.01 µm units, and `box` is the outline of `my_inv` in its own coordinates. When the cell
+is in another folder, the `use` line also names the folder to look in, and Magic writes it only on
+the first `use` of each cell in a file: in Lab 04's `solutions/buf_ref.mag` the line for `inv1`
+ends in `../mag` and the line for `inv2` doesn't. When the cell is in the same folder as the file
+that uses it, as here and in Lab 04's `mag/my_buf.mag`, none of the `use` lines has a path.
 
 Because every instance refers back to `my_inv.mag`, editing that one file changes all of them.
 That's the reason to use instances, and it's also why Lab 04's blocks are only a few lines long.
@@ -56,23 +60,15 @@ That is what makes a cell a **standard cell**: it keeps to a fixed height and fi
 positions, so that placing cells is just arithmetic.
 
 The foundry's library keeps to a height of 2.72 µm and a site width of 0.46 µm, so every cell in
-it is a multiple of 0.46 µm wide. In the capstone you place four of its cells at x = 0, 7.36,
-9.66 and 11.96, each one the running total of the widths of the cells before it, and the rails
-line up without any further work from you.
+it is a multiple of 0.46 µm wide. The capstone's four cells sit at x = 0, 7.36, 9.66 and 11.96,
+each one the running total of the widths of the cells before it, so their rails line up with
+nothing more drawn.
 
 ## Hierarchy
 
-In outline, Lab 04's buffer is:
-
-```tcl
-load my_buf
-place my_inv inv1 0.0
-place my_inv inv2 3.0
-paint li from inv1/Y across to inv2/A
-label A, label X, label VGND, label VPWR
-```
-
-When you extract it, you get this netlist:
+In outline, Lab 04's buffer is two instances of `my_inv`, `inv1` at x = 0 and `inv2` at x = 3 µm,
+one li wire from `inv1`'s output to `inv2`'s input, and four labels: A, X, VGND and VPWR. When you
+extract it, you get this netlist:
 
 ```spice
 .subckt my_buf A X VGND VPWR
@@ -93,18 +89,20 @@ AND gate has six transistors, and you don't draw any of them.
 
 **1. A label over a subcell's geometry names nothing.**
 
-Say you place two cells and abut them, and the rails connect. Then you put the box over a rail
-and type `label VGND`. A label always goes into the cell you're editing, so it lands in your
-cell, but the rail under it is geometry inside `inv1` and your cell has nothing of its own
-there. So Magic puts the label on empty space (if you type `label VGND c m1`, it says so:
-`Moving label "VGND" from metal1 to space`), and a label on space isn't attached to any net.
-*Your* cell then comes out of extraction with no supply ports at all, and netgen reports a
-pin-matching failure on a block that is otherwise perfect.
+Say you have placed two inverters, and you want the block's input `A` on `inv1`'s input. You set
+the box on `inv1`'s A pin, open `Edit → Text ...`, type `A`, tick `Port:` and click `Okay`. A label
+always goes into the cell you're editing, so it lands in your cell, but the li under it is
+geometry inside `inv1`, and your cell has nothing of its own there. So Magic puts the label on
+empty space, without a word in the console, and a label on space isn't attached to any net. In
+Lab 04's `my_buf`, extracting after that mistake gives `.subckt my_buf VGND VPWR`, with no `A`.
+The same happens to a VGND or VPWR label put on a rail that belongs to the cells: your cell then comes out of extraction with no supply ports, and netgen
+reports a pin-matching failure on a block that is otherwise perfect.
 
-The fix is to give the top cell some geometry of its own to put the name on. Paint a metal1
-rectangle over the row (it's the same net, so it changes nothing electrically) and put the label
-on that. Every composed block in this course does this, and the solutions READMEs for Lab 04 and
-the capstone explain it as a decision you can break on purpose to see what happens.
+The fix is to give the top cell some geometry of its own to put the name on. Paint a small `li`
+patch over the pin, or a metal1 rectangle over a rail (it's the same net, so it changes nothing
+electrically), and put the label on that. Every composed block in this course does this, and the
+solutions READMEs for Lab 04 and the capstone explain it as a decision you can break on purpose to
+see what happens.
 
 **2. The layers above a cell are not always empty.**
 
@@ -114,19 +112,19 @@ route metal1 across the flip-flop without knowing that, you get `met1.2` spacing
 geometry you didn't draw.
 
 That's why real routers carry a blockage map for every cell, and it's also why the capstone's `D`
-pin takes its via at an unexpected place. Before you route over a cell, read the `<< metal1 >>`
-section of its `.mag` file; the capstone has you do this.
+pin takes its via at an unexpected place. Before you route over a cell, look at the metal1 it
+already has, on screen or in the `<< metal1 >>` section of its `.mag` file; the capstone has you
+do this.
 
 **3. The path recorded in the `.mag` file is relative to where you saved it.**
 
-`use my_inv  inv2 ../mag` means "look in `../mag`, starting from the folder this `.mag` file is
-in", rather than from the folder you started Magic in. That's why you can load Lab 04's
-`solutions/buf_ref` from the lab folder and Magic still finds `my_inv` in the lab's `mag/`. If you
-move the file to a folder with no `../mag` next to it, though, Magic can't find the cell: it
-prints a `couldn't be read` error for `my_inv.mag`, and the instance shows up as an empty box with
-a name in it. The labs avoid this by always changing to a known directory first
-and setting `addpath` after that, and the order is worth copying in your own work: **`cd` first,
-`addpath` second.**
+`use my_inv  inv1 ../mag` means "look in `../mag`, starting from the folder this `.mag` file is
+in", rather than from the folder you started Magic in. That's why Lab 04's
+`solutions/buf_ref.mag` still finds `my_inv` in the lab's `mag/`. If you move the file to a folder
+with no `../mag` next to it, though, Magic can't find the cell: it prints a `couldn't be read`
+error for `my_inv.mag`, and the instance shows up as an empty box with a name in it. The lab
+scripts in `tcl/` have a related trap with `addpath`, which the
+[Magic cheat sheet](../reference/magic-cheatsheet.md#batch-scripts) explains.
 
 ## What a place-and-route tool does
 

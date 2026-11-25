@@ -14,39 +14,49 @@ and you'll spend a lot of your layout time going round it.
 
 ## What a violation looks like
 
-Magic runs the check continuously as you draw. It covers each violation with white hatching and
-keeps a count in the toolbar, and to find out what a particular violation is, you put the box
-over it and ask:
+Magic checks the shapes you change as you draw. It covers each violation with white hatching and
+keeps a count on the `DRC` button at the top of the window, and to find out what a particular
+violation is, you put the box on it and choose `Drc → DRC report`:
 
-![A real violation, and the rule it broke](../assets/img/ad104-magic-drc-why.png)
+![Lab 02's `drc_03` after `Drc → DRC update`, the `=` key and `Drc → DRC report`](../assets/img/ad104-g-drc-report.png){fig-alt="Magic's layout window, zoomed in on a poly contact with white hatching around it, and the console under it. The DRC button at the top reads DRC=14 on a red background. The console's last lines are No errors found, Error area #2, and the licon.8a message twice."}
 
-*The toolbar says `DRC=14`, and the white hatching sits around the poly contact. With the box
-over the hatching, `drc why` names the rule twice: once as the plain enclosure rule and once as
-the directional version of it.*
+*The `DRC` button says `DRC=14`, and the white hatching sits around the poly contact. `DRC update`
+printed `No errors found.` because the box was still on empty space; `=` moved the box onto an
+error, and `DRC report` named the rule broken inside it.*
 
 ```
-% drc why
-poly overlap of poly contact < 0.05um (licon.8)
+No errors found.
+Error area #2:
+poly overlap of poly contact < 0.08um in one direction (licon.8a)
 poly overlap of poly contact < 0.08um in one direction (licon.8a)
 ```
+
+The box that `=` sets covers one small error tile, so the report names the one rule broken there.
+With the box over the whole landing pad, `DRC report` names the rule twice: once as the plain
+enclosure rule, `poly overlap of poly contact < 0.05um (licon.8)`, and once as the directional
+version above.
 
 That's cell `drc_03` from [Lab 02](../labs/lab-02-break-it-on-purpose-overview.md). Its poly
 landing pad has been shrunk to 0.25 × 0.25 µm around a 0.17 µm cut, which leaves 0.04 µm of poly
 on each side, and the rule asks for 0.05.
 
-## The four DRC commands
+## Reading DRC in Magic
 
-```tcl
-drc check          ;# re-run the checker over the whole cell
-drc catchup        ;# wait for it to finish (batch scripts need this)
-drc count total    ;# how many violations
-drc why            ;# name the rules broken under the current box
-```
+Everything you need is on the `Drc` menu, the `DRC` button and one key:
 
-You'll use `drc why` the most, because `drc count total` only tells you how many violations there
-are, while `drc why` tells you what they are. When you do want the count, use `drc count total`
-rather than plain `drc count`. The last line of plain `drc count` is a hierarchical total, and on
-a cell with no subcells it reads 0.
+| Where | What it does |
+|---|---|
+| the `DRC` button | Shows the count, as `DRC=14`, once the cell has been checked. A cell you have just opened shows a green `DRC` and no count, even if it has errors, because Magic checks only what you change. |
+| `Drc → DRC update` | Checks the whole cell and sets the count on the button. It then reports the rules broken inside the box, so if the box is on empty space the console says `No errors found.` while the button shows a count. |
+| the `=` key | Puts the box on the next error and zooms out far enough that you can see where it is. The pointer has to be over the drawing. (`Drc → DRC Find next error` does the same but zooms in to a view about 0.1 µm wide, too close to see where you are.) |
+| `Drc → DRC report` | Prints, in the console, the rule broken by every error inside the box. |
+| `Options → DRC Manager` | Lists every rule the cell breaks, one row per rule, with the cell's errors under each. Select an error and press `Zoom` to go to it. Using the manager selects the whole cell, which writes the cell's name across the drawing; press `,` over the drawing to clear it. |
+| `Drc → DRC Fast`, `Drc → DRC Complete` | Switch between the default and the full rule set. The count changes only at the next `DRC update`. See [The full DRC rule set](the-rule-set-you-are-not-running.md). |
+
+`DRC report` is the one you'll use most, because the count only tells you how many violations
+there are, while the report tells you what they are. The
+[Magic cheat sheet](../reference/magic-cheatsheet.md) has the console form of each of these,
+which the lab scripts use.
 
 ## "In one direction"
 
@@ -108,7 +118,7 @@ The worst habit in layout is nudging shapes a little at a time until the white h
 away. It does work eventually, but it takes ten times as long and teaches you nothing, and the
 layout it produces is usually right only by accident, so a single edit can make it wrong again.
 
-Instead, take the rule name and number from `drc why`, look the number up, change the geometry
+Instead, take the rule name and number from `DRC report`, look the number up, change the geometry
 so that it satisfies the rule with a comfortable margin, and run the check again.
 
 The [DRC error decoder](../reference/drc-error-decoder.md) lists every rule this course can make you

@@ -15,16 +15,19 @@ through the two circuits and asks whether there is a one-to-one correspondence b
 devices and between their nets. The names of the cell's pins are the exception, and the first
 failure below is what you get when they disagree.
 
+In the labs you type it in a terminal, in the folder that holds your layout and its extracted
+netlist. For Lab 03's inverter, from its `mag/` folder:
+
 ```bash
-netgen -batch lvs \
-  "results/my_inv.lvs.spice my_inv" \
-  "spice/my_inv_sch.spice my_inv" \
-  "$PDK_ROOT/sky130A/libs.tech/netgen/sky130A_setup.tcl" \
-  results/lvs.report
+netgen -batch lvs "my_inv.spice my_inv" "../spice/my_inv_sch.spice my_inv" \
+  $PDK_ROOT/sky130A/libs.tech/netgen/sky130A_setup.tcl
 ```
 
-The command takes four arguments: your layout netlist and the cell in it, the schematic netlist
-and the cell in it, the PDK's setup file, and the file to write the report to.
+The command takes three arguments: your layout netlist and the cell in it, the schematic netlist
+and the cell in it, and the PDK's setup file. netgen prints the comparison and writes the same
+report to `comp.out` in the folder you ran it from. When `make` runs netgen, it adds a fourth
+argument, the file to write the report to (`results/lvs.report` in Lab 03), and reads the result
+from there.
 
 The setup file is easy to treat as a formality, but netgen depends on it. It tells netgen that
 `sky130_fd_pr__nfet_01v8` has interchangeable source and drain, which W and L to compare and with
@@ -44,8 +47,9 @@ The word "uniquely" means that netgen found exactly one correspondence between t
 ### "Netlists match uniquely" with "failed pin matching"
 
 This is the more confusing of the two failures, so in
-[Lab 04](../labs/lab-04-buffer-and-and-overview.md#part-6-meet-the-pin-swap-message) we have you
-produce it on purpose with `make swapped`:
+[Lab 04, Part 6](../labs/lab-04-buffer-and-and-overview.md#part-6-meet-the-pin-swap-message) you
+produce it on purpose, by running netgen against `spice/swapped_sch.spice`, a schematic with the
+NAND's two inputs exchanged:
 
 ```
 Netlists match uniquely.
@@ -118,8 +122,8 @@ so that it doesn't cost you an afternoon later:
 
 ## Why the labs run LVS {#why-every-lab-runs-lvs}
 
-DRC failures are loud and local: Magic hatches the spot and `drc why` names the rule, so they're
-cheap to fix. LVS failures are quiet, and the cause can be anywhere in the cell.
+DRC failures are loud and local: Magic hatches the spot and `Drc → DRC report` names the rule,
+so they're cheap to fix. LVS failures are quiet, and the cause can be anywhere in the cell.
 
 Take a wire that stops 0.02 µm short of its pin. At any zoom you would normally use, it looks
 perfect. It passes DRC, because a gap doesn't violate any rule, and it extracts without

@@ -8,7 +8,9 @@ style drc variants (fast),(full),(routing)
 ```
 
 The first variant listed is the default, so unless you choose another one, Magic checks your
-layout with **`fast`**, which leaves out a whole category of rules.
+layout with **`fast`**, which leaves out a whole category of rules. Magic's `Drc` menu calls the
+two you'll use `DRC Fast` and `DRC Complete`, and `make` prints them as the default and the full
+rule set.
 
 ## What `full` adds
 
@@ -44,7 +46,7 @@ leaves unsatisfied: Lab 02's `drc_05` has an n-tap with no contact, and the full
 A missing tap is hard to catch because nothing you normally look at shows it:
 
 - The layout looks complete.
-- `drc check`, with the default rule set, reports **0**.
+- DRC with the default rule set reports **0**.
 - The cell extracts.
 - It might even simulate, depending on what the floating body does.
 
@@ -56,7 +58,9 @@ checked both ways before its tap cells go in:
       DRC, full rule set     32
 ```
 
-The default check reported none of the thirty-two violations in this block. That matters because
+Magic shows the same thing on the `DRC` button: `DRC=0` after `Drc → DRC update` under
+`DRC Fast`, and `DRC=32` after `Drc → DRC Complete` and another update. The default check
+reported none of the thirty-two violations in this block. That matters because
 on real silicon, missing taps cause **latch-up**. Every CMOS process contains parasitic bipolar
 transistors between the well, the substrate and your diffusions, and the taps are what hold the
 well and substrate firmly at their supplies. If nothing holds them there, a transient can turn
@@ -66,20 +70,15 @@ that.
 
 ## The rule of thumb
 
-> **Before you believe a DRC count of zero, run it again with `drc style drc(full)`.**
+> **Before you believe a DRC count of zero, check again with the full rule set.**
 
-Every lab in this course that runs DRC runs both rule sets and prints both counts side by side,
-so inside a lab you never have to remember to do this. When you work in Magic by hand, you have
-to switch to the full set yourself, with this sequence:
-
-```tcl
-drc style drc(full)
-drc check
-drc catchup
-drc count total
-```
-
-To switch back to the default rule set, run `drc style drc(fast)`.
+Wherever a lab's `make` runs DRC, it runs both rule sets and prints both counts side by side, so
+inside `make` you never have to remember this. In Magic you switch yourself: choose
+`Drc → DRC Complete`, then `Drc → DRC update`. Switching the rule set doesn't recheck anything,
+so the count on the `DRC` button changes only after the update. `Drc → DRC Fast`, then
+`Drc → DRC update`, takes you back to the default. The
+[Magic cheat sheet](../reference/magic-cheatsheet.md#the-drc-menu) has the console form that the
+lab scripts use.
 
 ## The same fault in the netlist
 

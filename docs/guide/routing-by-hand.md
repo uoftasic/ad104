@@ -77,8 +77,11 @@ that somewhere around ten nets you no longer could.
 
 ## Metal already inside a cell
 
-Before you run metal1 across a cell, check what metal1 the cell already has by reading the
-`<< metal1 >>` section of its `.mag` file. On the workbench image, `and2_0` has 16 metal1
+Before you run metal1 across a cell, check what metal1 the cell already has. On screen, expand
+the cells and press `!` with the pointer over the drawing. In the workbench image that key hides
+every layer except mcon, metal1 and via1, so the metal1 inside each cell stands out; left-click a
+layer's swatch in the palette to show that layer again. The other way is to read the
+`<< metal1 >>` section of the cell's `.mag` file. On the workbench image, `and2_0` has 16 metal1
 rectangles and `buf_1` has 12, all of them in the rails. The flip-flop, `dfxtp_1`, has 74,
 including two long horizontal straps across the middle of the cell. Those straps are why the
 capstone's `D` connection can't put its via at the D label: a pad there would sit 0.07 µm from a
@@ -95,8 +98,11 @@ A cell's pin is a rectangle of li, and often it's several rectangles in differen
 the same net. `buf_1`, for example, publishes its output `X` at three different heights. Any of
 them is a legal place to land, so pick the one your wire can reach.
 
-You'll find the coordinates in the cell's `.mag` file, on its `flabel` lines. Here is the one for
-`and2_0`'s output `X`:
+To find a pin on screen, expand the cell so its shapes and labels are drawn, find the pin's label,
+zoom in on it, and set the box on the pin's rectangle with the click recipe from
+[Drawing in Magic](drawing-in-magic.md#exact-small-shapes); `b` then prints its corners. The
+cell's `.mag` file has the same rectangle on its `flabel` lines, which is a good way to check what
+you read. Here is the line for `and2_0`'s output `X`:
 
 ```
 flabel locali s 397 425 431 459 0 FreeSans 340 0 0 0 X
@@ -106,12 +112,12 @@ port 7 nsew signal output
 The units are 0.005 µm, as in every foundry cell's `.mag` file
 ([Drawing in Magic](drawing-in-magic.md#the-mag-file) shows how your own cells differ), so that
 pin covers x = 1.985–2.155 and y = 2.125–2.295, measured from the cell's origin. Add the x
-position you placed the cell at, and you know where to put the `mcon`.
+position the cell was placed at, and you can compare it with the corners `b` printed.
 
 ## The routing loop
 
-The capstone turns this page into a step-by-step procedure: find both pins in absolute
-coordinates, put an `mcon` and a pad on each, join them inside the band, and then check your
-work. You need two checks, because they catch different mistakes. DRC, run under both rule sets
-(see [The full DRC rule set](the-rule-set-you-are-not-running.md)), catches spacing and enclosure errors and missing tap cells, and LVS catches a wire that doesn't
-quite land on its pin.
+The capstone turns this page into a step-by-step procedure: find both pins on screen, put an
+`mcon` and a pad on each, join them inside the band, and then check your work. You need two
+checks, because they catch different mistakes. DRC, run under both rule sets (see
+[The full DRC rule set](the-rule-set-you-are-not-running.md)), catches spacing and enclosure
+errors and missing tap cells, and LVS catches a wire that doesn't quite land on its pin.

@@ -41,7 +41,8 @@ Step files go in `steps/`: one per lab (`l01.sh`, `l02.sh`, …, `cap.sh`) and o
 guide pages (`g.sh`). Every screenshot on a page comes from a committed step file, so it
 can be taken again after a change. Run all of a lab's shots in one call. In the spike, ten
 step files ran in one container in 26 minutes, most of it in the pauses after each click
-and menu item.
+and menu item. The capstone's `cap.sh` takes 15 to 16 minutes on its own, more than the
+default timeout, so run it with `RIG_TIMEOUT=2400`.
 
 ## Files
 

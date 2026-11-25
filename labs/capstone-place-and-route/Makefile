@@ -2,11 +2,9 @@
 #
 #   make           DRC both ways, LVS, then time the path            (~15 s)
 #   make layout    just the DRC and LVS part                          (~1.4 s)
-#   make edit      open mag/datapath.mag in Magic
 #   make scaffold  throw your routing away, back to four placed cells
 #   make ref       build solutions/datapath_ref.mag
 #   make refcheck  run every check against the reference block
-#   make gds       write results/datapath.gds and a KLayout-ready view
 #   make clean     delete results/
 
 export PDK      := sky130A
@@ -18,7 +16,7 @@ NGSPICE ?= ngspice
 PYTHON  ?= python3
 SETUP   := $(PDK_ROOT)/sky130A/libs.tech/netgen/sky130A_setup.tcl
 
-.PHONY: all check layout edit scaffold ref refcheck gds clean
+.PHONY: all check layout scaffold ref refcheck clean
 
 all: check
 
@@ -54,9 +52,6 @@ layout: results/lvs.report
 check: results/timing.log
 	@$(PYTHON) src/check.py
 
-edit:
-	@cd mag && $(MAGIC) -d X11 datapath &
-
 scaffold: | results
 	@rm -f mag/datapath.mag
 	@$(MAGIC) -dnull -noconsole tcl/place.tcl > results/place.log 2>&1 || true
@@ -77,11 +72,6 @@ refcheck: | results
 	   "spice/datapath_sch.spice datapath" "$(SETUP)" results/lvs.report \
 	   > results/netgen_ref.log 2>&1 || true
 	@$(PYTHON) src/check.py --layout-only --cell datapath_ref
-
-gds: results/report.txt
-	@$(MAGIC) -dnull -noconsole tcl/gds.tcl > results/gds.log 2>&1 || true
-	@ls -la results/datapath.gds 2>/dev/null || { echo "no GDS - read results/gds.log"; exit 1; }
-	@echo "open it with:  klayout -nn $(PDK_ROOT)/sky130A/libs.tech/klayout/tech/sky130A.lyt results/datapath.gds"
 
 clean:
 	@rm -rf results && mkdir -p results && touch results/.gitkeep

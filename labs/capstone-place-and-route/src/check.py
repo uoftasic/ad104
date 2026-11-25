@@ -137,7 +137,8 @@ def main() -> int:
                 "      Every violation is about well taps. Nothing in your row ties the\n"
                 "      nwell to VPWR or the substrate to VGND, because sky130_fd_sc_hd\n"
                 "      cells are drawn tapless on purpose - the taps are a separate cell.\n"
-                "      Place a sky130_fd_sc_hd__tapvpwrvgnd_1 at each end of the row.\n"
+                "      Place a sky130_fd_sc_hd__tapvpwrvgnd_1 at each end of the row\n"
+                "      (`Options -> Library Manager`, then `Place`).\n"
                 "      Look at the extracted netlist too: the body terminals come out on\n"
                 "      a node called VSUBS instead of VGND, which is the same fault seen\n"
                 "      by a different tool."
@@ -238,7 +239,7 @@ def main() -> int:
     print("      it is the circuit you were given, and then measured the clock ceiling")
     print("      of your own layout.")
     print()
-    print("      `make gds` writes the file a foundry would take.")
+    print("      `File -> Write GDS` in Magic writes the file a foundry would take.")
     return 0
 
 

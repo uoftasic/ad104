@@ -1,6 +1,6 @@
 # Capstone: Place and route
 
-Writeup: [uoftasic.com/ad104 → Capstone](https://uoftasic.com/ad104/labs/capstone-place-and-route-overview.html).
+Writeup: [uoftasic.com/ad104-m → Capstone](https://uoftasic.com/ad104-m/labs/capstone-place-and-route-overview.html).
 The writeup has the steps, the expected output and the explanations; this file is a quick
 reference.
 
@@ -18,8 +18,18 @@ a timing simulation of the extracted layout. The four cells make this circuit:
 
 ```bash
 cd labs/capstone-place-and-route
-make scaffold     # four cells placed, nothing wired
-make edit
+make scaffold                 # four cells placed, nothing wired
+cd mag
+magic -d X11 datapath &       # place, route and check the block in Magic
+```
+
+You do the work in Magic: routing, labels, DRC, extraction, and writing the GDS with
+`File → Write GDS`. Extraction and netgen run in `mag/`, where Magic started. Save the
+block in Magic before each check, because the checker reads `mag/datapath.mag` from disk:
+`File → Save...` asks about each changed cell in turn, and you click `write` for `datapath`
+and `skip` for the library cells. Then, from `labs/capstone-place-and-route`:
+
+```bash
 make layout       # DRC + LVS only, about 1.4 s
 make              # ...and the timing, about 15 s
 ```
@@ -34,10 +44,8 @@ make              # ...and the timing, about 15 s
 |---|---|
 | `make` | DRC both ways, LVS, then the timing |
 | `make layout` | just DRC and LVS, about 1.4 s; the loop to use while routing |
-| `make edit` | open your block in Magic |
 | `make scaffold` | **throw your routing away**, back to four placed cells |
 | `make ref` / `make refcheck` | build and check the reference block |
-| `make gds` | write `results/datapath.gds`, about 25 kB |
 | `make clean` | delete `results/` |
 
 ## Files
@@ -48,7 +56,6 @@ make              # ...and the timing, about 15 s
 | `tcl/place.tcl` | the placement, four `getcell` calls |
 | `tcl/route_ref.tcl` | the reference: every wire and every via, with the reason for each coordinate |
 | `tcl/verify.tcl` | DRC both ways, extract, PEX-extract |
-| `tcl/gds.tcl` | write GDSII |
 | `spice/datapath_sch.spice` | the netlist you were given, for LVS |
 | `src/mktiming.py` | builds the testbench around your port order, and reads the setup time out of the Liberty file |
 | `solutions/README.md` | the decisions in the reference, and what to break to see why |

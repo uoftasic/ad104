@@ -75,8 +75,9 @@ covers**, and it tells you where to read the transistor's size off the drawing:
   current.
 - **$L$ is the width of the poly stripe where it crosses.** A longer channel carries less current.
 
-In this course you never type `W=0.65`. Instead, in Lab 03 you draw a rectangle 0.65 µm tall,
-and Magic reads `w=0.65` back out of it. That round trip, in which you draw a shape and a tool
+In Lab 03 you never type `W=0.65`. Instead you draw a rectangle 0.65 µm tall, and Magic reads
+`w=0.65` back out of it. (In Lab 04, Magic's device generator asks for the width in a dialog and
+draws the rectangle for you.) That round trip, in which you draw a shape and a tool
 tells you the device parameter, is the point where layout stops being abstract.
 
 ## Diffusion as a wire, and tying the wells

@@ -7,23 +7,43 @@ intentions would tell you nothing you didn't already know.
 
 ## The commands
 
+Magic has no menu for extraction, so you type it in the console, `tkcon`, in the Magic you started
+from the cell's folder:
+
 ```tcl
-extract do local          ;# extract this cell's own geometry
-extract all               ;# ...and every subcell in it
-ext2spice lvs             ;# format the result for netgen
-ext2spice -o my_inv.spice
+extract all
+ext2spice lvs
+ext2spice
 ```
 
-`extract` writes a `.ext` file in Magic's own format, which isn't very readable, and `ext2spice`
-turns that file into a SPICE netlist. The `lvs` argument is a preset that formats the netlist the
-way netgen wants it: no parasitic resistors, the subcircuits kept hierarchical, and no `.include`
-of the models.
+`extract all` reads the geometry of the cell and every subcell in it, works out the devices and
+the nets that join them, and writes a `.ext` file for each cell in Magic's own format, which
+isn't very readable. `ext2spice` turns those into a SPICE netlist, `<cell>.spice`, or into the
+file you name with `ext2spice -o`. `ext2spice lvs` prints nothing: its `lvs` argument is a preset
+that formats the netlist the way netgen wants it, with no parasitic resistors, the subcircuits
+kept hierarchical, and no `.include` of the models. Without it, `ext2spice` writes the devices with
+no `.subckt` line around them.
+
+`extract all` writes each cell's `.ext` file next to that cell's `.mag` file. You start Magic in
+your cell's own folder, so for your own cells the `.ext` files and the netlist all land next to
+the `.mag` file. The foundry's cells, which Labs 01 and 05 open from a folder of the PDK that you
+can't write to, are different: for those, `extract all` writes the `.ext` file into the folder
+you started Magic in. In Lab 01 the console says:
+
+```
+Extracting sky130_fd_sc_hd__inv_1 into sky130_fd_sc_hd__inv_1.ext:
+```
+
+`extract do local` makes that the rule for every cell: Magic then writes all its `.ext` files in
+the folder it was started in, wherever the cells came from. The lab scripts in `tcl/` run it
+before `extract all`, so that their files land in `results/` rather than next to your cell.
 
 ## Reading the netlist
 
 Here is the extracted netlist of the reference inverter for Lab 03. Yours will have the same
 devices, though its ports may be listed in a different order, depending on the order in which you
-created the labels:
+created the labels, and its `ad`, `pd`, `as` and `ps` will be your own, because they measure the
+diffusions you drew:
 
 ```spice
 .subckt my_inv A Y VPWR VGND
@@ -36,7 +56,7 @@ Every field in it comes from something you drew:
 
 | Field | Where it came from |
 |---|---|
-| `.subckt my_inv A Y VPWR VGND` | the four labels you placed, promoted by `port makeall` |
+| `.subckt my_inv A Y VPWR VGND` | the four labels in the cell, each one made a port |
 | `X0 Y A VGND VGND` | drain, gate, source and bulk, worked out from which shapes touch which |
 | `w=0.65` | the **height** of the n-diffusion under the poly |
 | `l=0.15` | the **width** of the poly stripe where it crosses |
@@ -47,8 +67,9 @@ Every field in it comes from something you drew:
 `ad` and `pd` are easy to skim past, and they matter a great deal. Every square micron of drain
 diffusion is a reverse-biased junction to the body (the p-substrate under the NMOS, the n-well
 under the PMOS), and a reverse-biased junction is a capacitor, so the more drain area you draw,
-the more capacitance sits on the drain. Your
-inverter's drain area is **4.2 times** the foundry's, and Lab 05 measures what that costs.
+the more capacitance sits on the drain. The
+reference inverter's drain area is **4.2 times** the foundry's, and Lab 05 measures what that
+costs.
 
 ## Node names you did not choose
 

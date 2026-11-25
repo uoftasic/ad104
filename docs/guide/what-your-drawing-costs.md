@@ -30,7 +30,11 @@ Lab 05 runs the extraction and both simulations and prints this table:
 | **FO4 delay, average** | **62.88 ps** | **57.73 ps** | **1.09 ×** |
 | **ring-oscillator stage delay** | **42.58 ps** | **32.80 ps** | **1.30 ×** |
 
-Look at the two delay rows. Your cell is 9 % slower than the foundry's in one test and 30 %
+The `yours` column is the Lab 03 reference inverter, which Lab 05 measures unless you swap in your
+own cell in its optional part. A cell you drew has the same 3.00 × 6.00 µm frame, but its
+junction areas and delays are its own, because you chose its shapes.
+
+Look at the two delay rows. The Lab 03 cell is 9 % slower than the foundry's in one test and 30 %
 slower in the other, and most of this page is about why the two tests disagree by that much.
 
 ## FO4 delay and ring-oscillator delay
@@ -47,12 +51,12 @@ number of femtofarads.
 
 In a **fan-out of 4 (FO4)** test, the output drives four copies of the same cell. The gate
 capacitance of those four copies dominates the load, and it's the same for both cells because
-their W and L are the same. Your extra junction area is then only a small share of the total, so
-you come out 9 % behind.
+their W and L are the same. The Lab 03 cell's extra junction area is then only a small share of
+the total, so it comes out 9 % behind.
 
 **A ring oscillator** is a loop in which each stage drives exactly one copy of itself and nothing
-else. With only one gate downstream, the self-load is a much bigger fraction of the total, so your
-4.23 × junction area shows up in full and you come out 30 % behind.
+else. With only one gate downstream, the self-load is a much bigger fraction of the total, so the
+4.23 × junction area shows up in full and the Lab 03 cell comes out 30 % behind.
 
 > **Layout parasitics act roughly like a fixed extra load, so they're lost in the noise when a
 > gate drives something big, and they dominate when it drives something small.**
@@ -65,7 +69,7 @@ last nanometre even though "it is only a few femtofarads".
 Here is part of what `ext2spice cthresh 0` pulls out of each cell:
 
 ```
-yours, all of it              the foundry's, only the lines on Y
+Lab 03 cell, all of it        the foundry's, only the lines on Y
 C0 Y A       0.02272f         C1 Y VPWR    0.07413f
 C1 VPWR A    0.10808f         C5 Y VPB     0.01774f
 C2 Y VPWR    0.06413f         C6 VGND Y    0.05975f
@@ -74,11 +78,11 @@ C4 VPWR VGND 1.32518f         C11 Y VNB    0.1626f
                               ... 14 lines in total
 ```
 
-(Magic doesn't always write the `C` lines in the same order, so yours may be numbered
+(Magic doesn't always write the `C` lines in the same order, so your run may number them
 differently, but the values don't change from run to run.)
 
-Your total is higher, 1.86 fF against 1.424 fF, and so is the part that Lab 05 prints as
-*"of it on the output"*: 0.4268 fF for yours against 0.3519 fF for theirs. Neither ratio, 1.31 ×
+The Lab 03 cell's total is higher, 1.86 fF against 1.424 fF, and so is the part that Lab 05
+prints as *"of it on the output"*: 0.4268 fF against 0.3519 fF for the foundry's. Neither ratio, 1.31 ×
 and 1.21 ×, comes anywhere near the 4.23 × of the drain junction areas.
 
 That's because the extracted capacitors don't include the drain junctions. They are the
@@ -86,7 +90,7 @@ capacitance of the **wiring** and the well: between one wire and another, from t
 the substrate and the well (the lines ending in `VNB` and `VPB` in the foundry's list), and
 between the well and the substrate. The **junction capacitance** of the source and drain
 diffusions lives inside the device model instead, which computes it from the `ad`, `as`, `pd` and
-`ps` parameters, and your values for those are 4.23 × theirs.
+`ps` parameters, and the Lab 03 cell's values for those are 4.23 × theirs.
 
 Adding it up:
 

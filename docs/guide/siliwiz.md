@@ -7,7 +7,7 @@ You paint layout layers in SiliWiz, and it shows you the **cross-section** of th
 described and simulates it. It doesn't model the SKY130 process and it isn't a production tool,
 but it's the quickest way to turn "poly over diffusion makes a transistor" from a sentence you've
 read into something you've seen. You can spend twenty minutes with it in
-[Part 8](../labs/lab-01-open-the-cell-overview.md#part-8-explore-siliwiz-optional), the optional
+[Part 10](../labs/lab-01-open-the-cell-overview.md#part-10-explore-siliwiz-optional), the optional
 last part of Lab 01.
 
 ![SiliWiz with the inverter preset loaded](../assets/img/ad104-siliwiz.png)

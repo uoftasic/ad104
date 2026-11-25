@@ -61,8 +61,8 @@ name. With the box set:
   there.
 - **Shift + middle-click a swatch** to erase only that layer from the box.
 - With the pointer over a row, **`p`** paints that layer and **`e`** erases it.
-- **Point at a row** and the layer's name appears in the title bar. That is the only place the
-  window names a layer before you paint it, so check it.
+- **Point at a row** and the layer's name also appears in the title bar, which tells you which
+  row the pointer is on before you click.
 - **Right-click a swatch** to hide that layer, and **left-click** it to show it again.
 
 The palette shows only its top part at first. `polysilicon`, `locali`, `viali` and `metal1`, the
@@ -84,14 +84,15 @@ below `locali`.*
 | `v` | fit the whole cell in the window (`Window → Full View`) |
 | arrow keys | pan by a tenth of the window; with shift, by a whole window |
 
-**Keys act only while the pointer is over the drawing.** A key pressed with the pointer over the
-scrollbars, the title bar or the palette leaves Magic without a current window, and until you
-move the pointer back over the drawing the next menu item may fail with an `Application Error`
-box that says only `Error:`.
+**Apart from `p` and `e` over the palette, keys act only while the pointer is over the
+drawing.** A key pressed with the pointer over the scrollbars or the title bar leaves Magic
+without a current window, and until you move the pointer back over the drawing the next menu
+item may fail with an `Application Error` box that says only `Error:`.
 
 The desktop gives the keyboard to the window you last clicked. After you type in the console,
-click the layout window's **title bar** before you press a key, or the key goes into the console.
-Don't click in the drawing to do it: a left click there moves the box.
+click the layout window's **title bar**, the brown strip with the caption, then move the pointer
+back over the drawing and press the key. Without the click the key goes into the console. Don't
+click in the drawing instead: a left click there moves the box.
 
 ## The grid and snapping
 
@@ -164,6 +165,12 @@ names. These are the ones this course uses:
 
 `tech layers`, typed in the console, prints the full list with every alias.
 
+Where a poly stripe crosses a diffusion, Magic stores the crossing as a layer of its own, a
+transistor layer, and that is what extraction turns into a device. The `.mag` file uses Magic's
+own names, which can be a third name again: in Lab 03's cell the NMOS channel is the
+`<< nmos >>` section, the PMOS channel after you paint `pfethvt` over it is `<< pmoshvt >>`, the
+p-tap is `<< psubdiff >>`, and the diffusion contacts are `<< ndiffc >>` and `<< pdiffc >>`.
+
 ## Contact layers
 
 Contacts surprise everyone who is new to Magic, because you don't place a contact as an object.
@@ -178,7 +185,8 @@ That has a few consequences, and it's worth knowing them before they confuse you
 - The plain layers still have to surround the contact. The diffusion has to extend past the
   contact, and so does the li. The rules for those are `licon.5c` and `li.5`, and `li.5` is one
   of the five rules you fix in Lab 02.
-- Erasing li from a contact doesn't remove the contact; Magic demotes it instead.
+- Erasing li from a contact doesn't leave a bare cut: the contact goes, and the layer below it
+  stays, so an `ndcontact` with its li erased is plain `ndiffusion` again.
 
 ## Labels and ports
 
@@ -203,13 +211,16 @@ next free one
 ([Lab 04, Part 4](../labs/lab-04-buffer-and-and-overview.md#part-4-build-the-and-gate)).
 
 The label goes on the layer under the box, and the console says so:
-`Moving label "A" from space to locali in cell my_inv.` With `default` ticked under
-`Attach to layer:`, Magic picks a layer that covers the whole box. If the box touches a contact,
-that can be the well underneath rather than the li you meant, so untick `default` and type the
-layer's name, as
-[Lab 03, Part 7](../labs/lab-03-draw-an-inverter-overview.md#part-7-name-the-pins) does. A label names a net, and the `Port:` box
-makes it a terminal of the cell. That second step is what makes the extracted netlist come out as
-`.subckt my_inv A Y VPWR VGND` rather than as a subcircuit with no pins. If netgen ever says a
+`Moving label "A" from space to locali in cell my_inv.` That is with `default` ticked under
+`Attach to layer:`, where Magic picks a layer that covers the whole box; with a layer name typed
+there instead, the console prints no such line. If the box touches a contact, the layer that
+covers it can be the well underneath rather than the li you meant, so untick `default` and type
+the layer's name, as
+[Lab 03, Part 7](../labs/lab-03-draw-an-inverter-overview.md#part-7-name-the-pins) does.
+
+A label names a net, and the `Port:` box makes it a terminal of the cell. That second step is
+what makes the extracted netlist come out as `.subckt my_inv A Y VPWR VGND` rather than as a
+subcircuit with no pins. If netgen ever says a
 cell's pin list is empty, a label without `Port:` ticked is the first thing to check. (In the
 capstone you make the block's labels without ticking it, then make them all ports at once by
 typing `select top cell` and `port makeall` in the console.)
@@ -254,8 +265,8 @@ Each of these happens in the workbench image:
 6. **`Drc → DRC update` prints `No errors found.`** while the `DRC` button shows a count, because
    it reports only on the box. And a cell you have just opened shows a green `DRC` and no count
    until something triggers a check.
-7. **`Drc → DRC Complete` and `Drc → DRC Fast` don't recount.** The count changes only at the
-   next `Drc → DRC update`.
+7. **`Drc → DRC Complete` and `Drc → DRC Fast` don't recount.** They switch DRC to the full and
+   to the default rule set, and the count changes only at the next `Drc → DRC update`.
 8. **`Drc → DRC Find next error` zooms in to about 0.1 µm**, too close to see where you are. The
    `=` key finds the next error and zooms out 16 times.
 9. **`!`, `?` and `f` do something else in this image** than Magic's own documentation says: `!`
@@ -287,15 +298,16 @@ rect 80 260 520 390
 | A foundry cell from the PDK | `magscale 1 2` | 0.005 µm | 0.40 → 2.60 µm |
 | Anything this course draws | *no `magscale` line* | 0.01 µm | 0.80 → 5.20 µm |
 
-So the rectangle above spans 0.40 → 2.60 µm horizontally if it's **in a foundry cell**. In
-Lab 03's frame, which uses the course's unit, the p-tap from 0.40 to 2.60 µm is stored in its
-`<< psubdiff >>` section as four `rect` lines whose x values run from 40 to 260, split around its
-contact. Magic splits a painted shape into several `rect` lines like that, so read the extent of
-the whole shape rather than any one line. If you apply the foundry cell's unit to a cell you drew,
-you'll read every dimension as half its real size, and nothing will warn you. Magic does tell you
-which kind of cell you have every time it loads one
-(`Scaled magic input cell my_inv geometry by factor of 2`), and the `internal:` line that `b`
-prints is always in 0.005 µm units, whichever kind of file you're in.
+So the rectangle above spans 0.40 → 2.60 µm horizontally if it's **in a foundry cell**. A shape
+with that same span in a cell this course draws is written with x from 40 to 260: Lab 03's p-tap,
+for example, runs from 0.40 to 2.60 µm, and its `<< psubdiff >>` section has four `rect` lines
+with x values from 40 to 260, split around its contact. Magic splits a painted shape into
+several `rect` lines like that, so read the extent of the whole shape rather than any one line. If you apply the foundry cell's unit to a cell you drew,
+you'll read every dimension as half its real size, and nothing will warn you. When Magic loads a cell
+in the course's unit, the console says so
+(`Scaled magic input cell my_inv geometry by factor of 2`), and a foundry cell loads without that
+line. The `internal:` line that `b` prints is always in 0.005 µm units, whichever kind of file
+you're in.
 
 When a lab says that a shipped cell has a particular dimension, the number comes from the cell's
 `.mag` file, so you can check it yourself with `grep`. In
@@ -309,10 +321,10 @@ Magic has no menu for extraction, so you type it in the console, and netgen runs
 [Layout versus schematic](lvs-asks-a-different-question.md) explain them:
 
 ```tcl
-extract all               ;# geometry -> circuit
-ext2spice lvs             ;# write it in a form netgen understands
-ext2spice                 ;# into <cell>.spice
-ext2spice cthresh 0       ;# ...and keep every parasitic capacitance (Lab 05)
+extract all               ;# geometry -> circuit, written to <cell>.ext
+ext2spice lvs             ;# set ext2spice up for netgen
+ext2spice cthresh 0       ;# Lab 05 only: keep every parasitic capacitance too
+ext2spice                 ;# write <cell>.spice
 ```
 
 Apart from those, you type `magic -d X11 <cell> &` in a terminal to start Magic, `box size` for

@@ -2,15 +2,17 @@
 
 AD103's capstone was a CMOS inverter that you could simulate. In this lab you draw the same
 circuit as geometry in Magic, with the mouse and the layer palette: two transistors sharing one
-gate, clean under both DRC rule sets, and checked by netgen to be the circuit you meant.
+gate, clean under both of Magic's DRC rule sets (the default one and the full one you met in
+Lab 02), and checked by netgen to be the circuit you meant.
 
 Package: [`labs/lab-03-draw-an-inverter/`](https://github.com/uoftasic/ad104-m/tree/main/labs/lab-03-draw-an-inverter)
 
 ## Before you start
 
-- Finish [Lab 02](../labs/lab-02-break-it-on-purpose-overview.md). This lab uses its two ways
-  of drawing an exact shape, the **click recipe** and the **typed size**, and doesn't explain
-  them again.
+- Finish [Lab 02](../labs/lab-02-break-it-on-purpose-overview.md). This lab uses the two ways
+  of drawing an exact shape that Lab 02 taught, the **click recipe** and the **typed size**
+  ([Drawing in Magic](../guide/drawing-in-magic.md#exact-small-shapes) sums them up), and
+  doesn't explain them again.
 - Read [Stick diagrams](../guide/stick-diagrams.md), [Extraction](../guide/extraction-is-reverse-engineering.md)
   and [Layout versus schematic (LVS)](../guide/lvs-asks-a-different-question.md). You'll use
   [Drawing in Magic](../guide/drawing-in-magic.md) constantly.
@@ -20,16 +22,18 @@ Package: [`labs/lab-03-draw-an-inverter/`](https://github.com/uoftasic/ad104-m/t
 
 **The sizes:** Wn = 0.65 µm, Wp = 1.00 µm, L = 0.15 µm. These are exactly the
 numbers in `sky130_fd_sc_hd__inv_1`, which you read in Lab 01. In
-[Lab 05](../labs/lab-05-what-it-costs-overview.md) you put the inverter next to the foundry's and
-measure the difference, and because the transistors are identical, the only thing left to
-compare is the way each cell is drawn. L = 0.15 µm is the SKY130 minimum (`poly.1a`), but your
-cell will still be nearly five times the foundry's area, because area depends on how tightly the
-shapes are packed rather than on $L$.
+[Lab 05](../labs/lab-05-what-it-costs-overview.md) you put an inverter drawn this way next to the
+foundry's and measure the difference, and because the transistors are identical, the only thing
+left to compare is the way each cell is drawn. L = 0.15 µm is the SKY130 minimum (`poly.1a`), but
+your cell will still be nearly five times the foundry's area, because area depends on how tightly
+the shapes are packed rather than on $L$, and the frame you draw in is 3.00 × 6.00 µm.
 
 **Coordinates:** you choose them. Each drawing part has a table of what its shapes must
 achieve: a size, the rules they must meet, and where they sit relative to shapes already on the
 screen. Because you choose the corners, your cell won't match anyone else's exactly, so the
-checks on this page show verdicts, device lines and rule names rather than error counts.
+checks on this page show verdicts, device lines and rule names rather than error counts. The
+package also has a reference cell, `solutions/inv_ref.mag`, drawn to the same tables. Part 4's
+table quotes one of its numbers for comparison, Part 9 prints its netlist, and Lab 05 measures it.
 
 ## Part 1: Sketch it on paper
 
@@ -70,14 +74,14 @@ What does the frame already give you, and what is missing?
    cd ..
    ```
 
-   Magic keeps `mag/` as its own folder, so the files it writes later in this lab (the
-   extraction) land next to `my_inv.mag`. Your terminal is back in the lab folder, which is where
-   `make` runs.
+   Magic stays in `mag/`, the folder you started it in, after the terminal leaves it, so the
+   files it writes later in this lab (the extraction) land next to `my_inv.mag`. Your terminal is
+   back in the lab folder, which is where `make` runs.
 
    ![The frame you start from](../assets/img/ad104-magic-frame.png)
 
    *The frame has everything except the transistors. The n-well is the grey hatch across the top
-   half, and the p-substrate is the orange hatch below it. The green strip is the n-well tap and
+   half, and the p-well is the orange hatch below it. The green strip is the n-well tap and
    the brown one is the substrate tap, each with a contact and a short li run up to a purple
    metal1 rail. The middle of the cell is left for you to draw.*
 
@@ -87,8 +91,9 @@ What does the frame already give you, and what is missing?
    - the two metal1 supply rails, with `VGND` and `VPWR` already labelled
    - both **well taps**, contacted, with li up to the rails through `mcon`
 
-   Compare that with your sketch. The taps you marked are already drawn, so the frame takes care
-   of the tap problem from Lab 02, and what's missing is the middle of the cell.
+   Compare that with your sketch. The taps you marked are already drawn and contacted, so this
+   cell can't have the fault you fixed in Lab 02's `drc_05`, an n-well tap with no contact, and
+   what's missing is the middle of the cell.
 
 3. Put a grid on the drawing: `Window → Set grid 0.05um`. The dots are 0.05 µm apart. Leave
    `Snap-to-grid` alone: clicks still land on 0.01 µm steps, which is what you want.
@@ -234,8 +239,9 @@ that for now; you'll fix it in Part 8.
 
 What do the contacts need around them?
 
-The frame's li stubs come down on the left, so put the two **source** contacts on the left of
-the gate, under the stubs, and the two **drain** contacts on the right.
+The frame's two li stubs, one down from the n-tap and one up from the p-tap, are on the left, so
+put the two **source** contacts on the left of the gate, in line with the stubs, and the two
+**drain** contacts on the right.
 
 | Shape (palette name) | Must be | Rules it must meet |
 |---|---|---|
@@ -343,11 +349,12 @@ How does netgen know which shape is `A` and which is `Y`?
    ![The `texthelper` window filled in for A: Size 0.1, `default` unticked with `locali` in the layer field, and Port `enable` ticked with port number 3. The box sits on the A patch.](../assets/img/ad104-l03-08-text-dialog.png){fig-alt="Magic zoomed on the gate's poly pad with the li patch and a white box on it, and beside it the texthelper window headed New label, with Text string A, Size 0.1, Attach to layer with default unticked and locali typed in a field, and Port enable ticked with the number 3."}
 
    Typing the layer keeps the label on the li. With `default` ticked, Magic attaches the label
-   to a layer that covers the whole box. On the A patch the gate contact takes the li's place
-   in the middle, so a box that touches the contact isn't all li, and the layer left that
-   covers it is the p-well, which is the VGND net. The console then prints
-   `Moving label "A" from space to pwell` and the VGND net takes the name A, so `make` lists no
-   VGND port and reports `mismatched pins: A <-> VGND`.
+   to a layer that covers the whole box. In the middle of the A patch the gate contact is a
+   layer of its own, `pcontact`, so a box that touches the contact isn't all `locali`, and the
+   layer that covers all of it can be the well underneath, which is a supply net. In the runs
+   behind this page that was the p-well: the console printed
+   `Moving label "A" from space to pwell`, the VGND net took the name A, and `make` listed no
+   VGND port and reported `mismatched pins: A <-> VGND`.
 
 2. Do the same for `Y`, with the box on the Y run. The window remembers the size, `locali`
    and the ticked `enable`, and moves the port number on to 4, so this time you only change
@@ -385,9 +392,10 @@ Why does LVS still fail when DRC is clean and every pin has a name?
    ```
 
    The first argument is your extracted netlist and the subcircuit in it to compare, the second
-   is the schematic and its subcircuit, and the third is the SKY130 setup file that tells netgen
-   which devices and parameters to compare. netgen writes its full report to `comp.out`, and
-   what it prints in the terminal ends with:
+   is the schematic from the package's `spice/` folder and the subcircuit in it, and the third is
+   the SKY130 setup file that tells netgen which devices and parameters to compare. As in
+   Lab 01, Part 7, `$PDK_ROOT` is the folder that holds the PDK. netgen writes its full report
+   to `comp.out`, and what it prints in the terminal ends with:
 
    ```
    Final result:
@@ -421,7 +429,10 @@ Why does LVS still fail when DRC is clean and every pin has a name?
    `b` for `0.150 x 1.000`. Then middle-click `pfethvt` in the palette, between `pfetmvt` and
    `nfetlvt`.
 
-   `pfethvt` is a transistor layer, so a box that misses the channel changes the transistor.
+   Magic already stores the channel as a transistor layer, the layer that extraction turns
+   into a device ([Drawing in Magic](../guide/drawing-in-magic.md#layer-names)). `pfethvt` is
+   another transistor layer that replaces it, so a box that misses the channel changes the
+   transistor.
    A box 0.05 µm bigger than the channel all round turns poly and diffusion outside the channel
    into transistor too: DRC reports `poly overhang of transistor < 0.13um (poly.8)`, and the
    PMOS comes out with L = 0.25. A box 0.01 µm narrower than the stripe leaves a sliver of
@@ -499,9 +510,10 @@ Where in your geometry do `w=0.65` and `w=1` come from?
    starts `0.150 x 0.650`: the stripe's width is L, and the diffusion's height under it is W.
 3. Open `mag/my_inv.mag` in a text editor and find the `<< ndiff >>` section. The file has no
    `magscale` line, so one unit is 0.01 µm, and the section's `rect` lines together span your
-   n-diffusion's corners: its 0.65 µm height is 65 units. Magic has split the shape into tiles around
-   the contacts, and the part under the gate is not there at all, because it is in the `<< nmos >>`
-   section. [Drawing in Magic](../guide/drawing-in-magic.md#the-mag-file) explains the units.
+   n-diffusion's corners: its 0.65 µm height is 65 units. Magic has split the shape into several
+   rectangles around the contacts, and the part under the gate is not there at all, because it is
+   the transistor layer, in the `<< nmos >>` section.
+   [Drawing in Magic](../guide/drawing-in-magic.md#the-mag-file) explains the units.
 
 **You should see** `w=0.65` and `w=1`, both at `l=0.15`, and you should be able to point at the
 rectangle whose height is `w=0.65`.

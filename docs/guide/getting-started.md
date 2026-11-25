@@ -31,15 +31,17 @@ starts in IHP's process without stopping to ask, and the signs that it has are e
 The course environment script, `/foss/designs/common/.designinit`, switches the whole shell to
 SKY130, and it also defines `mod`, the command that copies a course's files into your workspace.
 The change lasts only as long as that shell, but each new terminal on the workbench desktop loads
-the script by itself, and running it again does no harm.
+the script by itself, and running it again does no harm. If your workspace from IC101 isn't set
+up, there is no `.designinit` to load, and `$PDK` keeps the image's default.
 
 The desktop is 1280 × 800 by default, which fits a laptop's browser. Everything in this course
 works at that size; the one window that doesn't fit, Magic's device generator in Lab 04, comes
 with an instruction. If your browser window has room for more, start the workbench with a larger
-desktop: `VNC_RESOLUTION=1680x1050 ./scripts/start_vnc.sh` on macOS or Linux, or
+desktop. On your laptop, in your `workspace` folder from IC101, run
+`VNC_RESOLUTION=1680x1050 ./scripts/start_vnc.sh` on macOS or Linux, or
 `set VNC_RESOLUTION=1680x1050` and then `scripts\start_vnc.bat` in the same Command Prompt on
-Windows. That starts a new desktop, so save your work first; your files in `/foss/designs` stay.
-No other setting changes.
+Windows. That starts a new desktop, so save your work first; your files in `/foss/designs` stay,
+and only the desktop's size changes.
 
 ## Magic
 
@@ -49,7 +51,8 @@ built-in extractor and a scripting console, which is why the open SKY130 ecosyst
 around it.
 
 You start Magic yourself, from a terminal on the desktop, in the folder that holds the cell, and
-give it the cell's name without the `.mag` extension:
+give it the cell's name without the `.mag` extension. From the course folder, where
+`mod ad104-m` puts you:
 
 ```bash
 cd labs/lab-03-draw-an-inverter/mag
@@ -66,19 +69,21 @@ has no menu for, such as extraction.
 
 ### The Magic window
 
-![Magic's two windows, with Lab 04's inverter open](../assets/img/ad104-g-magic-window.png){fig-alt="Magic's layout window above its console. Along the top of the layout window are the menu buttons File, Edit, Cell, Window, Layers, Drc, Options, Devices 1 and Devices 2, a DRC button with a tick, and a brown title bar reading Loaded: my_inv Editing: my_inv Tool: box, then box (+0 +0) to (+0.01 +0.01) microns. The middle shows an inverter: two metal1 rails, two diffusions, a red poly stripe and blue local interconnect. Down the right side is the layer palette. Below, the console window, tkcon 2.3 Main, shows Magic's start-up messages."}
+![Magic's two windows, with an inverter open](../assets/img/ad104-g-magic-window.png){fig-alt="Magic's layout window above its console. Along the top of the layout window are the menu buttons File, Edit, Cell, Window, Layers, Drc, Options, Devices 1 and Devices 2, a DRC button with a tick, and a brown title bar reading Loaded: my_inv Editing: my_inv Tool: box, then box (+0 +0) to (+0.01 +0.01) microns. The middle shows an inverter: two metal1 rails, two diffusions, a red poly stripe and blue local interconnect. Down the right side is the layer palette. Below, the console window, tkcon 2.3 Main, shows Magic's start-up messages."}
 
-*Magic with Lab 04's inverter, `my_inv`, open. Along the top are the menu buttons, the `DRC`
-button, the caption naming the cell, and the readout of where the box is. The palette runs down
-the right side, and the console is the second window. On the workbench desktop the two windows
-open in other places and overlap; drag either one by its title bar.*
+*Magic with `my_inv` from Lab 04's folder, a copy of the reference version of the Lab 03
+inverter. Along the top are the menu buttons, the `DRC` button, and the brown strip that the labs
+call Magic's title bar: the caption naming the cell, then the readout of where the box is. The
+palette runs down the right side, and the console is the second window. On the workbench desktop
+the two windows open in other places and overlap; drag either one by the bar the desktop draws
+across its top, which shows the window's name.*
 
 | Part | What it's for |
 |---|---|
-| the menu buttons, `File` to `Devices 2` | opening and saving, editing, cells, the view, DRC, the managers, and the device generator |
+| the menu buttons, `File` to `Devices 2` | opening and saving, editing, cells, the view, DRC, the Library and DRC Managers (windows that list library cells and DRC errors), and the device generator |
 | the `DRC` button | the DRC count, such as `DRC=3`, once the cell has been checked |
-| the caption | `Loaded:` and `Editing:` name the cell; it is cut off when the window is narrow |
-| the readout, at the right end of the title bar | where the box is, or where the pointer is and how far it is from the box's corner |
+| the caption, in the title bar | `Loaded:` and `Editing:` name the cell; it is cut off when the window is narrow |
+| the readout, at the right end of the title bar | where the box is, or where the pointer is and how far it is from the box's corner. When a step says to click the layout window's title bar, click this brown strip |
 | the drawing, in the middle | the layout; keys act only while the pointer is over it |
 | the palette, down the right side | one row per layer; middle-click a swatch to paint |
 | the console, `tkcon` | Magic's messages, and the commands you type |
@@ -87,10 +92,11 @@ open in other places and overlap; drag either one by its title bar.*
 
 ### The `-d X11` option
 
-Magic has three graphics drivers in this image, and `X11` is the one that works. The Cairo/OpenGL
-driver (`-d XR`) can fail with a `BadAlloc` inside the container, and when it does you get a black
-window rather than no window at all, so it takes a while to work out what went wrong. The team's
-`.designinit` defines a `magic130` alias that uses `-d X11` for the same reason.
+`-d X11` picks Magic's X11 graphics driver, which is the one that works in this image. The
+Cairo/OpenGL driver (`-d XR`) can fail with a `BadAlloc` inside the container, and when it does
+you get a black window rather than no window at all, so it takes a while to work out what went
+wrong. The team's `.designinit` also defines a `magic130` alias that adds `-d X11`; the labs
+type the full `magic -d X11` command instead.
 
 ### Where Magic gets the technology
 
@@ -102,11 +108,17 @@ When Magic starts, it decides which technology to load from two startup files:
 - A file called `.magicrc` in **the directory you start Magic in**, if there is one. Every lab
   package has one at its top level, which is where Lab 01 starts Magic, and it loads SKY130 only
   if nothing has loaded it yet; if `~/.magicrc` already did, it does nothing. The check is there
-  because a `.magicrc` that loads SKY130 a second time makes Magic print
-  `Error parsing ".magicrc": can't rename to "closewrapperonly": command already exists` and
-  `Bad local startup file ".magicrc", continuing without.` in the console, which makes a
-  toolchain that is working fine look broken. The `mag/` folders, where you start Magic from
-  Lab 02 on, have no `.magicrc`, so there `$PDK` alone decides.
+  because loading SKY130 on top of a technology that is already loaded, SKY130 itself or IHP's,
+  makes Magic print these two lines in the console, which make a toolchain that is working fine
+  look broken:
+
+  ```
+  Error parsing ".magicrc": can't rename to "closewrapperonly": command already exists
+  Bad local startup file ".magicrc", continuing without.
+  ```
+
+  The `mag/` folders, where you start Magic from Lab 02 on, have no `.magicrc`, so there `$PDK`
+  alone decides.
 
 So `$PDK` has to say `sky130A` in the terminal you start Magic from, and Lab 01, Part 1 has you
 check it. If it still says `ihp-sg13g2`, Magic doesn't stop you, and what goes wrong depends on
@@ -127,9 +139,10 @@ Close Magic, load the environment with `. /foss/designs/common/.designinit` (or 
 terminal, which loads it by itself), and start Magic again. If `.designinit` itself fails, start
 Magic with the PDK set on the same line: `PDK=sky130A magic -d X11 <cell> &`.
 
-If no technology file gets loaded at all, Magic falls back on its own default technology, `scmos`,
-which has about a dozen layers and none of SKY130's. You'll see either
-`Failed to load technology`, or a Magic that opens normally but has no `nwell` in its layer list.
+If Magic can't find SKY130's files at all, which happens when `$PDK_ROOT` doesn't point at the PDK
+(`/foss/pdks` in this image), it starts in a bare built-in technology called `minimum`, with none
+of SKY130's layers. Opening one of the course's cells then prints
+`Could not find file 'sky130A.tech'` and `Error in loading technology file` in the console.
 
 ## What the labs give you
 
@@ -139,8 +152,8 @@ Every lab is a folder with a `Makefile`. You do the work in Magic, and `make` ch
 | | |
 |---|---|
 | `make` | run every check and print `PASS` or `FAIL` with a reason |
-| `make scaffold`, `make reset` | put the starting files back, in the labs that have them, so you can start over |
-| `make clean` | delete `results/` |
+| `make scaffold` (Lab 03, Lab 04, the capstone), `make reset` (Lab 02) | put the starting files back, so you can start over |
+| `make clean` | delete `results/`, the folder where `make` writes its reports |
 
 A lab that needs another target, such as Lab 04's `make layout`, says so in its writeup.
 
@@ -165,11 +178,11 @@ Setup problems with `.designinit` and `mod` are covered at the step where they h
 
 | What you see | What it means |
 |---|---|
-| `Failed to load technology "sky130A"` | No SKY130 startup file was loaded. Check that `echo $PDK` prints `sky130A` in the terminal you start Magic from (see [Where Magic gets the technology](#where-magic-gets-the-technology)). |
-| Magic opens, and there is no `nwell` in the layer list | Same cause: the technology did not load. |
+| `Could not find file 'sky130A.tech'` and `Error in loading technology file` | Magic couldn't find SKY130's files and is running its bare `minimum` technology. Check that `echo $PDK_ROOT` prints `/foss/pdks` in the terminal you start Magic from; if it doesn't, run `export PDK_ROOT=/foss/pdks` there and start Magic again (see [Where Magic gets the technology](#where-magic-gets-the-technology)). |
+| Magic opens, and there is no `nwell` in the layer list | Same cause: SKY130's technology did not load. |
 | One `Devices` menu where `Devices 1` and `Devices 2` should be, or `... but current technology is "ihp-sg13g2"` in the console | `$PDK` was `ihp-sg13g2` when you started Magic. Close Magic, load `.designinit`, and start it again. |
 | `Bad local startup file ".magicrc", continuing without.` | A `.magicrc` loaded SKY130 on top of a technology that was already loaded. In a lab folder, that means `$PDK` wasn't `sky130A`: close Magic, load `.designinit`, and start it again. Anywhere else, use a copy of a lab's `.magicrc`, which checks whether SKY130 is already loaded first. |
 | `Cell ... couldn't be read` | You named a cell that does not exist in this folder, or you are in the wrong folder. Magic then creates an empty cell with that name, which is why an empty window is a common symptom. |
 | The layout is one empty rectangle with a name in it | That's an unexpanded subcell. Put the box over it and press `x` with the pointer over the drawing, or select it with `i` and choose `Cell → Expand`. |
-| The caption says `[NOT BEING EDITED]` | Magic is showing the cell but not editing it. A cell read from the PDK's folder, such as Lab 01's `sky130_fd_sc_hd__inv_1`, shows this because you can't write to its file; in Lab 01 that's expected. For one of your own cells, open it with `File → Open...`. The `Open` window starts in the last folder it showed, so after you have opened a cell from the PDK, a bare name such as `my_inv.mag` fails with `... does not exist.`; type your cell's full path instead. |
-| A Magic window's buttons are below the bottom of the screen | Double-click the window's title bar to make it fill the screen; the buttons then appear along its bottom edge. At the default 1280 × 800 desktop this happens with the device generator in Lab 04. |
+| The caption says `[NOT BEING EDITED]` | Magic is showing the cell but not letting you edit it. A cell read from the PDK's folder, such as `sky130_fd_sc_hd__inv_1` in Labs 01 and 05, shows this because you can't write to its file, so there it's expected. With a name that long, the window cuts the caption off before these words, even when it is as wide as the 1280-pixel desktop. To go back to one of your own cells, use `File → Open...` with the cell's full path: the `Open` window starts in the last folder it showed, so after a cell from the PDK a bare name such as `my_inv.mag` fails with `... does not exist.` |
+| A Magic window's buttons are below the bottom of the screen | Double-click the bar the desktop draws across the window's top to make it fill the screen; the buttons then appear along its bottom edge. At the default 1280 × 800 desktop this happens with the device generator in Lab 04. |

@@ -1,6 +1,6 @@
-# Lab 02 — Break it on purpose
+# Lab 02: Break it on purpose
 
-Writeup: [uoftasic.com/ad104 → Lab 02](https://uoftasic.com/ad104/labs/lab-02-break-it-on-purpose-overview.html)
+Writeup: [uoftasic.com/ad104-m → Lab 02](https://uoftasic.com/ad104-m/labs/lab-02-break-it-on-purpose-overview.html)
 
 This package holds five copies of the same inverter. Each one has a single mistake in it that
 breaks a real SKY130 rule, and your job is to fix all five.
@@ -12,28 +12,26 @@ cd labs/lab-02-break-it-on-purpose
 make
 ```
 
-A run takes about 4 seconds (3.97 s and 4.40 s on two timed clean runs). On the cells as shipped
+A run takes about 4 seconds (3.51 s and 3.58 s on two timed clean runs). On the cells as shipped
 it ends in `FAIL` and lists all five as still to fix.
 
-To fix one cell, you go round the same loop each time, starting with these two commands:
+To fix a cell, open it in Magic from the `mag/` folder:
 
 ```bash
-make why C=3      # every violation in cell 3, with its rule name
-make edit C=3     # open it in Magic
+cd mag
+magic -d X11 drc_03 &
 ```
 
-In Magic, run `drc check`, put the cursor box over a white hatched area and type `drc why`, which
-names the rule broken at that spot. Look the rule up in the
-[DRC error decoder](https://uoftasic.com/ad104/reference/drc-error-decoder.html), change the
-geometry, `save`, and run `make` again.
+In Magic, choose `Drc → DRC update`, then read the rule with `Drc → DRC report` (with the box on
+an error; the `=` key puts it there) or `Options → DRC Manager`. Look the rule up in the
+[DRC error decoder](https://uoftasic.com/ad104-m/reference/drc-error-decoder.html), change the
+geometry, save with `File → Save...` and `write`, and run `make` again from the package folder.
 
 ## Targets
 
 | Command | What it does |
 |---|---|
 | `make` | DRC both ways + LVS on all five, verdict |
-| `make why C=1..5` | every violation in one cell |
-| `make edit C=1..5` | open one cell in Magic |
 | `make reset` | **throw your fixes away** and rebuild the broken cells |
 | `make solutions` | write the answer key into `solutions/` |
 | `make clean` | delete `results/` |

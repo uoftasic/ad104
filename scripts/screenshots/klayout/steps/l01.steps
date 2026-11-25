@@ -1,0 +1,68 @@
+# Lab 01 (AD104-M), Part 9: the library GDS in KLayout, opened the way the page types it.
+# Run from the repo root, with the workbench's screen size:
+#
+#   RIG_WS=WS RIG_GEOM=1280x800 RIG_DISPLAY=:61 scripts/screenshots/klayout/run_rig.sh \
+#     scripts/screenshots/klayout/steps/l01.steps OUT \
+#     -nn /foss/pdks/sky130A/libs.tech/klayout/tech/sky130A.lyt \
+#     /foss/pdks/sky130A/libs.ref/sky130_fd_sc_hd/gds/sky130_fd_sc_hd.gds
+#
+# WS needs only env.sh (no plugin). Coordinates are for 1280x800 with the window maximised.
+wait '^KLayout 0\.30.*sky130_fd_sc_hd\.gds' 120
+since layout-shown
+sleep 3
+shot k01-first-start
+ifwin '^Tip$' key Return
+maximize '^KLayout 0\.30'
+sleep 2
+shot k01-maximised
+# The Cells panel is two rows tall at this size. Close the Libraries panel and then the
+# Tool Options panel with the x in their title bars; Cells takes the left column.
+click 176 178
+sleep 1
+shot k01-libraries-closed
+click 176 186
+sleep 1
+# Widen the left column so the cell names fit.
+drag 187 400 420 400
+sleep 1
+shot k01-cells-panel
+# Type a cell name with the pointer in the Cells list: a search field opens and the list
+# jumps to the match. Return closes the field and leaves the match highlighted. The Menu
+# key opens the same menu a right click on the highlighted row opens.
+click 200 300
+type 'sky130_fd_sc_hd__inv_1'
+sleep 1
+shot k01-search-inv1
+key Return
+sleep 1
+key Menu
+sleep 1
+shot k01-menu-inv1
+crop k01-menu-inv1 640x772+0+0 l01-10-klayout-menu
+click 288 650
+wait '^KLayout 0\.30.*sky130_fd_sc_hd__inv_1\]' 30
+sleep 2
+# The pointer on the top-right corner of inv_1's outline: about 1.38 and 2.72.
+move 903 188
+sleep 1.5
+shot k01-inv1
+crop k01-inv1 1280x772+0+0 k01-inv1-window
+crop k01-inv1 1280x24+0+750 k01-inv1-status
+click 200 300
+type 'sky130_fd_sc_hd__inv_8'
+sleep 1
+key Return
+sleep 1
+key Menu
+sleep 1
+shot k01-menu-inv8
+click 288 650
+wait '^KLayout 0\.30.*sky130_fd_sc_hd__inv_8\]' 30
+sleep 2
+# The pointer on the top-right corner of the cell's outline (the magenta areaid box); the
+# status bar's xy readout then reads about 4.14 and 2.72.
+move 1081 237
+sleep 1.5
+shot k01-inv8
+crop k01-inv8 1280x772+0+0 l01-11-klayout-inv8
+crop k01-inv8 1280x24+0+750 k01-inv8-status

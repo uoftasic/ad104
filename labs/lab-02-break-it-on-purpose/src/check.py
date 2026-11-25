@@ -102,9 +102,10 @@ def main() -> int:
     todo = [c for c, ok in zip(CELLS, fixed) if not ok]
     print(f"FAIL  Still to fix: {', '.join(todo)}")
     print()
-    print("      `make why C=3` prints every violation in cell 3 with its rule name.")
-    print("      `make edit C=3` opens it in Magic. Inside Magic, put the cursor box")
-    print("      over a white error dot and type `drc why`.")
+    print(f"      Open a cell in Magic (`cd mag; magic -d X11 {todo[0]} &`), run")
+    print("      Drc > DRC update, and read the rule with Drc > DRC report or")
+    print("      Options > DRC Manager. If the DRC button shows no count, choose")
+    print("      Drc > DRC Complete and run Drc > DRC update again.")
     return 1
 
 

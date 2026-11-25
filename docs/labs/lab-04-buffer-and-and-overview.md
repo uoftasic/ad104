@@ -6,7 +6,7 @@ gate is a NAND gate followed by the same inverter. The work is wiring the placed
 and naming their pins in Magic, which is also what the rest of a chip is made of. Then you build
 the inverter a third time, with Magic's device generator drawing the transistors for you.
 
-Package: [`labs/lab-04-buffer-and-and/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-04-buffer-and-and)
+Package: [`labs/lab-04-buffer-and-and/`](https://github.com/uoftasic/ad104-m/tree/main/labs/lab-04-buffer-and-and)
 
 ## Before you start
 
@@ -634,7 +634,7 @@ Submit: nothing for this lab.
 
 `make ref` and `make refcheck` build and check the reference blocks and the reference generated
 inverter. The package's
-[`solutions/README.md`](https://github.com/uoftasic/ad104/tree/main/labs/lab-04-buffer-and-and/solutions)
+[`solutions/README.md`](https://github.com/uoftasic/ad104-m/tree/main/labs/lab-04-buffer-and-and/solutions)
 discusses three decisions in the blocks, and `tcl/inv_gen.tcl` builds the reference generated
 inverter by calling Magic's generator from Tcl with the values you typed into the dialogs.
 

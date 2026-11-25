@@ -6,7 +6,7 @@ out the area price from numbers you already have. Then you measure both cells an
 Magic with every parasitic capacitance kept, and `make` simulates them, so you can check your
 arithmetic against the measurement.
 
-Package: [`labs/lab-05-what-it-costs/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-05-what-it-costs)
+Package: [`labs/lab-05-what-it-costs/`](https://github.com/uoftasic/ad104-m/tree/main/labs/lab-05-what-it-costs)
 
 ## Before you start
 

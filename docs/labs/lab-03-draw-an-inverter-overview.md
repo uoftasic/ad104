@@ -4,7 +4,7 @@ AD103's capstone was a CMOS inverter that you could simulate. In this lab you dr
 circuit as geometry in Magic, with the mouse and the layer palette: two transistors sharing one
 gate, clean under both DRC rule sets, and checked by netgen to be the circuit you meant.
 
-Package: [`labs/lab-03-draw-an-inverter/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-03-draw-an-inverter)
+Package: [`labs/lab-03-draw-an-inverter/`](https://github.com/uoftasic/ad104-m/tree/main/labs/lab-03-draw-an-inverter)
 
 ## Before you start
 
@@ -526,7 +526,7 @@ After yours passes, compare it with the reference:
 - `make refcheck` runs every check on the reference cell instead of yours.
 - `tcl/inverter.tcl` draws the reference cell command by command, with a comment on every line
   saying which rule the number comes from. It didn't come out right the first time either: the
-  package's [`solutions/README.md`](https://github.com/uoftasic/ad104/tree/main/labs/lab-03-draw-an-inverter/solutions)
+  package's [`solutions/README.md`](https://github.com/uoftasic/ad104-m/tree/main/labs/lab-03-draw-an-inverter/solutions)
   shows the 62 violations its first version had.
 
 Next on the Course path: read [Instances and hierarchy](../guide/cells-are-lego.md), then do

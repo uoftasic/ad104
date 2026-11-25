@@ -4,11 +4,9 @@
 # setup: it pins PDK itself, because the image ships with PDK=ihp-sg13g2.
 #
 #   make            check YOUR cell: DRC, extract, LVS, and a verdict  (~1 s)
-#   make edit       open your cell in Magic on the noVNC desktop
 #   make scaffold   throw your cell away and start again from the frame
 #   make ref        rebuild solutions/inv_ref.mag from tcl/inverter.tcl
 #   make refcheck   run the same checks against the reference cell
-#   make netlist    print the netlist Magic extracted from your geometry
 #   make clean      delete results/
 
 export PDK      := sky130A
@@ -19,7 +17,7 @@ NETGEN ?= netgen
 PYTHON ?= python3
 SETUP  := $(PDK_ROOT)/sky130A/libs.tech/netgen/sky130A_setup.tcl
 
-.PHONY: all check edit scaffold ref refcheck netlist clean
+.PHONY: all check scaffold ref refcheck clean
 
 all: check
 
@@ -39,12 +37,6 @@ results/lvs.report: results/report.txt spice/my_inv_sch.spice
 
 check: results/lvs.report
 	@$(PYTHON) src/check.py
-
-netlist: results/report.txt
-	@cat results/my_inv.lvs.spice
-
-edit:
-	@cd mag && $(MAGIC) -d X11 my_inv &
 
 scaffold:
 	@rm -f mag/my_inv.mag

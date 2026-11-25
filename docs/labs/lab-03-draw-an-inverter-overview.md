@@ -45,7 +45,7 @@ What goes where, before any dimensions?
    sketch leaves them out, and leaving them out is also the most common bug in a first layout,
    so drawing them by hand once is cheap insurance.
 3. Decide which side of the cell the input is on and which side the output is on, and why.
-   Part 6 shows where this lab's cell puts them.
+   Parts 5 and 6 show where this lab's cell puts them.
 
 The whole sketch takes about ninety seconds.
 
@@ -56,7 +56,8 @@ gate.
 
 What does the frame already give you, and what is missing?
 
-1. Go into the lab package and lay down the frame:
+1. Go into the lab package and lay down the frame. The commands start from the course folder,
+   `/foss/designs/modules/ad104-m`, where `mod ad104-m` puts you in a new terminal:
 
    ```bash
    cd labs/lab-03-draw-an-inverter
@@ -82,8 +83,10 @@ What does the frame already give you, and what is missing?
 
    *The frame has everything except the transistors. The n-well is the grey hatch across the top
    half, and the p-well is the orange hatch below it. The green strip is the n-well tap and
-   the brown one is the substrate tap, each with a contact and a short li run up to a purple
-   metal1 rail. The middle of the cell is left for you to draw.*
+   the brown one is the substrate tap, each with a contact and a pale blue li strip that joins it
+   to a purple metal1 rail and ends a little past the tap, towards the middle of the cell. Those
+   two strips are the li stubs that Parts 5 and 6 build on. The middle of the cell is left for
+   you to draw.*
 
    The frame already contains:
 
@@ -101,7 +104,7 @@ What does the frame already give you, and what is missing?
    ![The frame with the 0.05 µm grid on. The readout at the right of the title bar shows where the pointer is, in microns.](../assets/img/ad104-l03-01-grid.png){fig-alt="Magic's layout window showing the frame under a dense dot grid: the n-well hatch across the top half, the substrate below, a tap with its contact and li stub near the top and the bottom, and the layer palette down the right side."}
 
 4. Read the frame's numbers off the screen; they are the anchors for the next parts. Move the
-   pointer onto the n-well's bottom edge, where the well's hatch meets the substrate's. The
+   pointer onto the n-well's bottom edge, where its hatch meets the p-well's. The
    readout at the right of the title bar starts with the pointer's x and y in microns, and on
    that edge the y reads `+3`. Then zoom in on the p-tap, set the box on its corners with the
    click recipe, and press `b` with the pointer over the drawing. tkcon prints:
@@ -253,6 +256,11 @@ The gate needs a contact too, but it can't sit on the 0.15 µm stripe. `licon.8`
 0.05 µm of poly all round a 0.17 µm cut, and that takes a stripe 0.27 µm wide. That is why the
 table has a landing pad of poly in the gap between the diffusions, with the contact on the pad.
 
+Leave room for Part 6 too. The li run that will join the two drain contacts passes the li on the
+gate contact, and the two have to stay at least 0.17 µm apart (`li.3`), so keep the drain contacts
+well to the right of the gate rather than at the 0.06 µm minimum. The reference cell's are about
+0.8 µm from it.
+
 1. Use the typed size for the first contact. Zoom in on the NMOS, left-click the contact's
    lower-left corner, click in tkcon and type:
 
@@ -317,8 +325,8 @@ Which contacts join which, and how wide does the li have to be?
 Every run has to cover its contacts with at least 0.08 µm to spare on both sides along one axis
 (`li.5`), be at least 0.17 µm wide (`li.1`) and stay at least 0.17 µm from the other runs
 (`li.3`). The frame's li stubs are 0.37 µm wide, which leaves 0.10 µm on each side of a contact;
-making your runs that wide and lining the outer ones up with the stubs is the simplest way to
-meet `li.5`. The A patch has to reach li's minimum area too (`li.6`).
+making your runs that wide, and lining the VGND and VPWR runs up with the stubs, is the simplest
+way to meet `li.5`. The A patch has to reach li's minimum area too (`li.6`).
 
 1. For each run, set the box with the click recipe and middle-click `locali`.
 
@@ -351,10 +359,10 @@ How does netgen know which shape is `A` and which is `Y`?
    Typing the layer keeps the label on the li. With `default` ticked, Magic attaches the label
    to a layer that covers the whole box. In the middle of the A patch the gate contact is a
    layer of its own, `pcontact`, so a box that touches the contact isn't all `locali`, and the
-   layer that covers all of it can be the well underneath, which is a supply net. In the runs
-   behind this page that was the p-well: the console printed
-   `Moving label "A" from space to pwell`, the VGND net took the name A, and `make` listed no
-   VGND port and reported `mismatched pins: A <-> VGND`.
+   layer that covers all of it can be the well underneath, which is a supply net. If your gate
+   contact sits below the n-well's edge, as the reference cell's does, that is the p-well: the
+   console prints `Moving label "A" from space to pwell`, the VGND net takes the name A, and
+   `make` lists no VGND port and reports `mismatched pins: A <-> VGND`.
 
 2. Do the same for `Y`, with the box on the Y run. The window remembers the size, `locali`
    and the ticked `enable`, and moves the port number on to 4, so this time you only change
@@ -426,8 +434,9 @@ Why does LVS still fail when DRC is clean and every pin has a name?
 4. Paint the implant over the PMOS channel. The channel is where the stripe crosses the
    p-diffusion, and the box has to sit **exactly** on it: the stripe's left and right edges, and
    the p-diffusion's bottom and top edges. Zoom in, set it with the click recipe, and check with
-   `b` for `0.150 x 1.000`. Then middle-click `pfethvt` in the palette, between `pfetmvt` and
-   `nfetlvt`.
+   `b` for `0.150 x 1.000`. The keyboard is still in tkcon from step 1, so click the layout
+   window's title bar before you press a key. Then middle-click `pfethvt` in the palette, between
+   `pfetmvt` and `nfetlvt`.
 
    Magic already stores the channel as a transistor layer, the layer that extraction turns
    into a device ([Drawing in Magic](../guide/drawing-in-magic.md#layer-names)). `pfethvt` is

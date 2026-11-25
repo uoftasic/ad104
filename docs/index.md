@@ -5,10 +5,10 @@ the set of coloured rectangles that a foundry turns into masks. Yours has to pas
 check (DRC, can it be manufactured?) and a layout-versus-schematic check (LVS, is it the circuit
 you meant?). You do the work the way layout engineers do, with Magic's mouse, keys, menus and
 dialogs, and run both checks in the tool yourself before `make` checks the result. You run the
-checks on the foundry's own inverter in Lab 01 before you draw yours in Lab 03. Lab 03's package
-also holds a reference version of the inverter you draw, and in Lab 05 you compare that with the
-foundry's in area and delay, and then, if you like, your own. In the capstone you place four
-standard cells and route them by hand.
+checks on the foundry's own inverter in Lab 01 before you draw yours in Lab 03. Lab 03 also comes
+with a reference version of the inverter you draw. In Lab 05 you compare that reference with the
+foundry's inverter in area and delay, and you can then run the same comparison on yours. In the
+capstone you place four standard cells and route them by hand.
 
 This is AD104-M, the Magic version of AD104. A KLayout version, AD104-K, is being written.
 
@@ -69,7 +69,7 @@ way IC101 showed you, and Lab 01 has you load this course's environment in it an
 Magic, netgen and ngspice versions.
 
 If the environment setup in Lab 01 fails, you can still run `make` in any lab, because each lab's
-`Makefile` sets the SKY130 process for the tools it runs. It ends in `PASS` or `FAIL`, with a
+`Makefile` sets the SKY130 process for the tools it runs. `make` ends in `PASS` or `FAIL`, with a
 reason.
 
 ## What this course is about
@@ -95,8 +95,9 @@ supply rails are purple metal1.*
 
 ## What you'll do
 
-1. Open a cell you did not draw, the foundry's own inverter, and get DRC under two rule sets,
-   extraction and LVS to agree about it before you draw anything.
+1. Open a cell you did not draw, the foundry's own inverter, and get DRC under two rule sets
+   (Magic's default one and the full one), extraction and LVS to agree about it before you draw
+   anything.
 2. Fix five broken layouts, each with one mistake that breaks a real SKY130 rule, even though
    the default rule set calls one of them clean.
 3. Draw a CMOS inverter, starting from a frame that has only the wells, taps and supply rails,

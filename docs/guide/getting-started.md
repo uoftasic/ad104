@@ -51,8 +51,8 @@ built-in extractor and a scripting console, which is why the open SKY130 ecosyst
 around it.
 
 You start Magic yourself, from a terminal on the desktop, in the folder that holds the cell, and
-give it the cell's name without the `.mag` extension. From the course folder, where
-`mod ad104-m` puts you:
+give it the cell's name without the `.mag` extension. From the course folder,
+`/foss/designs/modules/ad104-m`, where `mod ad104-m` puts you:
 
 ```bash
 cd labs/lab-03-draw-an-inverter/mag
@@ -108,9 +108,9 @@ When Magic starts, it decides which technology to load from two startup files:
 - A file called `.magicrc` in **the directory you start Magic in**, if there is one. Every lab
   package has one at its top level, which is where Lab 01 starts Magic, and it loads SKY130 only
   if nothing has loaded it yet; if `~/.magicrc` already did, it does nothing. The check is there
-  because loading SKY130 on top of a technology that is already loaded, SKY130 itself or IHP's,
-  makes Magic print these two lines in the console, which make a toolchain that is working fine
-  look broken:
+  because loading SKY130 a second time makes Magic print these two lines in the console, which
+  make a toolchain that is working fine look broken (loading it on top of IHP's technology prints
+  the same two, and there something really is wrong; see the cases below):
 
   ```
   Error parsing ".magicrc": can't rename to "closewrapperonly": command already exists
@@ -182,7 +182,7 @@ Setup problems with `.designinit` and `mod` are covered at the step where they h
 | Magic opens, and there is no `nwell` in the layer list | Same cause: SKY130's technology did not load. |
 | One `Devices` menu where `Devices 1` and `Devices 2` should be, or `... but current technology is "ihp-sg13g2"` in the console | `$PDK` was `ihp-sg13g2` when you started Magic. Close Magic, load `.designinit`, and start it again. |
 | `Bad local startup file ".magicrc", continuing without.` | A `.magicrc` loaded SKY130 on top of a technology that was already loaded. In a lab folder, that means `$PDK` wasn't `sky130A`: close Magic, load `.designinit`, and start it again. Anywhere else, use a copy of a lab's `.magicrc`, which checks whether SKY130 is already loaded first. |
-| `Cell ... couldn't be read` | You named a cell that does not exist in this folder, or you are in the wrong folder. Magic then creates an empty cell with that name, which is why an empty window is a common symptom. |
+| `Cell ... couldn't be read` | You named a cell that does not exist in this folder, or you are in the wrong folder. Magic then creates an empty cell with that name, which is why an empty window is a common symptom. Close Magic, `cd` to the folder that holds the cell, and start it again; if you drew in the empty cell and saved it, the file went into the wrong folder, where `make` doesn't look. |
 | The layout is one empty rectangle with a name in it | That's an unexpanded subcell. Put the box over it and press `x` with the pointer over the drawing, or select it with `i` and choose `Cell → Expand`. |
 | The caption says `[NOT BEING EDITED]` | Magic is showing the cell but not letting you edit it. A cell read from the PDK's folder, such as `sky130_fd_sc_hd__inv_1` in Labs 01 and 05, shows this because you can't write to its file, so there it's expected. With a name that long, the window cuts the caption off before these words, even when it is as wide as the 1280-pixel desktop. To go back to one of your own cells, use `File → Open...` with the cell's full path: the `Open` window starts in the last folder it showed, so after a cell from the PDK a bare name such as `my_inv.mag` fails with `... does not exist.` |
 | A Magic window's buttons are below the bottom of the screen | Double-click the bar the desktop draws across the window's top to make it fill the screen; the buttons then appear along its bottom edge. At the default 1280 × 800 desktop this happens with the device generator in Lab 04. |

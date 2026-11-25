@@ -176,7 +176,7 @@ p-tap is `<< psubdiff >>`, and the diffusion contacts are `<< ndiffc >>` and `<<
 Contacts surprise everyone who is new to Magic, because you don't place a contact as an object.
 Instead you **paint the contact layer over an area**, and Magic treats that region as the whole
 stack at once: the diffusion, the cut, and the local interconnect on top. So painting
-`ndcontact` into a 0.17 × 0.17 µm box gives you one properly formed n-diffusion contact.
+`ndcontact` into a 0.17 × 0.17 µm box gives you one n-diffusion contact with a single cut.
 
 That has a few consequences, and it's worth knowing them before they confuse you:
 
@@ -211,7 +211,8 @@ next free one
 ([Lab 04, Part 4](../labs/lab-04-buffer-and-and-overview.md#part-4-build-the-and-gate)).
 
 The label goes on the layer under the box, and the console says so:
-`Moving label "A" from space to locali in cell my_inv.` That is with `default` ticked under
+`Moving label "A" from space to locali in cell my_inv.` (`space` is Magic's name for no layer at
+all.) That is with `default` ticked under
 `Attach to layer:`, where Magic picks a layer that covers the whole box; with a layer name typed
 there instead, the console prints no such line. If the box touches a contact, the layer that
 covers it can be the well underneath rather than the li you meant, so untick `default` and type
@@ -283,7 +284,7 @@ Each of these happens in the workbench image:
 
 When you save, Magic writes the cell to its `.mag` file, `my_inv.mag` for the cell `my_inv`.
 A `.mag` file is plain text, made up of one section per layer, each listing that layer's
-rectangles:
+rectangles. A `rect` line gives a rectangle's lower-left and upper-right corners, x1 y1 x2 y2:
 
 ```
 << ndiff >>
@@ -330,4 +331,5 @@ ext2spice                 ;# write <cell>.spice
 Apart from those, you type `magic -d X11 <cell> &` in a terminal to start Magic, `box size` for
 exact small shapes, and in the capstone `select top cell` and `port makeall`. The
 [Magic cheat sheet](../reference/magic-cheatsheet.md) has the console form of everything else on
-this page, which is what the lab scripts in `tcl/` use.
+this page, which is what the scripts in each lab package's `tcl/` folder, the ones `make` runs,
+use.

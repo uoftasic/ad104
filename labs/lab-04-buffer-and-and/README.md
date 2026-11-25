@@ -61,5 +61,5 @@ you are wiring.
 | `spice/swapped_sch.spice` | the NAND with A and B exchanged |
 | `spice/my_inv_gen_sch.spice` | the inverter under the name `my_inv_gen` |
 | `src/mktb.py` | builds the testbench around **your** netlist's port order, because Magic orders ports by when the labels were created |
-| `src/check_gen.py` | the verdict for `make gen` |
+| `src/check_gen.py` | reads the results of `make gen` and prints PASS or FAIL with the reason |
 | `solutions/README.md` | three decisions in the reference worth arguing about |

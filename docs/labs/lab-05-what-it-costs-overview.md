@@ -1,9 +1,10 @@
 # Lab 05: What it costs
 
-In this lab you compare two layouts of the same two transistors, your Lab 03 inverter and the
-foundry's `inv_1`, to see what the drawing costs in area and in delay. You start by working out
-the area price from numbers you already have. Then you extract both cells with every parasitic
-capacitance kept, simulate them, and check your arithmetic against the measurement.
+In this lab you compare two layouts of the same two transistors, the Lab 03 reference inverter and
+the foundry's `inv_1`, to see what the drawing costs in area and in delay. You start by working
+out the area price from numbers you already have. Then you measure both cells and extract them in
+Magic with every parasitic capacitance kept, and `make` simulates them, so you can check your
+arithmetic against the measurement.
 
 Package: [`labs/lab-05-what-it-costs/`](https://github.com/uoftasic/ad104/tree/main/labs/lab-05-what-it-costs)
 
@@ -12,13 +13,16 @@ Package: [`labs/lab-05-what-it-costs/`](https://github.com/uoftasic/ad104/tree/m
 - Get [Lab 03](../labs/lab-03-draw-an-inverter-overview.md) to `PASS`.
 - Read [Area, parasitics and delay](../guide/what-your-drawing-costs.md). This lab also uses
   [Extraction](../guide/extraction-is-reverse-engineering.md).
-- Have paper or a text file ready for the numbers you work out in Parts 1 and 5.
+- Have paper or a text file ready for the numbers you work out in Parts 1 and 7.
+- Open two terminals. You run `make` in one, in `labs/lab-05-what-it-costs`. You start Magic and
+  read files in the other, in its `mag/` folder.
 
-**Time:** about 1 hour, not counting the optional Part 6. Each full `make` takes about half a
-minute (27 to 39 s on seven timed clean runs, depending on what else the machine is doing).
-Nearly all of that time goes on the two ngspice runs, about 13 s for the fan-out deck and 15 s
-for the two ring oscillators, which between them have 62 extracted subcircuits to simulate for
-20 ns of transient. Each run starts by reading the whole SKY130 model library.
+**Time:** about 1.25 hours, an estimate, not counting the optional Parts 8 and 9. Each full `make`
+takes about half a minute (27 to 39 s on seven timed clean runs, depending on what else the
+machine is doing). Nearly all of that time goes on the two ngspice runs, about 13 s for the
+fan-out deck and 15 s for the two ring oscillators, which between them have 62 extracted
+subcircuits to simulate for 20 ns of transient. Each run starts by reading the whole SKY130 model
+library.
 
 ## Part 1: Predict the price
 
@@ -28,31 +32,145 @@ How much does the drawing cost in area, judging only from numbers you have alrea
    how many times bigger the Lab 03 cell is, and write it down.
 
 2. The extracted netlists give each transistor's drain junction area as `ad=`: 0.715 µm² for the
-   Lab 03 NMOS and 1.1 µm² for its PMOS (Lab 03, Part 9), against 0.169 µm² and 0.26 µm² for
-   `inv_1` (Lab 01, Part 5). Work out both ratios and write them down.
+   NMOS of the Lab 03 reference cell and 1.1 µm² for its PMOS (the reference cell's numbers in
+   Lab 03, Part 9), against 0.169 µm² and 0.26 µm² for `inv_1` (Lab 01, Part 6). Work out both
+   ratios and write them down.
 
 3. Guess how much slower the Lab 03 cell will be. Is it closer to the area ratio, the junction
-   ratio, or much less than either? Write down a number, because Part 3 compares it with the
+   ratio, or much less than either? Write down a number, because Part 5 compares it with the
    measurement.
 
-**You should see** three ratios and a guess in your notes. Part 2 checks the ratios against the
+**You should see** three ratios and a guess in your notes. Part 4 checks the ratios against the
 table.
 
-## Part 2: Run the comparison
+## Part 2: Measure and extract the Lab 03 cell
+
+Do your own measurements give the numbers Part 1 used?
+
+1. In your `mag/` terminal, open the cell the table calls `yours`, which is the Lab 03 reference
+   inverter:
+
+   ```bash
+   cd labs/lab-05-what-it-costs/mag
+   magic -d X11 my_inv &
+   ```
+
+2. Measure the cell. Its metal1 rails run along its bottom and top edges, so their outer corners
+   are the cell's corners: left-click the bottom rail's lower-left corner, right-click the top
+   rail's upper-right corner, and press `b` with the pointer over the drawing. The `microns:` line
+   in the console gives the width and height:
+
+   ```
+   microns:   3.000 x 6.000   ( 0.000,  0.000), ( 3.000,  6.000)  18.000
+   ```
+
+3. Extract it with every capacitance kept. In the console, type:
+
+   ```tcl
+   extract all
+   ext2spice lvs
+   ext2spice cthresh 0
+   ext2spice -o my_inv_pex.spice
+   ```
+
+   `ext2spice cthresh 0` sets the smallest capacitance `ext2spice` writes out to zero, so it
+   keeps them all; without it Magic leaves out the small coupling capacitances. `-o` names the
+   output file, so this netlist doesn't overwrite a plain `my_inv.spice`.
+
+   ![Extraction with every capacitance](../assets/img/ad104-l05-01-pex-console.png){fig-alt="Magic's console after the four commands extract all, ext2spice lvs, ext2spice cthresh 0 and ext2spice -o my_inv_pex.spice, with Extracting my_inv into my_inv.ext and exttospice finished."}
+
+   *The four commands in tkcon, and Magic's answers.*
+
+4. Print the netlist in your `mag/` terminal:
+
+   ```bash
+   cat my_inv_pex.spice
+   ```
+
+   ```spice
+   * NGSPICE file created from my_inv.ext - technology: sky130A
+
+   .subckt my_inv A Y VPWR VGND
+   X0 Y A VGND VGND sky130_fd_pr__nfet_01v8 ad=0.715 pd=3.5 as=0.6175 ps=3.2 w=0.65 l=0.15
+   X1 Y A VPWR VPWR sky130_fd_pr__pfet_01v8_hvt ad=1.1 pd=4.2 as=0.95 ps=3.9 w=1 l=0.15
+   C0 VPWR Y 0.06413f
+   C1 VPWR A 0.10808f
+   C2 Y A 0.02272f
+   C3 Y VGND 0.33997f
+   C4 VPWR VGND 1.32518f
+   .ends
+   ```
+
+   The `C` lines can come out in another order in your file; the values are the same.
+
+**You should see** `3.000 x 6.000` on the `microns:` line, `ad=0.715` and `ad=1.1` on the two
+transistor lines, and five `C` lines.
+
+## Part 3: Measure and extract the foundry's cell
+
+What does Magic extract from the foundry's `inv_1`?
+
+1. Open `inv_1` in the same Magic: `File → Open...`, type the full path of the cell's file in
+   `File name:` and press Return:
+
+   ```
+   /foss/pdks/sky130A/libs.ref/sky130_fd_sc_hd/mag/sky130_fd_sc_hd__inv_1.mag
+   ```
+
+   The caption says `[NOT BEING EDITED]`, as it did in Lab 01: the PDK's files are read-only.
+   You can still measure and extract the cell.
+
+2. Measure it. As you found in Lab 01, `inv_1`'s rails straddle its bottom and top edges: point at
+   the middle of each rail and read the y in the title bar. Then set the box from the left end of
+   the bottom rail's centre line to the right end of the top rail's centre line, and press `b`.
+
+   ![Measuring inv_1](../assets/img/ad104-l05-02-inv1-width.png){fig-alt="Magic showing sky130_fd_sc_hd__inv_1 with the box running from the left end of the bottom rail's centre line to the right end of the top rail's centre line. The console below shows the b output, whose microns line reads 1.380 x 2.720."}
+
+   *The box from rail centre to rail centre, and the `microns:` line: 1.380 × 2.720.*
+
+3. Extract it the same way, with one more command first. The cell's own folder in the PDK is
+   read-only, so `extract do local` tells Magic to write the `.ext` file into the folder you
+   started it in, as in Lab 01, Part 6:
+
+   ```tcl
+   extract do local
+   extract all
+   ext2spice lvs
+   ext2spice cthresh 0
+   ext2spice -o inv_1_pex.spice
+   ```
+
+4. Print it with `cat inv_1_pex.spice`, count its `C` lines, and find `ad=` on the two transistor
+   lines.
+
+   ```spice
+   .subckt sky130_fd_sc_hd__inv_1 A VGND VNB VPB VPWR Y
+   X0 Y A VGND VNB sky130_fd_pr__nfet_01v8 ad=0.169 pd=1.82 as=0.169 ps=1.82 w=0.65 l=0.15
+   X1 Y A VPWR VPB sky130_fd_pr__pfet_01v8_hvt ad=0.26 pd=2.52 as=0.26 ps=2.52 w=1 l=0.15
+   C0 VPWR Y 0.07413f
+   ...
+   C13 VPB VNB 0.33898f
+   .ends
+   ```
+
+**You should see** `1.380 x 2.720`, then `ad=0.169` and `ad=0.26` on the transistor lines and 14
+`C` lines, against the Lab 03 cell's five.
+
+## Part 4: Run the comparison
 
 Does the measurement agree with your arithmetic?
 
-1. Go into the lab package and run it:
+1. In your other terminal, go into the lab package and run it:
 
    ```bash
    cd labs/lab-05-what-it-costs
    make
    ```
 
-   By default it compares the **reference** Lab 03 inverter, in `mag/my_inv.mag`, with the
-   foundry's. The reference uses the same transistor and wiring coordinates as Lab 03's steps, so
-   if you followed those steps, the `yours` column describes the cell you drew. Part 6 (optional)
-   swaps in your own file instead. The run prints:
+   `make` runs the same extraction you just typed, on both cells, then simulates them. By default
+   it compares the **reference** Lab 03 inverter, in `mag/my_inv.mag`, with the foundry's, so the
+   `yours` column is the reference cell's: the one you measured in Part 2. Part 8 (optional) swaps
+   in your own file instead. The run prints:
 
    ```
      THE SAME TWO TRANSISTORS, DRAWN TWICE
@@ -103,7 +221,7 @@ Does the measurement agree with your arithmetic?
 **You should see** `1.00 x` on every W and L row, `4.80 x` for the cell area and `4.23 x` on both
 drain junction area rows, matching your Part 1 ratios to rounding, and `make` ending in `PASS`.
 
-## Part 3: Compare the two delay rows
+## Part 5: Compare the two delay rows
 
 Why does the same drawing cost more delay in one test than in the other?
 
@@ -130,30 +248,29 @@ Why does the same drawing cost more delay in one test than in the other?
 
 **You should see** that the self-loaded test (the ring) shows the bigger penalty.
 
-## Part 4: Look at the capacitors
+## Part 6: Look at the capacitors
 
 Where does the extra capacitance live?
 
-1. Print both parasitic netlists side by side:
-
-   ```bash
-   make caps
-   ```
-
-2. Compare the two capacitance rows with the drain junction areas from Part 1:
+1. Find the two capacitance rows in your table:
 
    ```
      extracted capacitance, total          1.86         1.424 fF       1.31 x
           ... of it on the output        0.4268        0.3519 fF       1.21 x
    ```
 
-   Your cell has more extracted capacitance than the foundry's, but only 1.2 to 1.3 times as
-   much, even though its drain junctions are 4.23 times the size. As
+2. Add up the values of the five `C` lines in `my_inv_pex.spice` from Part 2: they come to the
+   1.86 fF in the `total` row. The three that have `Y` as one end add up to the 0.4268 fF on the
+   output. The 14 lines of `inv_1_pex.spice` make the foundry's column the same way.
+
+3. Compare the two rows with the drain junction areas from Part 1. Your cell has more extracted
+   capacitance than the foundry's, but only 1.2 to 1.3 times as much, even though its drain
+   junctions are 4.23 times the size. As
    [Area, parasitics and delay](../guide/what-your-drawing-costs.md#where-the-femtofarads-come-from)
    explains, the extracted `C` elements are the capacitance of the wiring and the well, and the
    drain junctions aren't among them.
 
-3. Where does the junction capacitance of the source and drain diffusions live, and why isn't it
+4. Where does the junction capacitance of the source and drain diffusions live, and why isn't it
    in the `C` lines?
 
    <details>
@@ -166,9 +283,10 @@ Where does the extra capacitance live?
 
    </details>
 
-**You should see** the `C` lines for both cells, with no junction capacitance among them.
+**You should see** the `C` lines for both cells add up to the table's capacitance rows, with no
+junction capacitance among them.
 
-## Part 5: Read the ring oscillator
+## Part 7: Read the ring oscillator
 
 How long does one gate take when it drives nothing but a copy of itself?
 
@@ -200,7 +318,9 @@ driving nothing but a copy of itself. The capstone's timing numbers are multiple
 
 **You should see** your two stage delays agree with the `one stage` row, to rounding.
 
-## Part 6: Measure your own cell (optional)
+## Part 8: Measure your own cell (optional)
+
+How does the cell you drew in Lab 03 compare?
 
 1. Copy your Lab 03 cell in and run the comparison again:
 
@@ -220,19 +340,68 @@ driving nothing but a copy of itself. The capstone's timing numbers are multiple
 
 To go back to the reference cell afterwards, run `git checkout mag/my_inv.mag` and then `make`.
 
-**You should see** `1.00 x` on the W and L rows. If you used Lab 03's coordinates exactly, the
-whole table is the same as the reference's.
+**You should see** `1.00 x` on the W and L rows. The area, junction and capacitance rows are your
+cell's own, because you chose your own coordinates in Lab 03, so they differ from the reference's.
+
+## Part 9: The generator's inverter (optional)
+
+How much drain area does Magic's device generator draw?
+
+This part needs the `my_inv_gen` you built in Lab 04, Parts 7 to 9.
+
+1. In your `mag/` terminal, go to Lab 04's `mag/` folder and open it:
+
+   ```bash
+   cd ../../lab-04-buffer-and-and/mag
+   magic -d X11 my_inv_gen &
+   ```
+
+2. Extract it the way you extracted `my_inv` in Part 2, and name the output `my_inv_gen_pex.spice`.
+
+3. `cat my_inv_gen_pex.spice`. Each generated device is its own subcircuit, and its one
+   transistor line is inside it. Find `ad=` and `pd=` on the two transistor lines, and compare
+   them with the table's two columns.
+
+   ```spice
+   .subckt sky130_fd_pr__nfet_01v8_HFW449 B D S G
+   X0 S G D B sky130_fd_pr__nfet_01v8 ad=0.1885 pd=1.88 as=0.1885 ps=1.88 w=0.65 l=0.15
+   ...
+   .subckt sky130_fd_pr__pfet_01v8_hvt_55X2WM B D S G VSUBS
+   X0 S G D B sky130_fd_pr__pfet_01v8_hvt ad=0.29 pd=2.58 as=0.29 ps=2.58 w=1 l=0.15
+   ```
+
+   The code at the end of each device cell's name may differ in yours.
+
+Why is the generator's drain area so much closer to the foundry's than to the Lab 03 reference
+cell's?
+
+<details>
+<summary>Answer</summary>
+
+`ad` is the drain's length, from the edge of the gate to the end of the diffusion, times W. The
+generator draws each drain only as long as its contact needs, 0.29 µm, so its NMOS has
+0.29 × 0.65 = 0.1885 µm². The foundry's drains are 0.26 µm long (0.169 µm² for the NMOS), and the
+Lab 03 reference cell's are 1.10 µm long (0.715 µm²).
+
+</details>
+
+This lab doesn't simulate the generator's inverter: `make` compares only the cell in
+`mag/my_inv.mag` with the foundry's.
+
+**You should see** `ad=0.1885 pd=1.88` on the NMOS line and `ad=0.29 pd=2.58` on the PMOS line,
+wherever you placed the devices, because the generator draws the same devices for the same width,
+length and options.
 
 ## Finishing
 
 You're done when the area and drain-area ratios you worked out in Part 1 match the table's
-`cell area` and `drain junction area` rows, and the stage delays you worked out in Part 5 match
+`cell area` and `drain junction area` rows, and the stage delays you worked out in Part 7 match
 its `one stage` row.
 
 Questions:
 
-- Why does the ring show a bigger penalty than fan-out 4? Part 3 answers it.
-- Where does junction capacitance live, and why is it not in the `C` lines? Part 4, step 3
+- Why does the ring show a bigger penalty than fan-out 4? Part 5 answers it.
+- Where does junction capacitance live, and why is it not in the `C` lines? Part 6, step 4
   answers it.
 
 Submit: nothing for this lab.
@@ -240,7 +409,7 @@ Submit: nothing for this lab.
 ## Going further (optional)
 
 `make table` prints the comparison again from the results already on disk, so it returns
-instantly. `make pex` runs only the extraction, which takes well under a second.
+instantly.
 
 Next on the Course path: read [Routing by hand](../guide/routing-by-hand.md) and
 [What sets the clock frequency](../guide/why-the-clock-cannot-go-faster.md), then do the

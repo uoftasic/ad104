@@ -25,7 +25,7 @@ This course is part of the **UofT ASIC Team** education materials, and it's publ
 | **Main tool** | **Magic** 8.3.681, the layout editor. We assume you haven't used it before. [Getting started](guide/getting-started.md) explains how to open it, and [Drawing in Magic](guide/drawing-in-magic.md) teaches the mouse, keys and menus. |
 | **Also** | netgen for LVS, KLayout 0.30.11 for looking at GDS, ngspice 47 for measuring delay |
 | **Math level** | Arithmetic. Every dimension in this course is a number of microns. |
-| **Time** | About 21 hours, self-paced |
+| **Time** | About 20 hours, self-paced |
 
 ## Course path
 
@@ -35,9 +35,9 @@ yourself. Each lab lists the pages to read before you start it.
 
 | # | | What | Time |
 |---|---|---|---|
-| 1 | Read | [Getting started](guide/getting-started.md) · [What a layout is](guide/what-a-layout-actually-is.md) · [SiliWiz](guide/siliwiz.md) · [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) | 1.25 h |
+| 1 | Read | [Getting started](guide/getting-started.md) · [What a layout is](guide/what-a-layout-actually-is.md) · [SiliWiz](guide/siliwiz.md) · [Anatomy of a standard cell](guide/anatomy-of-a-standard-cell.md) | 1 h |
 | 2 | Do | [Lab 01: Open a cell you did not draw](labs/lab-01-open-the-cell-overview.md). Open the foundry's inverter in Magic, measure it, and get DRC, extraction and LVS to agree about it. | 1.5 h |
-| 3 | Read | [Drawing in Magic](guide/drawing-in-magic.md) · [Reading DRC errors](guide/drc-is-a-conversation.md) · [The full DRC rule set](guide/the-rule-set-you-are-not-running.md) | 1.75 h |
+| 3 | Read | [Drawing in Magic](guide/drawing-in-magic.md) · [Reading DRC errors](guide/drc-is-a-conversation.md) · [The full DRC rule set](guide/the-rule-set-you-are-not-running.md) | 1 h |
 | 4 | Do | [Lab 02: Break it on purpose](labs/lab-02-break-it-on-purpose-overview.md). Fix five inverter layouts in Magic, each with one mistake that breaks a real SKY130 rule, until DRC and LVS both pass. | 2.5 h |
 | 5 | Read | [Stick diagrams](guide/stick-diagrams.md) · [Extraction](guide/extraction-is-reverse-engineering.md) · [Layout versus schematic (LVS)](guide/lvs-asks-a-different-question.md) | 1 h |
 | 6 | Do | [Lab 03: Draw an inverter](labs/lab-03-draw-an-inverter-overview.md). Draw a CMOS inverter in Magic with the mouse and the palette, from an empty frame, until it is DRC clean and LVS clean. | 3.5 h |

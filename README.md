@@ -16,7 +16,7 @@ labs to do.
 | **Track** | Analog |
 | **Prerequisites** | IC101 → AD101 → AD102 → AD103 |
 | **Workbench** | `hpretl/iic-osic-tools:2026.08` — Magic 8.3.681, netgen 1.5.323, KLayout 0.30.11, ngspice 47 |
-| **Time** | About 21 hours, self-paced |
+| **Time** | About 20 hours, self-paced |
 
 ## Quick start
 

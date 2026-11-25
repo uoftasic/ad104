@@ -138,7 +138,8 @@ format:
       light: [cosmo, _light.scss]
       dark: [darkly, _dark.scss]
     css: _styles.css
-    # Keeps old Docsify links (.../ad104/#/labs/...) working.
+    # Keeps old Docsify links (.../#/labs/...) working, including the ones
+    # uoftasic.com/ad104/ passes on to this site.
     include-in-header: _docsify-redirect.html
     toc: true
     toc-depth: 3

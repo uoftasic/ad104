@@ -16,8 +16,8 @@ Only these three are fillable:
 
 | Token | Example |
 |-------|---------|
-| `ad104` | `dd103` |
-| `AD104 — Layout` | `DD103 — RTL on FPGAs & ASICs` |
+| `ad104-m` | `dd103` |
+| `AD104-M — Layout` | `DD103 — RTL on FPGAs & ASICs` |
 | `Draw a CMOS inverter as a chip layout in Magic and get it through DRC and LVS, then place and route four standard cells by hand.` | `RTL synthesis intro with Yosys` |
 
 ## Conventions

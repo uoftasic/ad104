@@ -256,9 +256,10 @@ tm "Part 4"
 say "Part 5: extract before the taps"
 console 'extract all'; console 'ext2spice lvs'; console 'ext2spice'; pause 2; ct 16
 ( cd "/tmp/work/$CAP/mag" && ls && grep -n 'Xbuf0\|^\.subckt datapath' datapath.spice ) >&2 || true
-# Opening the Library Manager runs Magic's `path` command, and once the DRC Manager has been
-# opened in the session (Part 1), that also moves the box onto the whole block. So the manager
-# is opened first and the box set afterwards (rig logs of Nov 24, tapu.sh and tapt.sh).
+# Once the DRC Manager has been opened in the session (Part 1), opening the Library Manager
+# also moves the box onto the whole block. So the manager is opened first and the box set
+# afterwards. Set the other way round, the tap landed with its origin on the block's
+# lower-left corner.
 say "Library Manager: open it, open the library's folder, click the tap"
 focus_layout; hover_center; key v
 menu Options 'Library Manager'; pause 2

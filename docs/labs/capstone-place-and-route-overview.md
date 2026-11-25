@@ -247,8 +247,9 @@ pad, and join the two pads with metal1. Start with net `Q`.
 
    </details>
 
-3. Paint the `mcon`: scroll the palette down to `viali` and middle-click it. The DRC button jumps
-   to `DRC=4`, because an `mcon` on its own breaks the metal1 rules until its pad is there.
+3. Paint the `mcon`: scroll the palette down to `viali` and middle-click it. The DRC button shows
+   a count (4 in the shot below), because an `mcon` on its own breaks the metal1 rules until its
+   pad is there.
 
    ![Zoomed on dff0/Q: the box sits on the Q pin's square with a viali painted in it, DRC=4 on the button, and tkcon showing box size 0.17um 0.17um and the b readout 0.170 x 0.170 at (6.950, 0.430), (7.120, 0.600)](../assets/img/ad104-cap-04-mcon.png)
 

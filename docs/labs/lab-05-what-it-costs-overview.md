@@ -118,8 +118,9 @@ What does Magic extract from the foundry's `inv_1`?
    ```
 
    As in Lab 01, the cell's file is in the PDK and read-only, so Magic shows the cell without
-   letting you edit it. The full caption includes `[NOT BEING EDITED]`, though a narrow window cuts
-   that part off. You can still measure and extract the cell.
+   letting you edit it. The full caption includes `[NOT BEING EDITED]`, but with a name this long
+   the window cuts that part off, even at the full width of the 1280-pixel desktop. You can still
+   measure and extract the cell.
 
 2. Measure it. As you found in Lab 01, `inv_1`'s rails straddle its bottom and top edges: point at
    the middle of each rail and read the y in the title bar. Then set the box from the left end of
@@ -340,8 +341,9 @@ How does the cell you drew in Lab 03 compare?
 
 To go back to the reference cell afterwards, run `git checkout mag/my_inv.mag` and then `make`.
 
-**You should see** `1.00 x` on the W and L rows. The area, junction and capacitance rows are your
+**You should see** `1.00 x` on the W and L rows. The junction and capacitance rows are your
 cell's own, because you chose your own coordinates in Lab 03, so they differ from the reference's.
+The area rows don't, because a cell drawn in Lab 03's frame is 3.00 × 6.00 µm, like the reference.
 
 ## Part 9: The generator's inverter (optional)
 

@@ -20,7 +20,7 @@ horizontally still passes.
 | `N-tap overlap of N-tap contact < 0.12um in one direction (licon.7)` | 0.12 | This is the same rule for taps, and the margin is twice as big. |
 | `poly overlap of poly contact < 0.05um (licon.8)` | 0.05 | You've landed a contact on a bare gate stripe. A 0.15 µm poly stripe is too narrow to hold a 0.17 µm cut, so draw a wider landing pad for the contact. |
 | `poly overlap of poly contact < 0.08um in one direction (licon.8a)` | 0.08 | This is the directional half of the same rule, and it usually fires together with `licon.8`. |
-| `Diffusion contact to gate < 0.055um (licon.11)` | 0.055 | A source or drain contact is too close to the poly. Move it away from the gate; on Magic's 0.01 µm clicks that means at least 0.06 µm. The tech file has a second `licon.11`, `Diffusion contact to standard cell gate < 0.05um`, for the transistor layers inside the foundry's own cells. |
+| `Diffusion contact to gate < 0.055um (licon.11)` | 0.055 | A source or drain contact is too close to the poly. Move it away from the gate; on Magic's 0.01 µm clicks that means at least 0.06 µm. The tech file also has a `licon.11` for the transistor layers inside the foundry's own cells, `Diffusion contact to standard cell gate < 0.05um`. |
 | `poly contact spacing to diffusion < 0.19um (licon.14)` | 0.19 | The contact on the poly landing pad is too near the diffusion. Move the pad out into the gap between the two diffusions. |
 | `All taps must be contacted (licon.16)` | — | **Full rule set only**, and on the pinned image it never fires (see [Full rule set only](#full-rule-set-only) below). A tap with no contact on it isn't connected to anything, so it does nothing. |
 

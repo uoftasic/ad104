@@ -1,32 +1,32 @@
 # SKY130 layer map
 
 This page lists the layers this course uses, from the bottom of the stack to the top. For each
-one it gives the name you type in Magic, the number the GDS file uses, and what the layer
-physically is.
+one it gives Magic's console name, the name on Magic's layer palette, the number the GDS file
+uses, and what the layer physically is.
 
 The GDS numbers are written as `layer/datatype`. They come from the `calma` lines in
 `$PDK_ROOT/sky130A/libs.tech/magic/sky130A.tech`, and they're the numbers you see in KLayout's
 layer panel. The sheet resistances are the `resist` lines in the same file, converted from milliohms to
 ohms per square.
 
-| Magic | GDS | Physically | Sheet R |
-|---|---|---|---|
-| `nwell` | 64/20 | an n-type tub in the p-substrate | 950 Ω/□ |
-| `pwell` | 64/44 (marker) | the p-substrate itself. SKY130 has no p-well mask, so Magic draws a p-well only as a marker that lets it reason about the body, and the marker doesn't become a real layer. | 4400 Ω/□ |
-| `ndiff` | 65/20 + 93/44 | n+ silicon at the surface | 120 Ω/□ |
-| `pdiff` | 65/20 + 94/20 | p+ silicon at the surface | 197 Ω/□ |
-| `ntap` | 65/44 + 93/44 | n+ silicon **inside the n-well**: a handle on the well | 120 Ω/□ |
-| `ptap` | 65/44 + 94/20 | p+ silicon in the substrate: a handle on the substrate | 197 Ω/□ |
-| `poly` | 66/20 | polysilicon on the thin gate oxide | 48.2 Ω/□ |
-| `pfethvt` | 78/44 | the HVTP implant, which makes a PMOS high-threshold | — |
-| `pc` (poly contact) | 66/44 + 95/20 | a tungsten plug from poly to li, plus the NPC blocking mask | — |
-| `ndc` / `pdc` / `ntapc` / `ptapc` | 66/44 | the same plug, from silicon to li | — |
-| `li` | 67/20 | local interconnect | **12.8 Ω/□** |
-| `mcon` | 67/44 | plug from li to metal1 | — |
-| `m1` | 68/20 | metal1 | **0.125 Ω/□** |
-| `via1` | 68/44 | plug from metal1 to metal2 | — |
-| `m2` | 69/20 | metal2 | 0.125 Ω/□ |
-| `via2` / `m3` | 69/44 / 70/20 | and upward, to metal5 | |
+| Magic | Palette | GDS | Physically | Sheet R |
+|---|---|---|---|---|
+| `nwell` | nwell | 64/20 | an n-type tub in the p-substrate | 950 Ω/□ |
+| `pwell` | pwell | 64/44 (marker) | the p-substrate itself. SKY130 has no p-well mask, so Magic draws a p-well only as a marker that lets it reason about the body, and the marker doesn't become a real layer. | 4400 Ω/□ |
+| `ndiff` | ndiffusion | 65/20 + 93/44 | n+ silicon at the surface | 120 Ω/□ |
+| `pdiff` | pdiffusion | 65/20 + 94/20 | p+ silicon at the surface | 197 Ω/□ |
+| `ntap` | nsubstratendiff | 65/44 + 93/44 | n+ silicon **inside the n-well**: a handle on the well | 120 Ω/□ |
+| `ptap` | psubstratepdiff | 65/44 + 94/20 | p+ silicon in the substrate: a handle on the substrate | 197 Ω/□ |
+| `poly` | polysilicon | 66/20 | polysilicon on the thin gate oxide | 48.2 Ω/□ |
+| `pfethvt` | pfethvt | 78/44 | the HVTP implant, which makes a PMOS high-threshold | — |
+| `pc` (poly contact) | pcontact | 66/44 + 95/20 | a tungsten plug from poly to li, plus the NPC blocking mask | — |
+| `ndc` / `pdc` / `ntapc` / `ptapc` | ndcontact / pdcontact / nsubstratencontact / psubstratepcontact | 66/44 | the same plug, from silicon to li | — |
+| `li` | locali | 67/20 | local interconnect | **12.8 Ω/□** |
+| `mcon` | viali | 67/44 | plug from li to metal1 | — |
+| `m1` | metal1 | 68/20 | metal1 | **0.125 Ω/□** |
+| `via1` | m2contact | 68/44 | plug from metal1 to metal2 | — |
+| `m2` | metal2 | 69/20 | metal2 | 0.125 Ω/□ |
+| `via2` / `m3` | m3contact / metal3 | 69/44 / 70/20 | and upward, to metal5 | |
 
 ## Reading the table
 

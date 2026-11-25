@@ -88,6 +88,14 @@ That's on purpose, because in a real row the taps come from a separate cell.
 
 ## Looking up a rule yourself
 
+In Magic, put the box on a white-hatched error (the `=` key does that, with the pointer over the
+drawing) and choose `Drc → DRC report`: the console prints the message for every rule broken
+inside the box, and you can find it in the tables above. `Options → DRC Manager` lists every rule
+the cell breaks, one row per rule, with the errors under each. The
+[Magic cheat sheet](magic-cheatsheet.md#the-drc-menu) has both.
+
+To read a rule's value in the technology file, `grep` for its name:
+
 ```bash
 grep -n 'met1.5' $PDK_ROOT/sky130A/libs.tech/magic/sky130A.tech
 ```

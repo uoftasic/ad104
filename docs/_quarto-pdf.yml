@@ -7,7 +7,7 @@ project:
   output-dir: _book
 
 book:
-  title: "AD104 — Layout"
+  title: "AD104-M — Layout"
   subtitle: "Draw a CMOS inverter as a chip layout in Magic and get it through DRC and LVS, then place and route four standard cells by hand."
   author: "UofT ASIC Team"
   output-file: ad104-course

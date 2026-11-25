@@ -11,8 +11,8 @@ Create a course or lab-notes repo from this template under **`uoftasic`**, fill 
 
 | Token | Meaning | Example |
 |-------|---------|---------|
-| `ad104` | Repo slug / course id | `dd103`, `ic101`, `serdes-lab` |
-| `AD104 — Layout` | Display name | `DD103 — RTL on FPGAs & ASICs` |
+| `ad104-m` | Repo slug / course id | `dd103`, `ic101`, `serdes-lab` |
+| `AD104-M — Layout` | Display name | `DD103 — RTL on FPGAs & ASICs` |
 | `Draw a CMOS inverter as a chip layout in Magic and get it through DRC and LVS, then place and route four standard cells by hand.` | One-line blurb | `RTL synthesis intro with Yosys` |
 
 ## Init script
@@ -28,7 +28,7 @@ Dry run: add `--dry-run`.
 
 ## After-clone checklist
 
-- [ ] Repo created under `uoftasic` with id matching `ad104`
+- [ ] Repo created under `uoftasic` with id matching `ad104-m`
 - [ ] `scripts/init-template.py` run (or manual replace of the three tokens)
 - [ ] Pushed to `main`
 - [ ] Pages: **Settings → Pages → Source: GitHub Actions** (`.github/workflows/site.yml` builds `docs/` with Quarto)
@@ -39,7 +39,7 @@ Dry run: add `--dry-run`.
 
 ## Naming
 
-Prefer course ids already used by the team (`ic###`, `ad###`, `dd###`) or a clear kebab-case lab name. Keep the GitHub repo name equal to `ad104` so Pages and clone URLs stay predictable.
+Prefer course ids already used by the team (`ic###`, `ad###`, `dd###`) or a clear kebab-case lab name. Keep the GitHub repo name equal to `ad104-m` so Pages and clone URLs stay predictable.
 
 ## Related
 

@@ -1,6 +1,6 @@
 # Scripts
 
-Repo-level utilities for **AD104 — Layout** (`uoftasic/ad104`).
+Repo-level utilities for **AD104-M — Layout** (`uoftasic/ad104-m`).
 
 Everything a student runs lives in `labs/<lab-id>/` and is driven by that
 lab's `Makefile`. This directory is for repo maintenance only.

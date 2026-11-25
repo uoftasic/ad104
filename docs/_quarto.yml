@@ -1,4 +1,4 @@
-# Quarto build of the AD104 docs (replacing Docsify's index.html,
+# Quarto build of the AD104-M docs (replacing Docsify's index.html,
 # _sidebar.md and _navbar.md).
 #
 #   quarto preview docs          # live site at http://localhost:4200
@@ -17,10 +17,10 @@ project:
     browser: false
 
 website:
-  title: "AD104 — Layout"
+  title: "AD104-M — Layout"
   description: "Draw a CMOS inverter as a chip layout in Magic and get it through DRC and LVS, then place and route four standard cells by hand."
-  site-url: https://uoftasic.com/ad104/
-  repo-url: https://github.com/uoftasic/ad104
+  site-url: https://uoftasic.com/ad104-m/
+  repo-url: https://github.com/uoftasic/ad104-m
   repo-subdir: docs
   repo-actions: [issue]
   search: true
@@ -39,7 +39,7 @@ website:
         href: https://discord.gg/hrJnP5UsGz
         aria-label: Discord
       - icon: github
-        href: https://github.com/uoftasic/ad104
+        href: https://github.com/uoftasic/ad104-m
         aria-label: GitHub
   sidebar:
     # From 992px up, floating sets the sidebar 1.5em in from the left edge
@@ -112,7 +112,7 @@ website:
       - section: "Repo"
         contents:
           - text: "Lab packages"
-            href: https://github.com/uoftasic/ad104/tree/main/labs
+            href: https://github.com/uoftasic/ad104-m/tree/main/labs
 
 filters:
   - _filters/course.lua

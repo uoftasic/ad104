@@ -117,8 +117,9 @@ What does Magic extract from the foundry's `inv_1`?
    /foss/pdks/sky130A/libs.ref/sky130_fd_sc_hd/mag/sky130_fd_sc_hd__inv_1.mag
    ```
 
-   The caption says `[NOT BEING EDITED]`, as it did in Lab 01: the PDK's files are read-only.
-   You can still measure and extract the cell.
+   As in Lab 01, the cell's file is in the PDK and read-only, so Magic shows the cell without
+   letting you edit it. The full caption includes `[NOT BEING EDITED]`, though a narrow window cuts
+   that part off. You can still measure and extract the cell.
 
 2. Measure it. As you found in Lab 01, `inv_1`'s rails straddle its bottom and top edges: point at
    the middle of each rail and read the y in the title bar. Then set the box from the left end of

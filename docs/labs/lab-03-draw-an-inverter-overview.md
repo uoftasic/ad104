@@ -499,7 +499,7 @@ Where in your geometry do `w=0.65` and `w=1` come from?
    starts `0.150 x 0.650`: the stripe's width is L, and the diffusion's height under it is W.
 3. Open `mag/my_inv.mag` in a text editor and find the `<< ndiff >>` section. The file has no
    `magscale` line, so one unit is 0.01 µm, and the section's `rect` lines together span your
-   n-diffusion's corners: 0.40 µm is written `40`. Magic has split the shape into tiles around
+   n-diffusion's corners: its 0.65 µm height is 65 units. Magic has split the shape into tiles around
    the contacts, and the part under the gate is not there at all, because it is in the `<< nmos >>`
    section. [Drawing in Magic](../guide/drawing-in-magic.md#the-mag-file) explains the units.
 

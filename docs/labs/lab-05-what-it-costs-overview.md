@@ -128,9 +128,10 @@ What does Magic extract from the foundry's `inv_1`?
 
    *The box from rail centre to rail centre, and the `microns:` line: 1.380 × 2.720.*
 
-3. Extract it the same way, with one more command first. The cell's own folder in the PDK is
-   read-only, so `extract do local` tells Magic to write the `.ext` file into the folder you
-   started it in, as in Lab 01, Part 6:
+3. Extract it the same way, with one more command first. `extract do local` tells Magic to write
+   every `.ext` file into the folder you started it in, here `mag/`, wherever the cell came from.
+   In Lab 01, Part 6, `inv_1`'s file went there without it, because Magic can't write into the
+   PDK's read-only folder:
 
    ```tcl
    extract do local

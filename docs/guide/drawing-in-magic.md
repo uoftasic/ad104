@@ -196,8 +196,18 @@ box on it and choose `Edit → Text ...`. In the window that opens:
 *`Text string:` is `A`, `Size (um):` is 0.1, and `enable` next to `Port:` is ticked. The number
 beside it is the port's number, which Magic fills in.*
 
+Magic counts port numbers on from the last label you made, even one in another cell, and two
+ports with the same number in one cell clash, so one of them stops being a port. When you start
+labelling a different cell, untick `enable` and tick it again: the number becomes that cell's
+next free one
+([Lab 04, Part 4](../labs/lab-04-buffer-and-and-overview.md#part-4-build-the-and-gate)).
+
 The label goes on the layer under the box, and the console says so:
-`Moving label "A" from space to locali in cell my_inv.` A label names a net, and the `Port:` box
+`Moving label "A" from space to locali in cell my_inv.` With `default` ticked under
+`Attach to layer:`, Magic picks a layer that covers the whole box. If the box touches a contact,
+that can be the well underneath rather than the li you meant, so untick `default` and type the
+layer's name, as
+[Lab 03, Part 7](../labs/lab-03-draw-an-inverter-overview.md#part-7-name-the-pins) does. A label names a net, and the `Port:` box
 makes it a terminal of the cell. That second step is what makes the extracted netlist come out as
 `.subckt my_inv A Y VPWR VGND` rather than as a subcircuit with no pins. If netgen ever says a
 cell's pin list is empty, a label without `Port:` ticked is the first thing to check. (In the

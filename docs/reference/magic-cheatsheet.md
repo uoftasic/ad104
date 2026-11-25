@@ -175,6 +175,9 @@ The traps you meet while drawing (keys and the pointer, middle clicks, `s` and t
   window` across the layout. Press `,` over the drawing to clear the selection.
 - **`ext2spice` without `ext2spice lvs` first** writes a netlist with no `.subckt` line around the
   devices.
+- **After the DRC Manager has been open, the Library Manager moves the box** onto the whole cell
+  when it opens, and `Cell → Place Instance` misplaces its instance too. Open the Library Manager
+  first, then set the box and press `Place` (capstone, Part 5).
 
 ## Typed commands
 

@@ -15,6 +15,11 @@ go, which moves the box there, then choose `Cell → Place Instance` and pick th
 in the `Open` window. For a cell from the foundry's library, open `Options → Library Manager`
 instead, select the cell and press `Place`. Either way the instance goes in at the box.
 
+Once the DRC Manager has been open in a Magic session, opening the Library Manager moves the box
+onto your whole cell, and `Cell → Place Instance` puts the instance in the wrong place as well. So
+open the Library Manager first and set the box after it, as the capstone's
+[Part 5](../labs/capstone-place-and-route-overview.md#part-5-add-the-tap-cells) does.
+
 Magic names each new instance after its cell: `my_inv_0`, `my_inv_1`, and so on. LVS ignores
 instance names, so you can leave them as they are. If you want a name of your own, select the
 instance with `i` and type `identify` and the new name in the console.

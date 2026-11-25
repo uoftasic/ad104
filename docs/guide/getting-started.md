@@ -121,7 +121,7 @@ where you started it:
   process. The console says `Creating new cell` and `Using technology "ihp-sg13g2"`, the palette
   lists IHP's layers, and there is one `Devices` menu.
 - **In Lab 01's folder**, the lab's `.magicrc` loads SKY130 on top of IHP, which prints the two
-  error lines above, and the menu bar has no `Devices` menu at all.
+  error lines above. In our run of this case the menu bar then had no `Devices` menu at all.
 
 Close Magic, load the environment with `. /foss/designs/common/.designinit` (or open a new
 terminal, which loads it by itself), and start Magic again. If `.designinit` itself fails, start
@@ -171,5 +171,5 @@ Setup problems with `.designinit` and `mod` are covered at the step where they h
 | `Bad local startup file ".magicrc", continuing without.` | A `.magicrc` loaded SKY130 on top of a technology that was already loaded. In a lab folder, that means `$PDK` wasn't `sky130A`: close Magic, load `.designinit`, and start it again. Anywhere else, use a copy of a lab's `.magicrc`, which checks whether SKY130 is already loaded first. |
 | `Cell ... couldn't be read` | You named a cell that does not exist in this folder, or you are in the wrong folder. Magic then creates an empty cell with that name, which is why an empty window is a common symptom. |
 | The layout is one empty rectangle with a name in it | That's an unexpanded subcell. Put the box over it and press `x` with the pointer over the drawing, or select it with `i` and choose `Cell → Expand`. |
-| The caption says `[NOT BEING EDITED]` | Magic is showing the cell but not editing it. A cell read from the PDK's folder, such as Lab 01's `sky130_fd_sc_hd__inv_1`, always shows this, because you can't write to its file; in Lab 01 that's expected. For one of your own cells, open it with `File → Open...`. The `Open` window starts in the last folder it showed, so after you have opened a cell from the PDK, a bare name such as `my_inv.mag` fails with `... does not exist.`; type your cell's full path instead. |
+| The caption says `[NOT BEING EDITED]` | Magic is showing the cell but not editing it. A cell read from the PDK's folder, such as Lab 01's `sky130_fd_sc_hd__inv_1`, shows this because you can't write to its file; in Lab 01 that's expected. For one of your own cells, open it with `File → Open...`. The `Open` window starts in the last folder it showed, so after you have opened a cell from the PDK, a bare name such as `my_inv.mag` fails with `... does not exist.`; type your cell's full path instead. |
 | A Magic window's buttons are below the bottom of the screen | Double-click the window's title bar to make it fill the screen; the buttons then appear along its bottom edge. At the default 1280 × 800 desktop this happens with the device generator in Lab 04. |

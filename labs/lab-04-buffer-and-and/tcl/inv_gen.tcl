@@ -16,8 +16,7 @@
 # two pads that face each other. An unused pad is a lone 0.29 x 0.23 um piece of
 # metal1, below metal1's minimum area (met1.6).
 #
-# The wiring is the KLayout spike's build_inv_pcell.py (onecontact=1), with the
-# device centres at (1.4, 1.4) and (1.4, 4.6):
+# The wiring, with the device centres at (1.4, 1.4) and (1.4, 4.6):
 #   A     metal1 from the nmos gate pad up to the pmos gate pad
 #   Y     the two drains (the left strips) joined in metal1 round the left side
 #   S     each source (the right strip) tied to its guard ring in li

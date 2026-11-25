@@ -205,8 +205,8 @@ How do you give the block, rather than the cells inside it, its own pins?
 5. `Drc → DRC update`, then save: `File → Save...`, and click `autowrite` in the dialog. The
    dialog names `my_inv` first, not `my_buf`: Magic marks the cells inside a block as changed when
    it runs DRC on them, and asks about every changed cell in turn. `autowrite` saves them all
-   without asking. Nothing in `my_inv`'s drawing changes, only the time stamp in its file. `make`
-   reads the saved files, so save before every check.
+   without asking. Nothing in `my_inv`'s drawing changes. `make` reads the saved files, so save
+   before every check.
 
 6. Run the layout checks in your other terminal, in `labs/lab-04-buffer-and-and`:
 

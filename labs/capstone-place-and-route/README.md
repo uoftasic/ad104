@@ -25,8 +25,9 @@ magic -d X11 datapath &       # place, route and check the block in Magic
 
 You do the work in Magic: routing, labels, DRC, extraction, and writing the GDS with
 `File → Write GDS`. Extraction and netgen run in `mag/`, where Magic started. Save the
-block in Magic (`File → Save...`) before each check, because the checker reads
-`mag/datapath.mag` from disk. Then, from `labs/capstone-place-and-route`:
+block in Magic before each check, because the checker reads `mag/datapath.mag` from disk:
+`File → Save...` asks about each changed cell in turn, and you click `write` for `datapath`
+and `skip` for the library cells. Then, from `labs/capstone-place-and-route`:
 
 ```bash
 make layout       # DRC + LVS only, about 1.4 s

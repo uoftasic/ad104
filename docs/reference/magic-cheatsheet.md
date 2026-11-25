@@ -205,7 +205,7 @@ recipe in [Drawing in Magic](../guide/drawing-in-magic.md#exact-small-shapes).
 ### The box by numbers
 
 ```tcl
-box 0.4um 1.3um 2.6um 1.95um ;# put the box at these micron coordinates
+box 1um 2um 3um 2.5um  ;# put the box at these micron coordinates (x1 y1 x2 y2)
 box values             ;# read it back, in internal units of 0.005 um
 box width              ;# the box's width (box height for its height)
 findbox zoom           ;# zoom the view to the box

@@ -4,12 +4,15 @@ Writeup: [uoftasic.com/ad104 → Lab 05](https://uoftasic.com/ad104/labs/lab-05-
 
 This package extracts the Lab 03 inverter and the foundry's `inv_1` with every parasitic
 capacitance kept, simulates both, and prints a table comparing their area, junction area,
-capacitance and delay.
+capacitance and delay. In the writeup you measure both cells and extract them in Magic yourself
+first; `make` then runs the same extraction and the simulations.
 
 ## Run it
 
 ```bash
-cd labs/lab-05-what-it-costs
+cd labs/lab-05-what-it-costs/mag
+magic -d X11 my_inv &      # measure and extract, as the writeup describes
+cd ..
 make
 ```
 
@@ -34,8 +37,6 @@ than assuming one. `git checkout mag/my_inv.mag` puts the reference cell back.
 |---|---|
 | `make` | extract both cells with parasitics, simulate both, print the table |
 | `make mine MAG=...` | copy your own Lab 03 cell in and compare that |
-| `make pex` | just the extraction, well under a second |
-| `make caps` | both parasitic netlists, side by side |
 | `make table` | re-print from results already on disk, instantly |
 | `make clean` | delete `results/` |
 

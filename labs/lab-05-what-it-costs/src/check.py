@@ -94,7 +94,7 @@ def row(label, mine, theirs, unit="", fmt="{:.4g}"):
 def main() -> int:
     g = geom()
     if MINE not in g or THEIRS not in g:
-        sys.exit("results/geom.txt does not name both cells - re-run `make pex`.")
+        sys.exit("results/geom.txt does not name both cells - re-run `make`.")
     wm, hm = g[MINE]
     wt, ht = g[THEIRS]
     area_m, area_t = wm * hm, wt * ht

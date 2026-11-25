@@ -17,6 +17,11 @@ PYTHON ?= python3
 SETUP  := $(PDK_ROOT)/sky130A/libs.tech/netgen/sky130A_setup.tcl
 CELLS  := drc_01 drc_02 drc_03 drc_04 drc_05
 
+# When you extract a cell in Magic yourself, it leaves its .ext file beside the cell in
+# mag/. ext2spice reads that file before the fresh one the check writes in results/,
+# so a leftover one would make the check grade the cell as it was when you last
+# extracted it. The check deletes them first.
+
 .PHONY: all check reset solutions clean
 
 all: check
@@ -26,6 +31,7 @@ results:
 
 results/report.txt: $(wildcard mag/*.mag) tcl/verify.tcl | results
 	@echo "== magic: DRC and extract, all five cells"
+	@rm -f mag/*.ext
 	@$(MAGIC) -dnull -noconsole tcl/verify.tcl > results/magic.log 2>&1 || true
 	@test -f $@ || { echo "   Magic wrote no report. Read results/magic.log"; exit 1; }
 

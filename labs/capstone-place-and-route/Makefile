@@ -16,6 +16,11 @@ NGSPICE ?= ngspice
 PYTHON  ?= python3
 SETUP   := $(PDK_ROOT)/sky130A/libs.tech/netgen/sky130A_setup.tcl
 
+# When you extract in Magic yourself, it leaves datapath.ext, and one .ext for each
+# library cell, in mag/. ext2spice reads those before the fresh ones the check writes
+# in results/, so a leftover datapath.ext would make the check grade the block as it
+# was when you last extracted it. The check deletes them first.
+
 .PHONY: all check layout scaffold ref refcheck clean
 
 all: check
@@ -25,6 +30,7 @@ results:
 
 results/report.txt: mag/datapath.mag tcl/verify.tcl | results
 	@echo "== magic: DRC (both rule sets) and extract"
+	@rm -f mag/*.ext
 	@$(MAGIC) -dnull -noconsole tcl/verify.tcl > results/magic.log 2>&1 || true
 	@test -f $@ || { echo "   Magic wrote no report. Read results/magic.log"; exit 1; }
 
